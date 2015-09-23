@@ -175,7 +175,8 @@ SignUp = React.createClass({
 	  		<TextField
 	  			onChange={this.handlePassword}
 	  		  floatingLabelText="Password" 
-	  		  hintText="Required"/>
+	  		  hintText="Required"
+	  		  type="password"/>
 	  		</div>
 	  		{warning}
   		</Dialog>

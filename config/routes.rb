@@ -4,6 +4,8 @@ Rails.application.routes.draw do
   scope :api do
     resources :users, only: [:create]
     resources :universities, only: [:index]
+    resources :subscriptions, only: [:index, :create]
+    post '/parse_calendar', :to => 'subscriptions#parse_calendar'
     get '/login', :to => 'users#login'
     get '/current_user', :to => 'users#current'
   end

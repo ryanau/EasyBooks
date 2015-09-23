@@ -9,6 +9,8 @@ var Dialog = mui.Dialog;
 var TextField = mui.TextField;
 var Snackbar = mui.Snackbar;
 
+var CalendarUploader = require('./CalendarUploader.jsx');
+
 DashBoard = React.createClass({
 	childContextTypes: {
 	  muiTheme: React.PropTypes.object
@@ -23,6 +25,7 @@ DashBoard = React.createClass({
 		return (
 			<div>
 				<h1>DashBoard</h1>
+				<CalendarUploader origin={this.props.origin}/>
 			</div>
 		)
 	},

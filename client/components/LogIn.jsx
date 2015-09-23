@@ -61,9 +61,6 @@ LogIn = React.createClass({
 			type: 'GET',
 			data: data,
 			dataType: 'json',
-			crossDomain: true,
-			headers: {'Authorization': sessionStorage.getItem('jwt'),
-			},
 			success: function (response) {
 				jwt = response.token;
 				if (jwt) {
@@ -100,7 +97,8 @@ LogIn = React.createClass({
 	  		<TextField
 	  			onChange={this.handlePassword}
 	  		  floatingLabelText="Password" 
-	  		  hintText="Required"/>
+	  		  hintText="Required"
+	  		  type="password"/>
 			</Dialog>
 		return (
 			<div>

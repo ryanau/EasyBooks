@@ -15,6 +15,7 @@ gem 'omniauth-venmo'
 gem 'twilio-ruby', '~> 4.2.1'
 gem 'httparty'
 gem 'dotenv-rails'
+gem 'icalendar', '2.3.0'
 
 group :development, :test do
   gem 'dotenv-rails'
