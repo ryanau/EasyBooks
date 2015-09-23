@@ -1,8 +1,6 @@
 var React = require('react');
 var Router = require('react-router');
 var RouteHandler = Router.RouteHandler;
-var SignUp = require('./SignUp.jsx');
-var LogIn = require('./LogIn.jsx');
 var $ = require('jquery');
 
 
@@ -51,8 +49,9 @@ App = React.createClass({
 	render: function () {
 		return (
 			<div>
-				<SignUp origin={this.props.origin} readFromAPI={this.readFromAPI}/>
-				<LogIn origin={this.props.origin} readFromAPI={this.readFromAPI}/>
+        <div className="container">
+          <RouteHandler origin={this.props.origin} currentUser={this.state.currentUser} signedIn={this.state.signedIn}/>
+        </div>
 			</div>
 		)
 	},

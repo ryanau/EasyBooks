@@ -1,8 +1,24 @@
 var React = require('react');
 var $ = require('jquery');
 
+var mui = require('material-ui');
+var ThemeManager = new mui.Styles.ThemeManager();
+var FlatButton = mui.FlatButton;
+var RaisedButton = mui.RaisedButton;
+var Dialog = mui.Dialog;
+var TextField = mui.TextField;
+var Snackbar = mui.Snackbar;
 
 SignUp = React.createClass({
+	childContextTypes: {
+	  muiTheme: React.PropTypes.object
+	},
+
+	getChildContext: function () {
+	  return {
+	    muiTheme: ThemeManager.getCurrentTheme()
+	  };
+	},
 	getInitialState: function () {
 		return {
 			first_name: null,
@@ -30,6 +46,12 @@ SignUp = React.createClass({
 		this.setState({
 			password: e.target.value
 		})
+	},
+	closeModal: function () {
+		this.refs.signUpDialog.dismiss();
+	},
+	openModal: function () {
+		this.refs.signUpDialog.show();
 	},
 	handleSubmit: function () {
 		var data = {
@@ -60,6 +82,40 @@ SignUp = React.createClass({
 		});
 	},
 	render: function () {
+		var DialogAction = [
+			<div>
+			<FlatButton
+			  label="Cancel"
+			  onClick={this.closeModal}/>
+			<FlatButton
+			  label="Sign Up"
+			  onClick={this.handleSubmit}/> 
+			</div>
+		]
+		var signUpDialog = 
+  		<Dialog
+  			ref="signUpDialog"
+  			title="Sign Up"
+  			actions={DialogAction}
+  			modal={false}>
+	  		<TextField
+	  			onChange={this.handleFirstName}
+	  		  floatingLabelText="First Name" 
+	  		  hintText="Required"/>
+	  		<TextField
+	  			onChange={this.handleLastName}
+	  		  floatingLabelText="Last Name" 
+	  		  hintText="Required"/>
+	  		<TextField
+	  			onChange={this.handleEmail}
+	  		  floatingLabelText="Email" 
+	  		  hintText="Required"/>
+	  		<TextField
+	  			onChange={this.handlePassword}
+	  		  floatingLabelText="Password" 
+	  		  hintText="Required"/>
+
+  		</Dialog>
 		var signUpBox = (
 			<div>
 				<h1>SignUp</h1>
@@ -72,7 +128,10 @@ SignUp = React.createClass({
 		)
 		return (
 			<div>
-				{signUpBox}
+				{signUpDialog}
+				<FlatButton
+				  label="Sign Up"
+				  onClick={this.openModal}/>
 			</div>
 		)
 	},
