@@ -23,12 +23,12 @@ end
 
 # seed stars
 [6,7,8,9,10].each do |id|
-  User.find(id).star.create(post_id: id - 5)
+  User.find(id).stars.create(post_id: id - 5)
 end
 
 # seed subscriptions
 [1,2,3,4,5].each do |id|
-  User.subscriptions.create(course_id: id)
+  User.find(id).subscriptions.create(course_id: id)
 end
 
 # seed comments

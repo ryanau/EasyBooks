@@ -20,6 +20,7 @@ ActiveRecord::Schema.define(version: 20150923190448) do
     t.string   "name",       null: false
     t.string   "edition",    null: false
     t.string   "condition",  null: false
+    t.integer  "post_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -48,7 +49,7 @@ ActiveRecord::Schema.define(version: 20150923190448) do
     t.boolean  "sold",        default: true
     t.boolean  "public",      default: true
     t.string   "pickup"
-    t.integer  "coures_id",                  null: false
+    t.integer  "course_id",                  null: false
     t.integer  "seller_id",                  null: false
     t.integer  "buyer_id"
     t.datetime "created_at",                 null: false
