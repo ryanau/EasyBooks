@@ -3,7 +3,6 @@ var Router = require('react-router');
 var RouteHandler = Router.RouteHandler;
 var $ = require('jquery');
 
-
 App = React.createClass({
 	getDefaultProps: function() {
     return {

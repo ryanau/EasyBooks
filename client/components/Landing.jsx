@@ -4,6 +4,8 @@ var Link = Router.Link;
 
 var SignUp = require('./SignUp.jsx');
 var LogIn = require('./LogIn.jsx');
+var DashBoard = require('./DashBoard.jsx');
+
 
 var mui = require('material-ui');
 var ThemeManager = new mui.Styles.ThemeManager();
@@ -12,17 +14,30 @@ Landing = React.createClass({
 	childContextTypes: {
 	  muiTheme: React.PropTypes.object
 	},
-
 	getChildContext: function () {
 	  return {
 	    muiTheme: ThemeManager.getCurrentTheme()
 	  };
 	},
   render: function () {
+  	console.log("signed in" + this.props.signedIn);
+  	if (this.props.signedIn) {
+  		var display = (
+	  		<div>
+		  		<DashBoard origin={this.props.origin} />
+	  		</div>
+  		);
+  	} else {
+  		var display = (
+	  		<div>
+		  		<SignUp origin={this.props.origin} />
+		  		<LogIn origin={this.props.origin} />
+	  		</div>
+  		);
+  	}
   	return (
   		<div>
-	  		<SignUp origin={this.props.origin} />
-	  		<LogIn origin={this.props.origin} />
+	  		{display}
   		</div>
   	)
   }
