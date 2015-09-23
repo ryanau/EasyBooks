@@ -1,8 +1,24 @@
 var React = require('react');
 var $ = require('jquery');
 
+var mui = require('material-ui');
+var ThemeManager = new mui.Styles.ThemeManager();
+var FlatButton = mui.FlatButton;
+var RaisedButton = mui.RaisedButton;
+var Dialog = mui.Dialog;
+var TextField = mui.TextField;
+var Snackbar = mui.Snackbar;
 
 LogIn = React.createClass({
+	childContextTypes: {
+	  muiTheme: React.PropTypes.object
+	},
+
+	getChildContext: function () {
+	  return {
+	    muiTheme: ThemeManager.getCurrentTheme()
+	  };
+	},
 	getInitialState: function () {
 		return {
 			email: null,
@@ -28,6 +44,12 @@ LogIn = React.createClass({
 		this.setState({
 			password: e.target.value
 		})
+	},
+	closeModal: function () {
+		this.refs.logInDialog.dismiss();
+	},
+	openModal: function () {
+		this.refs.logInDialog.show();
 	},
 	handleSubmit: function () {
 		var data = {
@@ -55,17 +77,38 @@ LogIn = React.createClass({
 		});
 	},
 	render: function () {
-		var signUpBox = (
+		var DialogAction = [
 			<div>
-				<h1>LogIn</h1>
-				<p>Email: <input onChange={this.handleEmail} value={this.state.email} /></p>
-				<p>Password: <input onChange={this.handlePassword} value={this.state.password} /></p>
-				<button onClick={this.handleSubmit}>Log In</button>
+			<FlatButton
+			  label="Cancel"
+			  onClick={this.closeModal}/>
+			<FlatButton
+			  label="Log In"
+			  onClick={this.handleSubmit}/> 
 			</div>
-		)
+		]
+		var logInDialog = 
+			<Dialog
+				ref="logInDialog"
+				title="Log In"
+				actions={DialogAction}
+				modal={false}>
+	  		<TextField
+	  			onChange={this.handleEmail}
+	  		  floatingLabelText="Email" 
+	  		  hintText="Required"/>
+	  		<TextField
+	  			onChange={this.handlePassword}
+	  		  floatingLabelText="Password" 
+	  		  hintText="Required"/>
+			</Dialog>
 		return (
 			<div>
-				{signUpBox}
+				{logInDialog}
+				<RaisedButton
+					secondary={true}
+				  label="Log In"
+				  onClick={this.openModal}/>
 			</div>
 		)
 	},

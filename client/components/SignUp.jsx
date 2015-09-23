@@ -114,7 +114,6 @@ SignUp = React.createClass({
 	  			onChange={this.handlePassword}
 	  		  floatingLabelText="Password" 
 	  		  hintText="Required"/>
-
   		</Dialog>
 		var signUpBox = (
 			<div>
@@ -129,7 +128,8 @@ SignUp = React.createClass({
 		return (
 			<div>
 				{signUpDialog}
-				<FlatButton
+				<RaisedButton
+					secondary={true}
 				  label="Sign Up"
 				  onClick={this.openModal}/>
 			</div>
