@@ -2,6 +2,9 @@ require 'faker'
 
 # seed universities
 university = University.create(name: "University of California, Berkeley")
+University.create(name: "University of Southern California")
+University.create(name: "Stanford University")
+
 
 # seed courses
 university.courses.create(department: "ESPM", course_number: "50AC", year: "2015", semester: "FALL")
@@ -12,7 +15,7 @@ university.courses.create(department: "ESPM", course_number: "50AC", year: "2015
 
 # seed users
 10.times do
-  User.create(first_name: Faker::Name.first_name, last_name: Faker::Name.last_name, email: Faker::Internet.email, phone: Faker::Number.number(10), password_digest: 1234, university_id: 1)
+  User.create(first_name: Faker::Name.first_name, last_name: Faker::Name.last_name, email: Faker::Internet.email, phone: Faker::Number.number(10), password: "1234", university_id: 1)
 end
 
 # seed posts and books

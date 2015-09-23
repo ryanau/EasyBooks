@@ -5,7 +5,7 @@ class UsersController < ApplicationController
     if User.find_by(email: params[:email])
       render json: {message: "error in signing up"}
     else
-      user = User.new(first_name: params[:first_name], last_name: params[:last_name], email: params[:email], password: params[:password])
+      user = User.new(first_name: params[:first_name], last_name: params[:last_name], phone: params[:phone], email: params[:email], password: params[:password])
       if user.save
         token = JWT.encode({id: user.id, exp: 1.day.from_now.to_i}, ENV['SECRET_KEY_BASE'])
         render json: {message: "success in signing up", token: token}

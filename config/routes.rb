@@ -3,6 +3,7 @@ Rails.application.routes.draw do
 
   scope :api do
     resources :users, only: [:create]
+    resources :universities, only: [:index]
     get '/login', :to => 'users#login'
     get '/current_user', :to => 'users#current'
   end

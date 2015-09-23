@@ -92,7 +92,7 @@ LogIn = React.createClass({
 				ref="logInDialog"
 				title="Log In"
 				actions={DialogAction}
-				modal={false}>
+				modal={true}>
 	  		<TextField
 	  			onChange={this.handleEmail}
 	  		  floatingLabelText="Email" 
