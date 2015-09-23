@@ -7,9 +7,9 @@ class CreatePosts < ActiveRecord::Migration
       t.boolean :public, default: true
       t.string :pickup
       
-      t.integer :coures_id, null: false
+      t.integer :course_id, null: false
       t.integer :seller_id, null: false
-      t.integer :buyer_id, null: false
+      t.integer :buyer_id
 
       t.timestamps null: false
     end

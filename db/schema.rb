@@ -50,7 +50,7 @@ ActiveRecord::Schema.define(version: 20150923190448) do
     t.string   "pickup"
     t.integer  "coures_id",                  null: false
     t.integer  "seller_id",                  null: false
-    t.integer  "buyer_id",                   null: false
+    t.integer  "buyer_id"
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
   end

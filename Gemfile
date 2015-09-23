@@ -18,6 +18,7 @@ gem 'dotenv-rails'
 
 group :development, :test do
   gem 'dotenv-rails'
+  gem 'faker', '1.5.0'
   # gem 'pry-rails'
   # gem 'pry-byebug'
 end
