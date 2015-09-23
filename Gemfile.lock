@@ -44,6 +44,8 @@ GEM
       dotenv (= 2.0.2)
       railties (~> 4.0)
     erubis (2.7.0)
+    faker (1.5.0)
+      i18n (~> 0.5)
     faraday (0.9.1)
       multipart-post (>= 1.2, < 3)
     globalid (0.3.6)
@@ -53,6 +55,7 @@ GEM
       json (~> 1.8)
       multi_xml (>= 0.5.2)
     i18n (0.7.0)
+    icalendar (2.3.0)
     json (1.8.3)
     jwt (1.5.1)
     loofah (2.0.3)
@@ -142,7 +145,9 @@ PLATFORMS
 DEPENDENCIES
   bcrypt (~> 3.1.7)
   dotenv-rails
+  faker (= 1.5.0)
   httparty
+  icalendar (= 2.3.0)
   jwt
   omniauth-venmo
   pg
