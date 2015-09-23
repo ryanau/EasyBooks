@@ -1,0 +1,38 @@
+{
+  "name": "EasyBooks",
+  "version": "0.0.1",
+  "description": "Buying/selling books can't be easier.",
+  "main": "client/main.jsx",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "scripts": {
+    "devserve": "webpack-dev-server -d --config webpack.config.js --content-base public/ --progress --colors",
+    "devbuild": "webpack -d --config webpack.config.js --profile --progress --colors",
+    "probuild": "webpack -p --config webpack.pro.config.js --profile --progress --colors",
+    "postinstall": "npm run probuild && npm run rejoice",
+    "rejoice": "echo yay!"
+  },
+  "author": "Ryan Au",
+  "license": "MIT",
+  "engines": {
+    "node": "0.10.x"
+  },
+  "dependencies": {
+    "jquery": "^2.1.3",
+    "css-loader": "^0.9.1",
+    "jsuri": "^1.3.0",
+    "jsx-loader": "^0.12.2",
+    "react": "^0.13.3",
+    "react-router": "^0.13.3",
+    "reqwest": "^1.1.5",
+    "style-loader": "^0.8.3",
+    "webpack": "^1.6.0",
+    "webpack-dev-server": "^1.8.0",
+    "material-ui": "^0.10.4",
+    "eventemitter3": "^1.1.1",
+    "object-assign" : "^3.0.0",
+    "moment" : "^2.10.6"
+  }
+}
