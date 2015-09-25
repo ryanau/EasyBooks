@@ -10,6 +10,7 @@ var TextField = mui.TextField;
 var Snackbar = mui.Snackbar;
 
 var CalendarUploader = require('./CalendarUploader.jsx');
+var MarketPlace = require('./MarketPlace.jsx');
 
 DashBoard = React.createClass({
 	childContextTypes: {
@@ -25,6 +26,7 @@ DashBoard = React.createClass({
 		return (
 			<div>
 				<h1>DashBoard</h1>
+				<MarketPlace origin={this.props.origin}/>
 				<CalendarUploader origin={this.props.origin}/>
 			</div>
 		)
