@@ -10,13 +10,18 @@ objectAssign(Courses.prototype, EventEmitter.prototype);
 
 Courses.prototype.addToCourses = function(data){
 	var i = 0
-	this.courses.forEach(function(user) {
-		if (user.user_id == data.user_id) {
+	var status = true
+	this.courses.forEach(function(course) {
+		if (course[0] === data[0] && course[1] === data[1]) {
 			this.courses.splice(i, 1)
+			status = false
 		};
 		i++
 	}.bind(this));
-  this.courses.push(data);
+	if (status == true) {
+	  this.courses.push(data);
+	}
+
   this.emit('change');
   return this;
 };

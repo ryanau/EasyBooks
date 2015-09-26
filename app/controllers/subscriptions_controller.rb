@@ -8,7 +8,14 @@ class SubscriptionsController < ApplicationController
   end
 
   def create
-
+    courses = params[:courses]
+    courses.each do |course|
+      department = course[1][0]
+      course_number = course[1][1]
+      selected = Course.where(department: department, course_number: course_number).first
+      current_user.subscriptions.create(course_id: selected.id)
+    end
+    render json: {message: "success"}
   end
 
   def parse_calendar

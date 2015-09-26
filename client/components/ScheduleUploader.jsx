@@ -39,7 +39,24 @@ ScheduleUploader = React.createClass({
 	  this.forceUpdate();
 	},
 	uploadSubscription: function () {
-		console.log(this.state.courseBasket);
+		var data = {
+			courses: this.state.courseBasket.courses,
+		};
+		$.ajax({
+			url: this.props.origin + '/subscriptions',
+			type: 'POST',
+			data: data,
+			dataType: 'json',
+			crossDomain: true,
+			headers: {'Authorization': localStorage.getItem('jwt'),
+			},
+			success: function (response) {
+				console.log(response)
+			}.bind(this),
+			error: function (error) {
+				window.location = "/"
+			}.bind(this),
+		});
 	},
 	uploadCalendar: function (file) {
 		var data = new FormData();

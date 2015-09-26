@@ -24,9 +24,11 @@ Course = React.createClass({
 		this.preLoad();
 	},
 	preLoad: function () {
+		console.log(this.props.course)
 		this.props.courseBasket.addToCourses(this.props.course)
 	},
 	handleToggle: function () {
+		this.props.courseBasket.addToCourses(this.props.course)
 		if (this.state.display === "NO") {
 		  this.setState({
 		    display: "YES"
