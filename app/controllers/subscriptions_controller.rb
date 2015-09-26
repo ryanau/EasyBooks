@@ -1,10 +1,24 @@
 require 'icalendar'
 
 class SubscriptionsController < ApplicationController
-  before_action :authentication, only: [:index, :create, :parse_calendar]
+  before_action :authentication, only: [:index, :create, :parse_calendar, :update]
 
   def index
-    subscriptions = current_user.subscriptions.all
+    subscriptions = current_user.subscriptions.all.includes(:course)
+    render json: subscriptions.to_json(include: [:course])
+  end
+
+  def update
+    courses = params[:courses]
+    if courses != nil
+      courses.each do |course|
+        department = course[1][0]
+        course_number = course[1][1]
+        for_deletion = current_user.subscriptions.find_by(course_id: Course.find_by(department: department, course_number: course_number).id)
+        for_deletion.destroy
+      end
+    end
+    render json: {message: "success"}
   end
 
   def create
@@ -13,13 +27,15 @@ class SubscriptionsController < ApplicationController
       courses.each do |course|
         department = course[1][0]
         course_number = course[1][1]
-        selected = Course.where(department: department, course_number: course_number).first
+        selected = Course.find_by(department: department, course_number: course_number)
         if current_user.subscriptions.where(course_id: selected.id).count == 0
           current_user.subscriptions.create(course_id: selected.id)
         end
       end
+      render json: {message: "success"}
+    else
+      render json: "Course not found", status: 400
     end
-    render json: {message: "success"}
   end
 
   def parse_calendar
@@ -47,7 +63,9 @@ class SubscriptionsController < ApplicationController
         arr.unshift(clas[0..total])
         class_arr << arr
       end
+      render json: {courses: class_arr}
+    else
+      render json: "Failed to parse .ics file", status: 400
     end
-    render json: {courses: class_arr}
   end
 end

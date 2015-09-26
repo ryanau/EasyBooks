@@ -2,6 +2,10 @@ var React = require('react');
 var $ = require('jquery');
 var Dropzone = require('react-dropzone');
 var Courses = require('../courses.js');
+var Router = require('react-router');
+var Navigation = Router.Navigation;
+var Link = Router.Link;
+
 
 var mui = require('material-ui');
 var ThemeManager = new mui.Styles.ThemeManager();
@@ -15,6 +19,7 @@ var Paper = mui.Paper;
 var Course = require('./Course.jsx');
 
 ScheduleUploader = React.createClass({
+	mixins: [ Navigation ],
 	childContextTypes: {
 	  muiTheme: React.PropTypes.object
 	},
@@ -27,12 +32,14 @@ ScheduleUploader = React.createClass({
 		return {
 			courseBasket: new Courses,
 			courses: null,
+			warning: null,
 		}
 	},
 	componentDidMount: function(){
 	  this.state.courseBasket.on('change', this.coursesChanged);
 	},
 	componentWillUnmount: function(){
+		this.state.courseBasket.empty();
 	  this.state.courseBasket.off('change');
 	},
 	coursesChanged: function(){
@@ -42,21 +49,28 @@ ScheduleUploader = React.createClass({
 		var data = {
 			courses: this.state.courseBasket.courses,
 		};
-		$.ajax({
-			url: this.props.origin + '/subscriptions',
-			type: 'POST',
-			data: data,
-			dataType: 'json',
-			crossDomain: true,
-			headers: {'Authorization': localStorage.getItem('jwt'),
-			},
-			success: function (response) {
-				console.log(response)
-			}.bind(this),
-			error: function (error) {
-				window.location = "/"
-			}.bind(this),
-		});
+		if (data.courses.length != 0) {
+			$.ajax({
+				url: this.props.origin + '/subscriptions',
+				type: 'POST',
+				data: data,
+				dataType: 'json',
+				crossDomain: true,
+				headers: {'Authorization': localStorage.getItem('jwt'),
+				},
+				success: function (response) {
+					console.log(response)
+					this.transitionTo('/', {postId: response.post_id});
+				}.bind(this),
+				error: function (error) {
+					window.location = "/"
+				}.bind(this),
+			});
+		} else {
+			this.setState({
+				warning: "Please subscribe to at least one class!"
+			})
+		}
 	},
 	uploadCalendar: function (file) {
 		var data = new FormData();
@@ -87,12 +101,13 @@ ScheduleUploader = React.createClass({
 				return (
 					<Course key={index} course={course} courseBasket={this.state.courseBasket}/>
 				)
-			}.bind(this))
+			}.bind(this));
 			var uploadButton = 
 				<FlatButton
-				  label="Subscribe Class Alert"
+				  label="Subscribe To Class Alert"
 				  onClick={this.uploadSubscription}
-				  secondary={true}/> 
+				  secondary={true}/>;
+			var warning = this.state.warning;
 		} else {
 			var courses = "Loading...";
 		}
@@ -107,6 +122,7 @@ ScheduleUploader = React.createClass({
 				</Paper>
 				{courses}
 				{uploadButton}
+				{warning}
 				</div>
 			</div>
 		)

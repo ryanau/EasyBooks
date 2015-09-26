@@ -21,7 +21,6 @@ Courses.prototype.addToCourses = function(data){
 	if (status == true) {
 	  this.courses.push(data);
 	}
-
   this.emit('change');
   return this;
 };
