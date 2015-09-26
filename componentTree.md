@@ -5,5 +5,6 @@ App
 		-- DashBoard
 			-- MarketPlace
 			-- CalendarUploader
+				-- Course
 	-- Sell
 	-- Post

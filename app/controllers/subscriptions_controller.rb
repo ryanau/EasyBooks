@@ -22,7 +22,19 @@ class SubscriptionsController < ApplicationController
       events << event.summary
     end
 
-    p events
-    render json: {message: "success"}
+    classes = []
+    events.each do |event|
+      classes << event[0..(event.reverse.index(/\s{1}/, 1) * -1 -2)]
+    end
+
+    class_arr = []
+    classes.uniq!.each do |clas|
+      arr = []
+      arr.unshift(clas[clas.reverse.index(/\s{1}/, 1) * -1.. -1])
+      total = clas.length - clas[clas.reverse.index(/\s{1}/, 1) * -1.. -1].length - 2
+      arr.unshift(clas[0..total])
+      class_arr << arr
+    end
+    render json: {courses: class_arr}
   end
 end

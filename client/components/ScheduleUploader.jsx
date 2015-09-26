@@ -1,6 +1,7 @@
 var React = require('react');
 var $ = require('jquery');
 var Dropzone = require('react-dropzone');
+var Courses = require('../courses.js');
 
 var mui = require('material-ui');
 var ThemeManager = new mui.Styles.ThemeManager();
@@ -11,9 +12,9 @@ var TextField = mui.TextField;
 var Snackbar = mui.Snackbar;
 var Paper = mui.Paper;
 
+var Course = require('./Course.jsx');
 
-
-CalendarUploader = React.createClass({
+ScheduleUploader = React.createClass({
 	childContextTypes: {
 	  muiTheme: React.PropTypes.object
 	},
@@ -22,8 +23,25 @@ CalendarUploader = React.createClass({
 	    muiTheme: ThemeManager.getCurrentTheme()
 	  };
 	},
+	getInitialState: function () {
+		return {
+			courseBasket: new Courses,
+			courses: null,
+		}
+	},
+	componentDidMount: function(){
+	  this.state.courseBasket.on('change', this.coursesChanged);
+	},
+	componentWillUnmount: function(){
+	  this.state.courseBasket.off('change');
+	},
+	coursesChanged: function(){
+	  this.forceUpdate();
+	},
+	uploadSubscription: function () {
+		console.log(this.state.courseBasket);
+	},
 	uploadCalendar: function (file) {
-		console.log(file[0])
 		var data = new FormData();
 		data.append("calendar", file[0]);
 		$.ajax({
@@ -37,7 +55,9 @@ CalendarUploader = React.createClass({
 			headers: {'Authorization': localStorage.getItem('jwt'),
 			},
 			success: function (response) {
-
+				this.setState({
+					courses: response.courses
+				});
 			}.bind(this),
 			error: function (error) {
 				window.location = "/"
@@ -45,6 +65,15 @@ CalendarUploader = React.createClass({
 		});
 	},
 	render: function () {
+		if (this.state.courses != null) {
+			var courses = this.state.courses.map(function (course, index) {
+				return (
+					<Course key={index} course={course} courseBasket={this.state.courseBasket}/>
+				)
+			}.bind(this))
+		} else {
+			var courses = "Loading..."
+		}
 		return (
 			<div>
 				<h1>Calendar uploader</h1>
@@ -54,10 +83,15 @@ CalendarUploader = React.createClass({
 	          <div><h3>Drag or click here to upload your calendar file</h3></div>
 	        </Dropzone>
 				</Paper>
+				{courses}
+				<FlatButton
+				  label="Subscribe Class Alert"
+				  onClick={this.uploadSubscription}
+				  secondary={true}/> 
 				</div>
 			</div>
 		)
 	},
 });
 
-module.exports = CalendarUploader;
+module.exports = ScheduleUploader;
