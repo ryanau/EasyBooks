@@ -43,7 +43,6 @@ App = React.createClass({
         window.location = "/"
       }.bind(this),
     });
-
   },
 	render: function () {
 		return (

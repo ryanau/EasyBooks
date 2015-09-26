@@ -1,5 +1,7 @@
 var React = require('react');
 var $ = require('jquery');
+var Router = require('react-router');
+var Link = Router.Link;
 
 var mui = require('material-ui');
 var ThemeManager = new mui.Styles.ThemeManager();
@@ -9,7 +11,7 @@ var Dialog = mui.Dialog;
 var TextField = mui.TextField;
 var Snackbar = mui.Snackbar;
 
-var CalendarUploader = require('./CalendarUploader.jsx');
+var MarketPlace = require('./MarketPlace.jsx');
 
 DashBoard = React.createClass({
 	childContextTypes: {
@@ -23,9 +25,14 @@ DashBoard = React.createClass({
 	},
 	render: function () {
 		return (
-			<div>
+			<div id="dashboard">
 				<h1>DashBoard</h1>
-				<CalendarUploader origin={this.props.origin}/>
+				<RaisedButton
+					containerElement={<Link to="/schedule" />}
+					linkButton={true}
+					secondary={true}
+					label={('no', 'Upload Your Schedule')}/>
+				<MarketPlace origin={this.props.origin}/>
 			</div>
 		)
 	},

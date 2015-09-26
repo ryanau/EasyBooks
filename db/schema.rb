@@ -46,6 +46,7 @@ ActiveRecord::Schema.define(version: 20150923190448) do
   create_table "posts", force: :cascade do |t|
     t.float    "price",                      null: false
     t.string   "picture_url"
+    t.string   "title",                      null: false
     t.boolean  "sold",        default: true
     t.boolean  "public",      default: true
     t.string   "pickup"

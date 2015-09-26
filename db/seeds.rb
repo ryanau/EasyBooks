@@ -20,7 +20,7 @@ end
 
 # seed posts and books
 [1,2,3,4,5].each do |id|
-  post = Post.create(seller_id: id, course_id: id, pickup: Faker::Address.country, price: Faker::Number.between(15, 100))
+  post = Post.create(seller_id: id, course_id: id, pickup: Faker::Address.country, price: Faker::Number.between(15, 100), title: Faker::Commerce.product_name, picture_url: "https://www.petfinder.com/wp-content/uploads/2012/11/140272627-grooming-needs-senior-cat-632x475.jpg")
   post.books.create(name: Faker::App.name, edition: Faker::App.version, condition: "New")
 end
 
