@@ -21,14 +21,14 @@ SignUp = React.createClass({
 	},
 	getInitialState: function () {
 		return {
-			first_name: null,
-			last_name: null,
-			email: null,
-			passowrd: null,
-			phone: null,
+			first_name: "",
+			last_name: "",
+			email: "",
+			passowrd: "",
+			phone: "",
 			university: "1",
 			universities: [{payload: "1", text: "Loading"}],
-			warning: null,
+			warning: "",
 		}
 	},
 	componentDidMount: function () {
@@ -78,7 +78,7 @@ SignUp = React.createClass({
 	closeModal: function () {
 		this.refs.signUpDialog.dismiss();
 		this.setState({
-			warning: null,
+			warning: "",
 		});
 	},
 	openModal: function () {
@@ -93,7 +93,7 @@ SignUp = React.createClass({
 			phone: this.state.phone,
 			university: this.state.university,
 		};
-		if (data.first_name == null || data.last_name == null || data.email == null || data.password == null || data.phone == null) {
+		if (data.first_name == "" || data.last_name == "" || data.email == "" || data.password == "" || data.phone == "") {
 			this.setState({
 				warning: "Please fill out all required fields."
 			});
@@ -135,7 +135,7 @@ SignUp = React.createClass({
 		];
 		var universityList = this.state.universities;
 		console.log(this.state.warning)
-		if (this.state.warning != null) {
+		if (this.state.warning != "") {
 			var warning = this.state.warning;
 		}
 		var signUpDialog = 

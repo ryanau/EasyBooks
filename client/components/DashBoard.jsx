@@ -24,7 +24,7 @@ DashBoard = React.createClass({
 	},
 	render: function () {
 		return (
-			<div>
+			<div id="dashboard">
 				<h1>DashBoard</h1>
 				<MarketPlace origin={this.props.origin}/>
 				<CalendarUploader origin={this.props.origin}/>

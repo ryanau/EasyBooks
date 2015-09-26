@@ -33,7 +33,6 @@ PublicPosts = React.createClass({
 			crossDomain: true,
 			headers: {'Authorization': localStorage.getItem('jwt')},
 			success: function (response) {
-				console.log(response);
 				this.setState({
 					posts: response.data
 				});
