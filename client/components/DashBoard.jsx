@@ -32,6 +32,11 @@ DashBoard = React.createClass({
 					linkButton={true}
 					secondary={true}
 					label={('no', 'Upload Your Schedule')}/>
+				<RaisedButton
+					containerElement={<Link to="/subscriptions" />}
+					linkButton={true}
+					secondary={true}
+					label={('no', 'Subscriptions')}/>
 				<MarketPlace origin={this.props.origin}/>
 			</div>
 		)

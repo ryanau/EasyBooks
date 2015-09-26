@@ -7,6 +7,7 @@ Rails.application.routes.draw do
     resources :subscriptions, only: [:index, :create]
     resources :posts, only: [:index, :show, :create]
     resources :courses, only: [:index]
+    put '/subscriptions', :to => 'subscriptions#update'
     post '/parse_calendar', :to => 'subscriptions#parse_calendar'
     get '/login', :to => 'users#login'
     get '/current_user', :to => 'users#current'

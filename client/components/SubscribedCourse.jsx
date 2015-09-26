@@ -1,12 +1,12 @@
 var React = require('react');
 var $ = require('jquery');
-var Dropzone = require('react-dropzone');
 
 var mui = require('material-ui');
 var ThemeManager = new mui.Styles.ThemeManager();
 var Toggle = mui.Toggle;
 
-Course = React.createClass({
+
+SubscribedCourse = React.createClass({
 	childContextTypes: {
 	  muiTheme: React.PropTypes.object
 	},
@@ -21,13 +21,13 @@ Course = React.createClass({
 		}
 	},
 	componentDidMount: function () {
-		this.preLoad();
-	},
-	preLoad: function () {
-		this.props.courseBasket.addToCourses(this.props.course)
+
 	},
 	handleToggle: function () {
-		this.props.courseBasket.addToCourses(this.props.course)
+		var course = [];
+		course.push(this.props.course.course.department);
+		course.push(this.props.course.course.course_number);
+		this.props.subscriptionBasket.addToCourses(course);
 		if (this.state.display === "NO") {
 		  this.setState({
 		    display: "YES"
@@ -39,18 +39,20 @@ Course = React.createClass({
 		};
 	},
 	render: function () {
-		course = this.props.course
+		var course = this.props.course
 		return (
 			<div>
-				<p>{course[0] + " " + course[1]}</p>
+				<h4>SubscribedCourse</h4>
+				<p>{course.course.department + course.course.course_number}</p>
+
 				<Toggle
 				  ref="toggle"
 				  onToggle={this.handleToggle}
 				  defaultToggled={true}
 				  label={this.state.display}/>
-		  </div>
+			</div>
 		)
-	},
+	}
 });
 
-module.exports = Course;
+module.exports = SubscribedCourse;

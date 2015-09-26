@@ -4,7 +4,11 @@ App
 		-- LogIn
 		-- DashBoard
 			-- MarketPlace
+				-- PublicPosts
+					-- PublicPost
 			-- CalendarUploader
 				-- Course
+			-- Subscription
+				-- SubscribedCourse
 	-- Sell
 	-- Post
