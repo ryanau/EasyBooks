@@ -88,8 +88,13 @@ ScheduleUploader = React.createClass({
 					<Course key={index} course={course} courseBasket={this.state.courseBasket}/>
 				)
 			}.bind(this))
+			var uploadButton = 
+				<FlatButton
+				  label="Subscribe Class Alert"
+				  onClick={this.uploadSubscription}
+				  secondary={true}/> 
 		} else {
-			var courses = "Loading..."
+			var courses = "Loading...";
 		}
 		return (
 			<div>
@@ -101,10 +106,7 @@ ScheduleUploader = React.createClass({
 	        </Dropzone>
 				</Paper>
 				{courses}
-				<FlatButton
-				  label="Subscribe Class Alert"
-				  onClick={this.uploadSubscription}
-				  secondary={true}/> 
+				{uploadButton}
 				</div>
 			</div>
 		)
