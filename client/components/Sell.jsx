@@ -11,6 +11,7 @@ var TextField = mui.TextField;
 var DropDownMenu = mui.DropDownMenu;
 var FlatButton = mui.FlatButton;
 var Paper = mui.Paper;
+var LinearProgress = mui.LinearProgress;
 
 Sell = React.createClass({
 	mixins: [ Navigation ],
@@ -32,6 +33,7 @@ Sell = React.createClass({
 			warning: "",
 			pic_file: null,
 			pic_url: null,
+			uploading: null,
 		}
 	},
 	componentDidMount: function () {
@@ -75,6 +77,9 @@ Sell = React.createClass({
 		});
 	},
 	onDrop: function (file) {
+		this.setState({
+			uploading: true,
+		});
 		var data = new FormData();
 		data.append("pic_file", file[0]);
 		$.ajax({
@@ -92,6 +97,7 @@ Sell = React.createClass({
 				this.setState({
 					pic_file: file,
 					pic_url: response.pic_url,
+					uploading: false,
 				})
 			}.bind(this),
 			error: function (error) {
@@ -107,7 +113,6 @@ Sell = React.createClass({
 			course_id: this.state.course_id,
 			pic_url: this.state.pic_url,
 		};
-		console.log(data)
 		if (data.title == "" || data.price == "" || data.pickup == "") {
 			this.setState({
 				warning: "Please fill out all required fields."
@@ -136,7 +141,16 @@ Sell = React.createClass({
   	var warning = this.state.warning;
   	if (this.state.pic_file != null) {
   		var picPreview = <img src={this.state.pic_file[0].preview} />
-  		console.log(this.state.pic_file)
+  	}
+  	if (this.state.uploading == true) {
+  		var uploadingProgress = <LinearProgress mode="indeterminate" />
+  	} else if (this.state.uploading == null) {
+  		var uploadingProgress = 
+				<Paper zDepth={2}>
+					<Dropzone onDrop={this.onDrop} multiple={false}>
+	          <div><h3>Drag or click here to upload your pictures</h3></div>
+	        </Dropzone>
+				</Paper>
   	}
   	return (
   		<div>
@@ -158,22 +172,18 @@ Sell = React.createClass({
   			  hintText="Required"/>
   			</div>
   			<div>
-					<Paper zDepth={2}>
-						<Dropzone onDrop={this.onDrop} multiple={false}>
-		          <div><h3>Drag or click here to upload your pictures</h3></div>
-		        </Dropzone>
-					</Paper>
-  			</div>
-  			<div>
   			<DropDownMenu menuItems={courseList} autoScrollBodyContent={true} onChange={this.handleDropDownMenu}/>
   			</div>
+  			<div>
+					{uploadingProgress}
+  			</div>
+  			<div>{picPreview}</div>
   			<div>
   			<FlatButton
   			  label="Sell Book"
   			  onClick={this.handleSubmit}/>
   			</div>
   			{warning}
-  			<div>{picPreview}</div>
   		</div>
   	)
   }
