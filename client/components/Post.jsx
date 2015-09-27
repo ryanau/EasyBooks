@@ -6,6 +6,7 @@ var Link = Router.Link;
 
 var mui = require('material-ui');
 var ThemeManager = new mui.Styles.ThemeManager();
+var RaisedButton = mui.RaisedButton;
 
 Post = React.createClass({
 	childContextTypes: {
@@ -57,6 +58,13 @@ Post = React.createClass({
 			var post = this.state.post;
 			var seller_id = this.state.seller_id;
 			var seller_name = this.state.seller_name;
+			if (this.state.post.seller_id == this.props.currentUser.id) {
+				var editButton = 
+				<RaisedButton
+				  label="Edit Post"
+				  onClick={this.editPost}
+				  secondary={true}/>;
+			}
 		} else {
 			var post = "Loading..."
 			var seller_id = ""
@@ -67,6 +75,7 @@ Post = React.createClass({
 				<h4>Post</h4>
 				<p>{post.title}</p>
 				<p>{seller_name}</p>
+				{editButton}
 			</div>
 		)
 	},
