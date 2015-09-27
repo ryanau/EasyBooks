@@ -27,7 +27,10 @@ class PostsController < ApplicationController
     auth = {
       cloud_name: ENV['CLOUDINARY_NAME'],
       api_key:    ENV['CLOUDINARY_API_KEY'],
-      api_secret: ENV['CLOUDINARY_API_SECRET']
+      api_secret: ENV['CLOUDINARY_API_SECRET'],
+      width: 1000,
+      height: 1000,
+      crop: "limit",
     }
     response = Cloudinary::Uploader.upload(pic_address, auth)
     render json: {pic_url: response["url"]}
