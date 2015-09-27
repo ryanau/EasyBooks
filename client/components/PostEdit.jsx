@@ -8,9 +8,6 @@ var mui = require('material-ui');
 var ThemeManager = new mui.Styles.ThemeManager();
 var RaisedButton = mui.RaisedButton;
 
-var Comments = require('./Comments.jsx');
-var CommentBox = require('./CommentBox.jsx');
-
 Post = React.createClass({
 	childContextTypes: {
 	  muiTheme: React.PropTypes.object
@@ -68,7 +65,6 @@ Post = React.createClass({
 				  onClick={this.editPost}
 				  secondary={true}/>;
 			}
-			var comments = <Comments origin={this.props.origin} post_id={post.id}/>
 		} else {
 			var post = "Loading..."
 			var seller_id = ""
@@ -80,7 +76,6 @@ Post = React.createClass({
 				<p>{post.title}</p>
 				<p>{post.price}</p>
 				<p>{seller_name}</p>
-				{comments}
 				{editButton}
 			</div>
 		)

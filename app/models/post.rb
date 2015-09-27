@@ -4,5 +4,5 @@ class Post < ActiveRecord::Base
 
   has_many :books
   has_many :stars
-
+  has_many :comments
 end
