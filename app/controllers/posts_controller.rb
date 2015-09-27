@@ -1,5 +1,5 @@
 class PostsController < ApplicationController
-  before_action :authentication, only: [:index, :create, :show]
+  before_action :authentication, only: [:index, :create, :show, :image_upload]
 
   def index
     posts = Post.where(public: true)
@@ -7,7 +7,8 @@ class PostsController < ApplicationController
   end
 
   def create
-    post = Post.create(price: params[:price], title: params[:title], pickup: params[:pickup], course_id: params[:course_id], seller_id: current_user.id, picture_url: "https://www.petfinder.com/wp-content/uploads/2012/11/140272627-grooming-needs-senior-cat-632x475.jpg")
+    p params[:pic_url]
+    post = Post.create(price: params[:price], title: params[:title], pickup: params[:pickup], course_id: params[:course_id], seller_id: current_user.id, picture_url: params[:pic_url])
     render json: {post_id: post.id}
   end
 
@@ -18,5 +19,17 @@ class PostsController < ApplicationController
     seller_id = seller.id
     seller_name = seller.first_name
     render json: {post: post, seller_id: seller_id, seller_name: seller_name}
+  end
+
+  def image_upload
+    file = params["pic_file"].open()
+    pic_address = File.open(file)
+    auth = {
+      cloud_name: ENV['CLOUDINARY_NAME'],
+      api_key:    ENV['CLOUDINARY_API_KEY'],
+      api_secret: ENV['CLOUDINARY_API_SECRET']
+    }
+    response = Cloudinary::Uploader.upload(pic_address, auth)
+    render json: {pic_url: response["url"]}
   end
 end

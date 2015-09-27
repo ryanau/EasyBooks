@@ -2,7 +2,6 @@ var React = require('react');
 var $ = require('jquery');
 var Courses = require('../courses.js');
 
-
 var Router = require('react-router');
 var Navigation = Router.Navigation;
 var Link = Router.Link;
