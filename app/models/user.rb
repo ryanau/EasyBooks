@@ -10,5 +10,6 @@ class User < ActiveRecord::Base
   has_many :selling_posts, :class_name => "Post", :foreign_key => :seller_id
   has_many :buying_posts, :class_name => "Post", :foreign_key => :buyer_id
   has_many :comments, through: :posts
+  has_many :comments
 
 end

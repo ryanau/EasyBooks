@@ -8,7 +8,6 @@ var ThemeManager = new mui.Styles.ThemeManager();
 var FlatButton = mui.FlatButton;
 var RaisedButton = mui.RaisedButton;
 var Dialog = mui.Dialog;
-var TextField = mui.TextField;
 var Snackbar = mui.Snackbar;
 
 var MarketPlace = require('./MarketPlace.jsx');

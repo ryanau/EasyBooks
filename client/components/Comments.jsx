@@ -9,6 +9,7 @@ var ThemeManager = new mui.Styles.ThemeManager();
 var RaisedButton = mui.RaisedButton;
 
 var Comment = require('./Comment.jsx');
+var CommentBox = require('./CommentBox.jsx');
 
 Comments = React.createClass({
 	childContextTypes: {
@@ -40,7 +41,28 @@ Comments = React.createClass({
 			headers: {'Authorization': localStorage.getItem('jwt')},
 			success: function (response) {
 				this.setState({
-					comments: response.comments,
+					comments: response
+				});
+			}.bind(this),
+			error: function (error) {
+				window.location = "/"
+			}.bind(this),
+		});
+	},
+	updateComments: function () {
+		var data = {
+			post_id: this.props.post_id,
+		};
+		$.ajax({
+			url: this.props.origin + '/comments',
+			type: 'GET',
+			data: data,
+			dataType: 'json',
+			crossDomain: true,
+			headers: {'Authorization': localStorage.getItem('jwt')},
+			success: function (response) {
+				this.setState({
+					comments: response,
 				});
 			}.bind(this),
 			error: function (error) {
@@ -57,6 +79,7 @@ Comments = React.createClass({
 					)
 				}.bind(this));
 			}
+		var commentBox = <CommentBox origin={this.props.origin} post_id={this.props.post_id} updateComments={this.updateComments}/>;
 		} else {
 			var comments = "Loading"
 		}
@@ -64,6 +87,7 @@ Comments = React.createClass({
 			<div>
 				<h4>Comments</h4>
 				{comments}
+				{commentBox}
 			</div>
 		)
 	},

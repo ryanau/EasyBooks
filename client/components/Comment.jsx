@@ -3,6 +3,7 @@ var $ = require('jquery');
 var Router = require('react-router');
 var Uri = require('jsuri');
 var Link = Router.Link;
+var moment = require('moment');
 
 var mui = require('material-ui');
 var ThemeManager = new mui.Styles.ThemeManager();
@@ -21,8 +22,7 @@ Comment = React.createClass({
 		var comment = this.props.comment;
 		return (
 			<div>
-				<h4>Comment</h4>
-				{comment.content}
+				<p>{comment.content} by {comment.user.first_name} from {moment(comment.created_at).fromNow()}</p>
 			</div>
 		)
 	},
