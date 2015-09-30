@@ -36,6 +36,7 @@
     "object-assign" : "^3.0.0",
     "moment" : "^2.10.6",
     "skrollr" : "^0.6.26",
-    "react-timer-mixin" : "^0.13.3"
+    "react-timer-mixin" : "^0.13.3",
+    "react-select" : "0.6.11"
   }
 }
