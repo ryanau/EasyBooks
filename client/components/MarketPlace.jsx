@@ -2,6 +2,7 @@ var React = require('react');
 var $ = require('jquery');
 var Router = require('react-router');
 var Link = Router.Link;
+var Select = require('react-select');
 
 var mui = require('material-ui');
 var ThemeManager = new mui.Styles.ThemeManager();
@@ -29,11 +30,21 @@ MarketPlace = React.createClass({
   		{ payload: "3", text: "Price: Low to High"},
   		{ payload: "4", text: "Price: High to Low"},
   	];
+    var searchOptions = [
+      { value: 'one', label: 'One' },
+      { value: 'two', label: 'Two' }
+    ];
   	return (
   		<div id="marketplace">
   			<Toolbar> 
   				<ToolbarGroup key={0} float="left">
   					<DropDownMenu menuItems={sortMethods} />
+            <Select
+              name="form-field-name"
+              value="one"
+              options={searchOptions}
+              onChange={this.searchChange}
+              searchable={true}/>
   				</ToolbarGroup>
   				<ToolbarGroup key={1} float="right">
 	  				<ToolbarSeparator/>

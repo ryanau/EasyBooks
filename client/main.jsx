@@ -1,4 +1,5 @@
 require('./assets/app.css');
+require('./assets/reactselect.css');
 
 var React = require('react');
 var App = require('./components/App.jsx');
