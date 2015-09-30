@@ -8,6 +8,8 @@ Rails.application.routes.draw do
     resources :posts, only: [:index, :show, :create, :update, :destroy]
     resources :courses, only: [:index]
     resources :comments, only: [:index, :create]
+    resources :stars, only: [:index, :create]
+    delete '/stars', :to => 'stars#destroy'
 
     get '/active_posts', :to => 'posts#active_posts'
 
