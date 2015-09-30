@@ -41,7 +41,6 @@ Post = React.createClass({
 			crossDomain: true,
 			headers: {'Authorization': localStorage.getItem('jwt')},
 			success: function (response) {
-				console.log(response)
 				this.setState({
 					post: response.post,
 					seller_id: response.seller_id,

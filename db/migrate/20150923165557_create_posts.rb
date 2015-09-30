@@ -4,7 +4,7 @@ class CreatePosts < ActiveRecord::Migration
       t.float :price, null: false
       t.string :picture_url
       t.string :title, null: false
-      t.boolean :sold, default: true
+      t.boolean :sold, default: false
       t.boolean :public, default: true
       t.string :pickup
       

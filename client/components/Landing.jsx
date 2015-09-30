@@ -4,7 +4,7 @@ var Link = Router.Link;
 
 var SignUp = require('./SignUp.jsx');
 var LogIn = require('./LogIn.jsx');
-var DashBoard = require('./DashBoard.jsx');
+var Dashboard = require('./Dashboard.jsx');
 
 
 var mui = require('material-ui');
@@ -24,7 +24,7 @@ Landing = React.createClass({
   	if (this.props.signedIn) {
   		var display = (
 	  		<div>
-		  		<DashBoard origin={this.props.origin} />
+		  		<Dashboard origin={this.props.origin} />
 	  		</div>
   		);
   	} else {

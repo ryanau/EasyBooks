@@ -93,7 +93,6 @@ Sell = React.createClass({
 			headers: {'Authorization': localStorage.getItem('jwt'),
 			},
 			success: function (response) {
-				console.log(response);
 				this.setState({
 					pic_file: file,
 					pic_url: response.pic_url,

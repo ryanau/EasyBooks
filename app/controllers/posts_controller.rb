@@ -1,5 +1,5 @@
 class PostsController < ApplicationController
-  before_action :authentication, only: [:index, :create, :show, :image_upload]
+  before_action :authentication, only: [:index, :create, :show, :image_upload, :active_posts]
 
   def index
     posts = Post.where(public: true)
@@ -19,6 +19,11 @@ class PostsController < ApplicationController
     seller_id = seller.id
     seller_name = seller.first_name
     render json: {post: post, seller_id: seller_id, seller_name: seller_name}
+  end
+
+  def active_posts
+    posts = current_user.selling_posts.where(sold: false, public: true)
+    render json: {data: posts}
   end
 
   def image_upload

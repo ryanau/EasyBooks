@@ -57,7 +57,6 @@ CommentBox = React.createClass({
 		});
 	},
 	render: function () {
-		console.log(this.state.comment)
 		return (
 			<div>
 				<h4>Comment Box</h4>

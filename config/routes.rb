@@ -8,6 +8,9 @@ Rails.application.routes.draw do
     resources :posts, only: [:index, :show, :create, :update]
     resources :courses, only: [:index]
     resources :comments, only: [:index, :create]
+
+    get '/active_posts', :to => 'posts#active_posts'
+
     put '/subscriptions', :to => 'subscriptions#update'
     post '/image_upload', :to => 'posts#image_upload'
     post '/parse_calendar', :to => 'subscriptions#parse_calendar'

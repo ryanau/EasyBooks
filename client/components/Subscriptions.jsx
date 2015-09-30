@@ -57,7 +57,6 @@ Subscriptions = React.createClass({
 		var data = {
 			courses: this.state.subscriptionBasket.courses,
 		};
-		console.log(data);
 		$.ajax({
 			url: this.props.origin + '/subscriptions',
 			type: 'PUT',
