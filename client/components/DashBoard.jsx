@@ -5,14 +5,11 @@ var Link = Router.Link;
 
 var mui = require('material-ui');
 var ThemeManager = new mui.Styles.ThemeManager();
-var FlatButton = mui.FlatButton;
 var RaisedButton = mui.RaisedButton;
-var Dialog = mui.Dialog;
-var Snackbar = mui.Snackbar;
 
 var MarketPlace = require('./MarketPlace.jsx');
 
-DashBoard = React.createClass({
+Dashboard = React.createClass({
 	childContextTypes: {
 	  muiTheme: React.PropTypes.object
 	},
@@ -36,10 +33,15 @@ DashBoard = React.createClass({
 					linkButton={true}
 					secondary={true}
 					label={('no', 'Subscriptions')}/>
+				<RaisedButton
+					containerElement={<Link to="/postdashboard" />}
+					linkButton={true}
+					secondary={true}
+					label={('no', 'Your Posts')}/>
 				<MarketPlace origin={this.props.origin}/>
 			</div>
 		)
 	},
 });
 
-module.exports = DashBoard;
+module.exports = Dashboard;

@@ -1,9 +1,9 @@
 var React = require('react');
 var $ = require('jquery');
-var Courses = require('../courses.js');
-
 var Router = require('react-router');
 var Navigation = Router.Navigation;
+var TimerMixin = require('react-timer-mixin');
+
 var Link = Router.Link;
 
 var mui = require('material-ui');
@@ -12,8 +12,10 @@ var Snackbar = mui.Snackbar;
 var RaisedButton = mui.RaisedButton;
 
 var SubscribedCourse = require('./SubscribedCourse.jsx');
+var Courses = require('../courses.js');
 
 Subscriptions = React.createClass({
+	mixins: [ Navigation, TimerMixin ],
 	childContextTypes: {
 	  muiTheme: React.PropTypes.object
 	},
@@ -57,7 +59,6 @@ Subscriptions = React.createClass({
 		var data = {
 			courses: this.state.subscriptionBasket.courses,
 		};
-		console.log(data);
 		$.ajax({
 			url: this.props.origin + '/subscriptions',
 			type: 'PUT',
@@ -69,11 +70,17 @@ Subscriptions = React.createClass({
 			success: function (response) {
 				this.refs.subscriptionsUpdated.show();
 				this.loadSubcriptions();
+				this.setTimeout(function () {
+					this.redirectToHome();
+				}, 1000)
 			}.bind(this),
 			error: function (error) {
 				window.location = "/"
 			}.bind(this),
 		});
+	},
+	redirectToHome: function () {
+		this.transitionTo('/');
 	},
 	render: function () {
 		if (this.state.subscriptions != null) {
@@ -94,8 +101,8 @@ Subscriptions = React.createClass({
 			<div>
 				<Snackbar
 				  ref="subscriptionsUpdated"
-				  message='Subscriptions Updated'
-				  autoHideDuration={2000}/>
+				  message='Subscriptions Updated. Redirecting...'
+				  autoHideDuration={1000}/>
 				<h4>Subscriptions</h4>
 				{subscriptions}
 				{updateSubscriptionButton}

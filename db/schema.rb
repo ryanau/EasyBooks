@@ -44,17 +44,17 @@ ActiveRecord::Schema.define(version: 20150923190448) do
   end
 
   create_table "posts", force: :cascade do |t|
-    t.float    "price",                      null: false
+    t.float    "price",                       null: false
     t.string   "picture_url"
-    t.string   "title",                      null: false
-    t.boolean  "sold",        default: true
+    t.string   "title",                       null: false
+    t.boolean  "sold",        default: false
     t.boolean  "public",      default: true
     t.string   "pickup"
-    t.integer  "course_id",                  null: false
-    t.integer  "seller_id",                  null: false
+    t.integer  "course_id",                   null: false
+    t.integer  "seller_id",                   null: false
     t.integer  "buyer_id"
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
   end
 
   create_table "stars", force: :cascade do |t|

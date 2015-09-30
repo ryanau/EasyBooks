@@ -36,28 +36,29 @@ CommentBox = React.createClass({
 			comment: this.state.comment,
 			post_id: this.props.post_id,
 		};
-		$.ajax({
-			url: this.props.origin + '/comments',
-			type: 'POST',
-			data: data,
-			dataType: 'json',
-			crossDomain: true,
-			headers: {'Authorization': localStorage.getItem('jwt')},
-			success: function (response) {
-				this.refs.commentAdded.show();
-				this.clearComment();
-				this.props.updateComments();
-				this.setState({
-					comment: null,
-				});
-			}.bind(this),
-			error: function (error) {
-				window.location = "/"
-			}.bind(this),
-		});
+		if (data.comment) {
+			$.ajax({
+				url: this.props.origin + '/comments',
+				type: 'POST',
+				data: data,
+				dataType: 'json',
+				crossDomain: true,
+				headers: {'Authorization': localStorage.getItem('jwt')},
+				success: function (response) {
+					this.refs.commentAdded.show();
+					this.clearComment();
+					this.props.updateComments();
+					this.setState({
+						comment: null,
+					});
+				}.bind(this),
+				error: function (error) {
+					window.location = "/"
+				}.bind(this),
+			});
+		}
 	},
 	render: function () {
-		console.log(this.state.comment)
 		return (
 			<div>
 				<h4>Comment Box</h4>

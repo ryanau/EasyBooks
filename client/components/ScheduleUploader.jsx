@@ -59,7 +59,6 @@ ScheduleUploader = React.createClass({
 				headers: {'Authorization': localStorage.getItem('jwt'),
 				},
 				success: function (response) {
-					console.log(response)
 					this.transitionTo('/', {postId: response.post_id});
 				}.bind(this),
 				error: function (error) {
