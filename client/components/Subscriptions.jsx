@@ -70,7 +70,6 @@ Subscriptions = React.createClass({
 			success: function (response) {
 				this.refs.subscriptionsUpdated.show();
 				this.loadSubcriptions();
-				// setTimeout(function(){ this.redirectToHome; }, 2000).bind(this);
 				this.setTimeout(function () {
 					this.redirectToHome();
 				}, 1000)

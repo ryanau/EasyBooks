@@ -2,6 +2,7 @@ var React = require('react');
 var $ = require('jquery');
 var Router = require('react-router');
 var Navigation = Router.Navigation;
+var TimerMixin = require('react-timer-mixin');
 
 var Uri = require('jsuri');
 var Link = Router.Link;
@@ -9,11 +10,14 @@ var Link = Router.Link;
 var mui = require('material-ui');
 var ThemeManager = new mui.Styles.ThemeManager();
 var RaisedButton = mui.RaisedButton;
+var FontIcon = mui.FontIcon;
+var IconButton = mui.IconButton;
+var Snackbar = mui.Snackbar;
 
 var Comments = require('./Comments.jsx');
 
 Post = React.createClass({
-	mixins: [ Navigation ],
+	mixins: [ Navigation, TimerMixin ],
 	childContextTypes: {
 	  muiTheme: React.PropTypes.object
 	},
@@ -71,13 +75,18 @@ Post = React.createClass({
 			crossDomain: true,
 			headers: {'Authorization': localStorage.getItem('jwt')},
 			success: function (response) {
-				alert('post deleted!');
-				this.transitionTo('/');
+				this.refs.postDeleted.show();
+				this.setTimeout(function () {
+					this.redirectToHome();
+				}, 1000)
 			}.bind(this),
 			error: function (error) {
 				window.location = "/"
 			}.bind(this),
 		});
+	},
+	redirectToHome: function () {
+		this.transitionTo('/');
 	},
 	render: function () {
 		if (this.state.post != null) {
@@ -95,6 +104,9 @@ Post = React.createClass({
 				  label="Delete Post"
 				  onClick={this.deletePost}
 				  primary={true}/>;
+			} else {
+				var starButton = 
+				<IconButton><FontIcon className="material-icons">star</FontIcon></IconButton>
 			}
 			var comments = <Comments origin={this.props.origin} post_id={post.id}/>;
 		} else {
@@ -104,6 +116,10 @@ Post = React.createClass({
 		}
 		return (
 			<div>
+				<Snackbar
+				  ref="postDeleted"
+				  message='Post Deleted. Redirecting...'
+				  autoHideDuration={1000}/>
 				<h4>Post</h4>
 				<p>{post.title}</p>
 				<p>{post.price}</p>
@@ -111,6 +127,7 @@ Post = React.createClass({
 				{comments}
 				{editButton}
 				{deleteButton}
+				{starButton}
 			</div>
 		)
 	},
