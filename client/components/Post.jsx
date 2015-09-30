@@ -1,6 +1,8 @@
 var React = require('react');
 var $ = require('jquery');
 var Router = require('react-router');
+var Navigation = Router.Navigation;
+
 var Uri = require('jsuri');
 var Link = Router.Link;
 
@@ -11,6 +13,7 @@ var RaisedButton = mui.RaisedButton;
 var Comments = require('./Comments.jsx');
 
 Post = React.createClass({
+	mixins: [ Navigation ],
 	childContextTypes: {
 	  muiTheme: React.PropTypes.object
 	},
@@ -54,6 +57,28 @@ Post = React.createClass({
 			}.bind(this),
 		});
 	},
+	deletePost: function () {
+		var path = location.pathname;
+		var post_id = path.substring(7, path.length);
+		var data = {
+			post_id: post_id,
+		};
+		$.ajax({
+			url: this.props.origin + '/posts/' + post_id,
+			type: 'DELETE',
+			data: data,
+			dataType: 'json',
+			crossDomain: true,
+			headers: {'Authorization': localStorage.getItem('jwt')},
+			success: function (response) {
+				alert('post deleted!');
+				this.transitionTo('/');
+			}.bind(this),
+			error: function (error) {
+				window.location = "/"
+			}.bind(this),
+		});
+	},
 	render: function () {
 		if (this.state.post != null) {
 			var post = this.state.post;
@@ -65,6 +90,11 @@ Post = React.createClass({
 				  label="Edit Post"
 				  onClick={this.editPost}
 				  secondary={true}/>;
+				var deleteButton = 
+				<RaisedButton
+				  label="Delete Post"
+				  onClick={this.deletePost}
+				  primary={true}/>;
 			}
 			var comments = <Comments origin={this.props.origin} post_id={post.id}/>;
 		} else {
@@ -80,6 +110,7 @@ Post = React.createClass({
 				<p>{seller_name}</p>
 				{comments}
 				{editButton}
+				{deleteButton}
 			</div>
 		)
 	},
