@@ -6,6 +6,8 @@ var Link = Router.Link;
 var mui = require('material-ui');
 var ThemeManager = new mui.Styles.ThemeManager();
 
+var PublicPost = require('../PublicPost.jsx');
+
 StarredPosts = React.createClass({
 	childContextTypes: {
 	  muiTheme: React.PropTypes.object
@@ -25,7 +27,7 @@ StarredPosts = React.createClass({
 	},
 	loadPosts: function () {
 		$.ajax({
-			url: this.props.origin + '/posts',
+			url: this.props.origin + '/starred_posts',
 			type: 'GET',
 			dataType: 'json',
 			crossDomain: true,
@@ -41,9 +43,19 @@ StarredPosts = React.createClass({
 		});
 	},
 	render: function () {
+		if (this.state.posts != null) {
+			var posts = this.state.posts.map(function (post, index) {
+				return (
+					<PublicPost key={post.id} origin={this.props.origin} post={post}/>
+				)
+			}.bind(this));
+		} else {
+			var posts = "Loading..."
+		};
 		return (
 			<div>
 				<h4>Starred Posts</h4>
+				{posts}
 			</div>
 		)
 	},

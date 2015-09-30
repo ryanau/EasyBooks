@@ -6,6 +6,8 @@ var Link = Router.Link;
 var mui = require('material-ui');
 var ThemeManager = new mui.Styles.ThemeManager();
 
+var PublicPost = require('../PublicPost.jsx');
+
 ActivePosts = React.createClass({
 	childContextTypes: {
 	  muiTheme: React.PropTypes.object
