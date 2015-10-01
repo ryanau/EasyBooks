@@ -14,6 +14,7 @@
 /node_modules
 /log
 /public/bundle.js
+/public/bundle.js.map
 npm-debug.log
 
 ## Specific to RubyMotion:
