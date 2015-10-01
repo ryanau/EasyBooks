@@ -6,7 +6,6 @@ var SignUp = require('./SignUp.jsx');
 var LogIn = require('./LogIn.jsx');
 var Dashboard = require('./Dashboard.jsx');
 
-
 var mui = require('material-ui');
 var ThemeManager = new mui.Styles.ThemeManager();
 
