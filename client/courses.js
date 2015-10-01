@@ -29,5 +29,11 @@ Courses.prototype.empty = function () {
 	this.courses = [];
 }
 
+Courses.prototype.courseSelect = function (data) {
+	this.courses.push(data)
+	this.emit('course_changed');
+	return this;
+}
+
 module.exports = Courses;
 

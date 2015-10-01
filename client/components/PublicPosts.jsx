@@ -20,10 +20,33 @@ PublicPosts = React.createClass({
 	getInitialState: function () {
 		return {
 			posts: null,
+			course_selected: this.props.course_selected,
 		}
 	},
 	componentDidMount: function () {
 		this.loadPosts();
+		this.state.course_selected.on('course_changed', this.readloadPosts)
+	},
+	readloadPosts: function () {
+		var data = {
+			course_selected: this.state.course_selected.courses[0],
+		};
+		$.ajax({
+			url: this.props.origin + '/posts',
+			type: 'GET',
+			dataType: 'json',
+			data: data,
+			crossDomain: true,
+			headers: {'Authorization': localStorage.getItem('jwt')},
+			success: function (response) {
+				this.setState({
+					posts: response.data
+				});
+			}.bind(this),
+			error: function (error) {
+				window.location = "/"
+			}.bind(this),
+		});
 	},
 	loadPosts: function () {
 		$.ajax({

@@ -32,11 +32,9 @@ Subscriptions = React.createClass({
 	},
 	componentDidMount: function () {
 		this.loadSubcriptions();
-		this.state.subscriptionBasket.on('change', this.coursesChanged);
 	},
 	componentWillUnmount: function(){
 		this.state.subscriptionBasket.empty();
-	  this.state.subscriptionBasket.off('change');
 	},
 	loadSubcriptions: function () {
 		$.ajax({

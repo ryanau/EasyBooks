@@ -5,7 +5,6 @@ var mui = require('material-ui');
 var ThemeManager = new mui.Styles.ThemeManager();
 var Toggle = mui.Toggle;
 
-
 SubscribedCourse = React.createClass({
 	childContextTypes: {
 	  muiTheme: React.PropTypes.object

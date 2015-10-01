@@ -1,8 +1,18 @@
 class PostsController < ApplicationController
-  before_action :authentication, only: [:index, :create, :show, :image_upload, :active_posts, :destroy, :starred_posts]
+  before_action :authentication, only: [:index, :create, :show, :image_upload, :active_posts, :destroy, :starred_posts, :mark_sold, :archived_posts]
 
   def index
-    posts = Post.where(public: true)
+    if params[:course_selected] != nil && params[:course_selected] != ""
+      course_selected = params[:course_selected]
+      arr = []
+      arr.unshift(course_selected[course_selected.reverse.index(/\s{1}/, 1) * -1.. -1])
+      total = course_selected.length - course_selected[course_selected.reverse.index(/\s{1}/, 1) * -1.. -1].length - 2
+      arr.unshift(course_selected[0..total])
+      course_id = Course.find_by(department: arr[0], course_number: arr[1]).id
+      posts = Post.where(public: true, course_id: course_id)
+    else
+      posts = Post.where(public: true)
+    end
     render json: {data: posts}
   end
 
@@ -12,7 +22,15 @@ class PostsController < ApplicationController
     else
       pic_url = params[:pic_url]
     end
-    post = Post.create(price: params[:price], title: params[:title], pickup: params[:pickup], course_id: params[:course_id], seller_id: current_user.id, picture_url: pic_url)
+
+    course_selected = params[:course_selected]
+    arr = []
+    arr.unshift(course_selected[course_selected.reverse.index(/\s{1}/, 1) * -1.. -1])
+    total = course_selected.length - course_selected[course_selected.reverse.index(/\s{1}/, 1) * -1.. -1].length - 2
+    arr.unshift(course_selected[0..total])
+    course_id = Course.find_by(department: arr[0], course_number: arr[1]).id
+
+    post = Post.create(price: params[:price], title: params[:title], pickup: params[:pickup], course_id: course_id, seller_id: current_user.id, picture_url: pic_url)
     render json: {post_id: post.id}
   end
 
@@ -23,6 +41,19 @@ class PostsController < ApplicationController
     seller_id = seller.id
     seller_name = seller.first_name
     render json: {post: post, seller_id: seller_id, seller_name: seller_name}
+  end
+
+  def mark_sold
+    post_id = params[:post_id]
+    post = Post.find(post_id)
+    if post.sold && !post.public
+      post.update_attributes(sold: false, public: true)
+      response = false
+    else
+      post.update_attributes(sold: true, public: false)
+      response = true
+    end
+    render json: {sold: response}
   end
 
   def destroy
@@ -38,6 +69,11 @@ class PostsController < ApplicationController
 
   def starred_posts
     posts = current_user.posts
+    render json: {data: posts}
+  end
+
+  def archived_posts
+    posts = current_user.selling_posts.where(sold: true, public: false)
     render json: {data: posts}
   end
 
