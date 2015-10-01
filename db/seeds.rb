@@ -1,5 +1,3 @@
-require 'faker'
-
 # seed universities
 university = University.create(name: "University of California, Berkeley")
 University.create(name: "University of Southern California")
