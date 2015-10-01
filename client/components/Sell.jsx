@@ -50,7 +50,6 @@ Sell = React.createClass({
 			success: function (response) {
 				this.setState({
 					courses: response.courses,
-					course_selected: response.courses[0].label,
 				});
 			}.bind(this),
 			error: function (error) {
@@ -173,7 +172,7 @@ Sell = React.createClass({
   			<div>
   			<Select
   			  name="form-field-name"
-  			  value="Please type the course or use the dropdown menu"
+  			  value="Please type the course name or use the dropdown menu"
   			  options={courseList}
   			  onChange={this.searchChange}
   			  searchable={true}/>

@@ -198,7 +198,6 @@ Post = React.createClass({
 			var seller_id = ""
 			var seller_name = ""
 		}
-		console.log(this.state.star)
 		return (
 			<div>
 				<Snackbar

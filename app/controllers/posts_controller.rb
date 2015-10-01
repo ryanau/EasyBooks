@@ -2,7 +2,19 @@ class PostsController < ApplicationController
   before_action :authentication, only: [:index, :create, :show, :image_upload, :active_posts, :destroy, :starred_posts]
 
   def index
-    posts = Post.where(public: true)
+    p "*************"
+    p params[:course_selected]
+    if params[:course_selected] != nil && params[:course_selected] != ""
+      course_selected = params[:course_selected]
+      arr = []
+      arr.unshift(course_selected[course_selected.reverse.index(/\s{1}/, 1) * -1.. -1])
+      total = course_selected.length - course_selected[course_selected.reverse.index(/\s{1}/, 1) * -1.. -1].length - 2
+      arr.unshift(course_selected[0..total])
+      course_id = Course.find_by(department: arr[0], course_number: arr[1]).id
+      posts = Post.where(public: true, course_id: course_id)
+    else
+      posts = Post.where(public: true)
+    end
     render json: {data: posts}
   end
 

@@ -1,5 +1,6 @@
 require('./assets/app.css');
 require('./assets/reactselect.css');
+require('./App/helper.js');
 
 var React = require('react');
 var App = require('./components/App.jsx');

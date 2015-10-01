@@ -29,14 +29,14 @@ PublicPost = React.createClass({
   	var post = this.props.post
   	return (
   		<div>
-        <Link to={"/posts/" + post.id}>
+      
   			<Card key={post.id} initiallyExpanded={false}>
   				<CardMedia overlay={
   					<CardTitle title={<Link to={"/posts/" + post.id}>{post.title}</Link>} subtitle={"$" + post.price + " | Created " + moment(post.created_at).fromNow()} />}>
   					<img src={post.picture_url} />
   				</CardMedia>
   			</Card>
-        </Link>
+
   		</div>
   	)
   }

@@ -13,6 +13,7 @@ var DropDownMenu = mui.DropDownMenu;
 var FlatButton = mui.FlatButton;
 
 var PublicPosts = require('./PublicPosts.jsx');
+var Courses = require('../courses.js');
 
 MarketPlace = React.createClass({
 	childContextTypes: {
@@ -26,11 +27,15 @@ MarketPlace = React.createClass({
   getInitialState: function () {
     return {
       courses: [{value: "1", label: "Loading..."}],
-      course_selected: null,
+      course_selected: new Courses,
     }
   },
   componentDidMount: function () {
     this.loadCourses();
+  },
+  courseChanged: function () {
+    this.forceUpdate();
+    this.state.course_selected.emit('course_updated')
   },
   loadCourses: function () {
     $.ajax({
@@ -42,13 +47,16 @@ MarketPlace = React.createClass({
       success: function (response) {
         this.setState({
           courses: response.courses,
-          course_selected: response.courses[0].label,
         });
       }.bind(this),
       error: function (error) {
         window.location = "/"
       }.bind(this),
     });
+  },
+  searchChange: function (value) {
+    this.state.course_selected.empty();
+    this.state.course_selected.courseSelect(value);
   },
   render: function () {
   	var sortMethods = [
@@ -62,7 +70,7 @@ MarketPlace = React.createClass({
   		<div id="marketplace">
         <Select
           name="form-field-name"
-          value="Please type the course or use the dropdown menu"
+          value="Please type the course name or use the dropdown menu"
           options={searchOptions}
           onChange={this.searchChange}
           searchable={true}/>
@@ -78,7 +86,7 @@ MarketPlace = React.createClass({
 				 		label={('no', 'Sell')}/>
   				</ToolbarGroup>
 			 	</Toolbar>
-  			<PublicPosts origin={this.props.origin} />
+  			<PublicPosts origin={this.props.origin} course_selected={this.state.course_selected}/>
   		</div>
   	)
   }
