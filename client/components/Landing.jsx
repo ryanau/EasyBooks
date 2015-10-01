@@ -2,12 +2,12 @@ var React = require('react');
 var Router = require('react-router');
 var Link = Router.Link;
 
+var mui = require('material-ui');
+var ThemeManager = new mui.Styles.ThemeManager();
+
 var SignUp = require('./SignUp.jsx');
 var LogIn = require('./LogIn.jsx');
 var Dashboard = require('./Dashboard.jsx');
-
-var mui = require('material-ui');
-var ThemeManager = new mui.Styles.ThemeManager();
 
 Landing = React.createClass({
 	childContextTypes: {
