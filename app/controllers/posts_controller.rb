@@ -1,9 +1,7 @@
 class PostsController < ApplicationController
-  before_action :authentication, only: [:index, :create, :show, :image_upload, :active_posts, :destroy, :starred_posts]
+  before_action :authentication, only: [:index, :create, :show, :image_upload, :active_posts, :destroy, :starred_posts, :mark_sold, :archived_posts]
 
   def index
-    p "*************"
-    p params[:course_selected]
     if params[:course_selected] != nil && params[:course_selected] != ""
       course_selected = params[:course_selected]
       arr = []
@@ -45,6 +43,19 @@ class PostsController < ApplicationController
     render json: {post: post, seller_id: seller_id, seller_name: seller_name}
   end
 
+  def mark_sold
+    post_id = params[:post_id]
+    post = Post.find(post_id)
+    if post.sold && !post.public
+      post.update_attributes(sold: false, public: true)
+      response = false
+    else
+      post.update_attributes(sold: true, public: false)
+      response = true
+    end
+    render json: {sold: response}
+  end
+
   def destroy
     post_id = params[:post_id]
     current_user.selling_posts.find(post_id).destroy
@@ -58,6 +69,11 @@ class PostsController < ApplicationController
 
   def starred_posts
     posts = current_user.posts
+    render json: {data: posts}
+  end
+
+  def archived_posts
+    posts = current_user.selling_posts.where(sold: true, public: false)
     render json: {data: posts}
   end
 
