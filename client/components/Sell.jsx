@@ -4,6 +4,7 @@ var Router = require('react-router');
 var Navigation = Router.Navigation;
 var Link = Router.Link;
 var Dropzone = require('react-dropzone');
+var Select = require('react-select');
 
 var mui = require('material-ui');
 var ThemeManager = new mui.Styles.ThemeManager();
@@ -28,8 +29,8 @@ Sell = React.createClass({
 			title: "",
 			price: "",
 			pickup: "",
-			courses: [{payload: "1", text: "Loading"}],
-			course_id: "1",
+			courses: [{value: "1", label: "Loading..."}],
+			course_selected: null,
 			warning: "",
 			pic_file: null,
 			pic_url: null,
@@ -48,7 +49,8 @@ Sell = React.createClass({
 			headers: {'Authorization': localStorage.getItem('jwt')},
 			success: function (response) {
 				this.setState({
-					courses: response.courses
+					courses: response.courses,
+					course_selected: response.courses[0].label,
 				});
 			}.bind(this),
 			error: function (error) {
@@ -71,9 +73,9 @@ Sell = React.createClass({
 			pickup: e.target.value
 		})
 	},
-	handleDropDownMenu: function (e, selectedIndex, menuItem) {
+	searchChange: function (value) {
 		this.setState({
-			course_id: menuItem.payload
+			course_selected: value,
 		});
 	},
 	onDrop: function (file) {
@@ -109,7 +111,7 @@ Sell = React.createClass({
 			title: this.state.title,
 			price: this.state.price,
 			pickup: this.state.pickup,
-			course_id: this.state.course_id,
+			course_selected: this.state.course_selected,
 			pic_url: this.state.pic_url,
 		};
 		if (data.title == "" || data.price == "" || data.pickup == "") {
@@ -126,10 +128,8 @@ Sell = React.createClass({
 				headers: {'Authorization': localStorage.getItem('jwt')},
 				success: function (response) {
 					this.transitionTo('/posts/' + response.post_id, {postId: response.post_id});
-					// window.location = "/" + this.props.origin + '/posts/' + response.post_id
 				}.bind(this),
 				error: function (error) {
-					debugger
 					window.location = "/"
 				}.bind(this),
 			});
@@ -171,7 +171,12 @@ Sell = React.createClass({
   			  hintText="Required"/>
   			</div>
   			<div>
-  			<DropDownMenu menuItems={courseList} autoScrollBodyContent={true} onChange={this.handleDropDownMenu}/>
+  			<Select
+  			  name="form-field-name"
+  			  value="Please type the course or use the dropdown menu"
+  			  options={courseList}
+  			  onChange={this.searchChange}
+  			  searchable={true}/>
   			</div>
   			<div>
 					{uploadingProgress}

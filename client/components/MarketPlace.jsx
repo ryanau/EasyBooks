@@ -23,6 +23,33 @@ MarketPlace = React.createClass({
 	    muiTheme: ThemeManager.getCurrentTheme()
 	  };
 	},
+  getInitialState: function () {
+    return {
+      courses: [{value: "1", label: "Loading..."}],
+      course_selected: null,
+    }
+  },
+  componentDidMount: function () {
+    this.loadCourses();
+  },
+  loadCourses: function () {
+    $.ajax({
+      url: this.props.origin + '/courses',
+      type: 'GET',
+      dataType: 'json',
+      crossDomain: true,
+      headers: {'Authorization': localStorage.getItem('jwt')},
+      success: function (response) {
+        this.setState({
+          courses: response.courses,
+          course_selected: response.courses[0].label,
+        });
+      }.bind(this),
+      error: function (error) {
+        window.location = "/"
+      }.bind(this),
+    });
+  },
   render: function () {
   	var sortMethods = [
   		{ payload: "1", text: "Date: Newest to Oldest"},
@@ -30,21 +57,18 @@ MarketPlace = React.createClass({
   		{ payload: "3", text: "Price: Low to High"},
   		{ payload: "4", text: "Price: High to Low"},
   	];
-    var searchOptions = [
-      { value: 'one', label: 'One' },
-      { value: 'two', label: 'Two' }
-    ];
+    var searchOptions = this.state.courses;
   	return (
   		<div id="marketplace">
+        <Select
+          name="form-field-name"
+          value="Please type the course or use the dropdown menu"
+          options={searchOptions}
+          onChange={this.searchChange}
+          searchable={true}/>
   			<Toolbar> 
   				<ToolbarGroup key={0} float="left">
   					<DropDownMenu menuItems={sortMethods} />
-            <Select
-              name="form-field-name"
-              value="one"
-              options={searchOptions}
-              onChange={this.searchChange}
-              searchable={true}/>
   				</ToolbarGroup>
   				<ToolbarGroup key={1} float="right">
 	  				<ToolbarSeparator/>
