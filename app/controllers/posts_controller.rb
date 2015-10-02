@@ -31,6 +31,13 @@ class PostsController < ApplicationController
     course_id = Course.find_by(department: arr[0], course_number: arr[1]).id
 
     post = Post.create(price: params[:price], title: params[:title], pickup: params[:pickup], course_id: course_id, seller_id: current_user.id, picture_url: pic_url)
+
+    Subscription.where(course_id: course_id).each do |subscription|
+      course = Course.find(subscription.course_id)
+      twilio_subscribed_notification(subscription.user.phone, course, post, current_user.first_name, post.pickup)
+    end
+
+
     render json: {post_id: post.id}
   end
 
@@ -90,5 +97,20 @@ class PostsController < ApplicationController
     }
     response = Cloudinary::Uploader.upload(pic_address, auth)
     render json: {pic_url: response["url"]}
+  end
+
+  private
+
+  def twilio_subscribed_notification(phone, course, post, seller, pick_up)
+    phone = '+1' + phone.to_s
+    course_name = course.department + " " + course.course_number
+    account_sid = ENV['TWILIO_ACCOUNT_SID']
+    auth_token = ENV['TWILIO_AUTH_TOKEN']
+    @client = Twilio::REST::Client.new account_sid, auth_token
+    @client.messages.create(
+      from: ENV['TWILIO_PHONE'],
+      to: phone,
+      body: "EasyBooks: A post for #{course_name} is available! The post titled: #{post.title}, is asking for $#{post.price} by #{seller} to be picked up at #{pick_up}!"
+    )
   end
 end

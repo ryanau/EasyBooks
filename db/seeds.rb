@@ -28,9 +28,9 @@ end
 end
 
 # seed subscriptions
-[1,2,3,4,5].each do |id|
-  User.find(id).subscriptions.create(course_id: id)
-end
+# [1,2,3,4,5].each do |id|
+#   User.find(id).subscriptions.create(course_id: id)
+# end
 
 # seed comments
 
