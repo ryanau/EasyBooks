@@ -6,7 +6,7 @@ var Sell = require('../components/Sell.jsx');
 var Post = require('../components/Post.jsx');
 var ScheduleUploader = require('../components/ScheduleUploader.jsx');
 var Subscriptions = require('../components/Subscriptions.jsx');
-var PostEdit = require('../components/PostEdit.jsx');
+// var PostEdit = require('../components/PostEdit.jsx');
 var PostDashboard = require('../components/PostDashboard.jsx');
 
 
@@ -20,9 +20,7 @@ module.exports = (
 	  <DefaultRoute name="landing" handler={Landing} />
 	  <Route name="postdashboard" path="postdashboard" handler={PostDashboard} />
 	  <Route name="sell" handler={Sell} />
-	  <Route name="posts/:id" path="posts/:id" handler={Post}>
-	  	<Route name="posts/:id/edit" path="posts/:id" handler={PostEdit} />
-	  </Route>
+	  <Route name="posts/:id" path="posts/:id" handler={Post} />
 	  <Route name="scheduleUploader" path="schedule" handler={ScheduleUploader} />
 	  <Route name="Subscriptions" path="subscriptions" handler={Subscriptions} />
   </Route>
