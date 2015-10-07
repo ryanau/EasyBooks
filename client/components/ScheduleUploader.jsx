@@ -56,7 +56,7 @@ ScheduleUploader = React.createClass({
 				data: data,
 				dataType: 'json',
 				crossDomain: true,
-				headers: {'Authorization': localStorage.getItem('jwt'),
+				headers: {'Authorization': localStorage.getItem('jwt-easybooks'),
 				},
 				success: function (response) {
 					this.transitionTo('/', {postId: response.post_id});
@@ -82,7 +82,7 @@ ScheduleUploader = React.createClass({
 			processData: false,
 			contentType: false,
 			crossDomain: true,
-			headers: {'Authorization': localStorage.getItem('jwt'),
+			headers: {'Authorization': localStorage.getItem('jwt-easybooks'),
 			},
 			success: function (response) {
 				this.setState({

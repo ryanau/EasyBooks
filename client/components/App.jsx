@@ -21,7 +21,7 @@ App = React.createClass({
     }
   },
   componentDidMount: function () {
-  	if (!!localStorage.getItem('jwt')) {
+  	if (!!localStorage.getItem('jwt-easybooks')) {
 			this.currentUserFromAPI();
   	};
   },
@@ -31,7 +31,7 @@ App = React.createClass({
       type: 'GET',
       dataType: 'json',
       crossDomain: true,
-      headers: {'Authorization': localStorage.getItem('jwt'),
+      headers: {'Authorization': localStorage.getItem('jwt-easybooks'),
       },
       success: function (response) {
         this.setState({

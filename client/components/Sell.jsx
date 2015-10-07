@@ -46,7 +46,7 @@ Sell = React.createClass({
 			type: 'GET',
 			dataType: 'json',
 			crossDomain: true,
-			headers: {'Authorization': localStorage.getItem('jwt')},
+			headers: {'Authorization': localStorage.getItem('jwt-easybooks')},
 			success: function (response) {
 				this.setState({
 					courses: response.courses,
@@ -91,7 +91,7 @@ Sell = React.createClass({
 			processData: false,
 			contentType: false,
 			crossDomain: true,
-			headers: {'Authorization': localStorage.getItem('jwt'),
+			headers: {'Authorization': localStorage.getItem('jwt-easybooks'),
 			},
 			success: function (response) {
 				this.setState({
@@ -124,7 +124,7 @@ Sell = React.createClass({
 				data: data,
 				dataType: 'json',
 				crossDomain: true,
-				headers: {'Authorization': localStorage.getItem('jwt')},
+				headers: {'Authorization': localStorage.getItem('jwt-easybooks')},
 				success: function (response) {
 					this.transitionTo('/posts/' + response.post_id, {postId: response.post_id});
 				}.bind(this),

@@ -30,8 +30,11 @@ class PostsController < ApplicationController
     arr.unshift(course_selected[0..total])
     course_id = Course.find_by(department: arr[0], course_number: arr[1]).id
 
-    post = Post.create(price: params[:price], title: params[:title], pickup: params[:pickup], course_id: course_id, seller_id: current_user.id, picture_url: pic_url)
+    post = Post.create(price: params[:price], title: params[:title].capitalize, pickup: params[:pickup].downcase, course_id: course_id, seller_id: current_user.id, picture_url: pic_url)
+
+    NotifySubscribedBuyers.perform_async(course_id, post.id, post.pickup, post.title, post.price, current_user.first_name)
     render json: {post_id: post.id}
+    # notify_buyers_available_posts(course_id, post)
   end
 
   def show
@@ -91,4 +94,29 @@ class PostsController < ApplicationController
     response = Cloudinary::Uploader.upload(pic_address, auth)
     render json: {pic_url: response["url"]}
   end
+
+  private
+
+  # def twilio_subscribed_notification(phone, course, post, seller, pick_up)
+  #   phone = '+1' + phone.to_s
+  #   course_name = course.department + " " + course.course_number
+  #   account_sid = ENV['TWILIO_ACCOUNT_SID']
+  #   auth_token = ENV['TWILIO_AUTH_TOKEN']
+  #   @client = Twilio::REST::Client.new account_sid, auth_token
+  #   @client.messages.create(
+  #     from: ENV['TWILIO_PHONE'],
+  #     to: phone,
+  #     body: "EasyBooks: A post for #{course_name} is available! The post titled: #{post.title}, is asking for $#{post.price} by #{seller} to be picked up at #{pick_up}!"
+  #   )
+  # end
+
+  # def notify_buyers_available_posts(course_id, post)
+  #   Subscription.where(course_id: course_id).each do |subscription|
+  #     course = Course.find(subscription.course_id)
+  #     if !Notification.find_by(user_id: subscription.user_id)
+  #       twilio_subscribed_notification(subscription.user.phone, course, post, current_user.first_name, post.pickup)
+  #       Notification.create(user_id: subscription.user.id, post_id: post.id)
+  #     end
+  #   end
+  # end
 end

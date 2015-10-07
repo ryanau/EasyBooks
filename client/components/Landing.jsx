@@ -2,13 +2,12 @@ var React = require('react');
 var Router = require('react-router');
 var Link = Router.Link;
 
-var SignUp = require('./SignUp.jsx');
-var LogIn = require('./LogIn.jsx');
-var Dashboard = require('./Dashboard.jsx');
-
-
 var mui = require('material-ui');
 var ThemeManager = new mui.Styles.ThemeManager();
+
+var SignUp = require('./SignUp.jsx');
+var LogIn = require('./LogIn.jsx');
+var DashBoard = require('./DashBoard.jsx');
 
 Landing = React.createClass({
 	childContextTypes: {
@@ -24,7 +23,7 @@ Landing = React.createClass({
   	if (this.props.signedIn) {
   		var display = (
 	  		<div>
-		  		<Dashboard origin={this.props.origin} />
+		  		<DashBoard origin={this.props.origin} />
 	  		</div>
   		);
   	} else {

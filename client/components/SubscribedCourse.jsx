@@ -41,7 +41,6 @@ SubscribedCourse = React.createClass({
 		var course = this.props.course
 		return (
 			<div>
-				<h4>SubscribedCourse</h4>
 				<p>{course.course.department + course.course.course_number}</p>
 
 				<Toggle

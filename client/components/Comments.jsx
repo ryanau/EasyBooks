@@ -38,7 +38,7 @@ Comments = React.createClass({
 			data: data,
 			dataType: 'json',
 			crossDomain: true,
-			headers: {'Authorization': localStorage.getItem('jwt')},
+			headers: {'Authorization': localStorage.getItem('jwt-easybooks')},
 			success: function (response) {
 				this.setState({
 					comments: response
@@ -59,7 +59,7 @@ Comments = React.createClass({
 			data: data,
 			dataType: 'json',
 			crossDomain: true,
-			headers: {'Authorization': localStorage.getItem('jwt')},
+			headers: {'Authorization': localStorage.getItem('jwt-easybooks')},
 			success: function (response) {
 				this.setState({
 					comments: response,

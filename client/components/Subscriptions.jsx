@@ -12,6 +12,7 @@ var Snackbar = mui.Snackbar;
 var RaisedButton = mui.RaisedButton;
 
 var SubscribedCourse = require('./SubscribedCourse.jsx');
+var AddSubscription = require('./AddSubscription.jsx');
 var Courses = require('../courses.js');
 
 Subscriptions = React.createClass({
@@ -28,13 +29,11 @@ Subscriptions = React.createClass({
 		return {
 			subscriptionBasket: new Courses,
 			subscriptions: null,
+			add_show: false,
 		}
 	},
 	componentDidMount: function () {
 		this.loadSubcriptions();
-	},
-	componentWillUnmount: function(){
-		this.state.subscriptionBasket.empty();
 	},
 	loadSubcriptions: function () {
 		$.ajax({
@@ -42,7 +41,7 @@ Subscriptions = React.createClass({
 			type: 'GET',
 			dataType: 'json',
 			crossDomain: true,
-			headers: {'Authorization': localStorage.getItem('jwt')},
+			headers: {'Authorization': localStorage.getItem('jwt-easybooks')},
 			success: function (response) {
 				this.setState({
 					subscriptions: response
@@ -63,7 +62,7 @@ Subscriptions = React.createClass({
 			data: data,
 			dataType: 'json',
 			crossDomain: true,
-			headers: {'Authorization': localStorage.getItem('jwt'),
+			headers: {'Authorization': localStorage.getItem('jwt-easybooks'),
 			},
 			success: function (response) {
 				this.refs.subscriptionsUpdated.show();
@@ -80,6 +79,14 @@ Subscriptions = React.createClass({
 	redirectToHome: function () {
 		this.transitionTo('/');
 	},
+	showSubscription: function () {
+		this.setState({
+			add_show: true,
+		})
+	},
+	reload: function () {
+		this.loadSubcriptions();
+	},
 	render: function () {
 		if (this.state.subscriptions != null) {
 			var subscriptions = this.state.subscriptions.map(function (course, index) {
@@ -92,6 +99,15 @@ Subscriptions = React.createClass({
 			  label="Update Subscriptions"
 			  onClick={this.updateSubscription}
 			  secondary={true}/>;
+			if (this.state.add_show) {
+				var subscription_component = <AddSubscription origin={this.props.origin} reload={this.reload}/>
+			} else {
+				var showAddSubscription = 
+				<RaisedButton
+				  label="Add Subscription"
+				  onClick={this.showSubscription}
+				  secondary={true}/>;
+			}
 		} else {
 			var subscriptions = "Loading..."
 		}
@@ -103,7 +119,9 @@ Subscriptions = React.createClass({
 				  autoHideDuration={1000}/>
 				<h4>Subscriptions</h4>
 				{subscriptions}
+				{subscription_component}
 				{updateSubscriptionButton}
+				{showAddSubscription}
 			</div>
 		)
 	},
