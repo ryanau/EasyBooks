@@ -22,17 +22,32 @@ class SubscriptionsController < ApplicationController
   end
 
   def create
-    courses = params[:courses]
-    if courses != nil
-      courses.each do |course|
-        department = course[1][0]
-        course_number = course[1][1]
-        selected = Course.find_by(department: department, course_number: course_number)
-        if current_user.subscriptions.where(course_id: selected.id).count == 0
-          current_user.subscriptions.create(course_id: selected.id)
-        end
+    if params[:course_selected]
+      course_selected = params[:course_selected]
+      arr = []
+      arr.unshift(course_selected[course_selected.reverse.index(/\s{1}/, 1) * -1.. -1])
+      total = course_selected.length - course_selected[course_selected.reverse.index(/\s{1}/, 1) * -1.. -1].length - 2
+      arr.unshift(course_selected[0..total])
+      course_id = Course.find_by(department: arr[0], course_number: arr[1]).id
+      if current_user.subscriptions.where(course_id: course_id).count == 0
+        current_user.subscriptions.create(course_id: course_id)
+        render json: {message: "success"}
+      else
+        render json: {message: "this course has already been subscribed to"}
       end
+    elsif params[:courses]
+      courses = params[:courses]
+      if courses != nil
+        courses.each do |course|
+          department = course[1][0]
+          course_number = course[1][1]
+          selected = Course.find_by(department: department, course_number: course_number)
+          if current_user.subscriptions.where(course_id: selected.id).count == 0
+            current_user.subscriptions.create(course_id: selected.id)
+          end
+        end
       render json: {message: "success"}
+      end
     else
       render json: "Course not found", status: 400
     end

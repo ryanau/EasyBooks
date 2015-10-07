@@ -37,7 +37,7 @@ PublicPosts = React.createClass({
 			dataType: 'json',
 			data: data,
 			crossDomain: true,
-			headers: {'Authorization': localStorage.getItem('jwt')},
+			headers: {'Authorization': localStorage.getItem('jwt-easybooks')},
 			success: function (response) {
 				this.setState({
 					posts: response.data
@@ -54,7 +54,7 @@ PublicPosts = React.createClass({
 			type: 'GET',
 			dataType: 'json',
 			crossDomain: true,
-			headers: {'Authorization': localStorage.getItem('jwt')},
+			headers: {'Authorization': localStorage.getItem('jwt-easybooks')},
 			success: function (response) {
 				this.setState({
 					posts: response.data

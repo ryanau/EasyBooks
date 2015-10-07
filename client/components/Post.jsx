@@ -52,7 +52,7 @@ Post = React.createClass({
 			data: data,
 			dataType: 'json',
 			crossDomain: true,
-			headers: {'Authorization': localStorage.getItem('jwt')},
+			headers: {'Authorization': localStorage.getItem('jwt-easybooks')},
 			success: function (response) {
 				if (response.sold) {
 					this.refs.markSold.show();
@@ -83,7 +83,7 @@ Post = React.createClass({
 			data: data,
 			dataType: 'json',
 			crossDomain: true,
-			headers: {'Authorization': localStorage.getItem('jwt')},
+			headers: {'Authorization': localStorage.getItem('jwt-easybooks')},
 			success: function (response) {
 				if (response.starred) {
 					this.setState({
@@ -112,7 +112,7 @@ Post = React.createClass({
 			data: data,
 			dataType: 'json',
 			crossDomain: true,
-			headers: {'Authorization': localStorage.getItem('jwt')},
+			headers: {'Authorization': localStorage.getItem('jwt-easybooks')},
 			success: function (response) {
 				this.setState({
 					post: response.post,
@@ -138,7 +138,7 @@ Post = React.createClass({
 			data: data,
 			dataType: 'json',
 			crossDomain: true,
-			headers: {'Authorization': localStorage.getItem('jwt')},
+			headers: {'Authorization': localStorage.getItem('jwt-easybooks')},
 			success: function (response) {
 				this.refs.postDeleted.show();
 				this.setTimeout(function () {
@@ -166,7 +166,7 @@ Post = React.createClass({
 				data: data,
 				dataType: 'json',
 				crossDomain: true,
-				headers: {'Authorization': localStorage.getItem('jwt')},
+				headers: {'Authorization': localStorage.getItem('jwt-easybooks')},
 				success: function (response) {
 					this.refs.postUnstarred.show();
 				}.bind(this),
@@ -187,7 +187,7 @@ Post = React.createClass({
 				data: data,
 				dataType: 'json',
 				crossDomain: true,
-				headers: {'Authorization': localStorage.getItem('jwt')},
+				headers: {'Authorization': localStorage.getItem('jwt-easybooks')},
 				success: function (response) {
 					this.refs.postStarred.show();
 				}.bind(this),

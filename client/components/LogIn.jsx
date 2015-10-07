@@ -64,7 +64,7 @@ LogIn = React.createClass({
 			success: function (response) {
 				jwt = response.token;
 				if (jwt) {
-					localStorage.setItem('jwt', jwt);
+					localStorage.setItem('jwt-easybooks', jwt);
 				};
 				window.location = "/"
 			}.bind(this),

@@ -33,17 +33,13 @@ MarketPlace = React.createClass({
   componentDidMount: function () {
     this.loadCourses();
   },
-  courseChanged: function () {
-    this.forceUpdate();
-    this.state.course_selected.emit('course_updated')
-  },
   loadCourses: function () {
     $.ajax({
       url: this.props.origin + '/courses',
       type: 'GET',
       dataType: 'json',
       crossDomain: true,
-      headers: {'Authorization': localStorage.getItem('jwt')},
+      headers: {'Authorization': localStorage.getItem('jwt-easybooks')},
       success: function (response) {
         this.setState({
           courses: response.courses,
