@@ -23,6 +23,8 @@ Rails.application.routes.draw do
     post '/parse_calendar', :to => 'subscriptions#parse_calendar'
     get '/login', :to => 'users#login'
     get '/current_user', :to => 'users#current'
+
+    post '/sms_inbound', :to => 'sms#approve'
   end
 
   match '*all', to: 'client_app#show', via: [:get]

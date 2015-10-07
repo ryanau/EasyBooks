@@ -5,5 +5,5 @@ class Post < ActiveRecord::Base
   has_many :books
   has_many :stars
   has_many :comments
-  has_many :entries
+  has_many :notifications
 end
