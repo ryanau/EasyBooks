@@ -7,8 +7,8 @@ University.create(name: "Stanford University")
 # seed courses
 university.courses.create(department: "ESPM", course_number: "50AC", year: "2015", semester: "FALL")
 university.courses.create(department: "CS", course_number: "70", year: "2015", semester: "FALL")
-university.courses.create(department: "PE", course_number: "101A", year: "2015", semester: "FALL")
-university.courses.create(department: "UGBA", course_number: "109", year: "2015", semester: "FALL")
+university.courses.create(department: "PE", course_number: "101", year: "2015", semester: "FALL")
+university.courses.create(department: "UGBA", course_number: "102A", year: "2015", semester: "FALL")
 university.courses.create(department: "ESPM", course_number: "50AC", year: "2015", semester: "SPRING")
 
 # seed users
@@ -17,9 +17,9 @@ university.courses.create(department: "ESPM", course_number: "50AC", year: "2015
 end
 
 # seed posts and books
+conditions = ['new', 'like new', 'good', 'fair']
 [1,2,3,4,5].each do |id|
-  post = Post.create(seller_id: id, course_id: id, pickup: Faker::Address.country, price: Faker::Number.between(15, 100), title: Faker::Commerce.product_name, picture_url: "https://www.petfinder.com/wp-content/uploads/2012/11/140272627-grooming-needs-senior-cat-632x475.jpg")
-  post.books.create(name: Faker::App.name, edition: Faker::App.version, condition: "New")
+  post = Post.create(seller_id: id, course_id: id, pickup: Faker::Address.country, price: Faker::Number.between(15, 100), title: Faker::Commerce.product_name, description: 'its good', condition: conditions.shuffle.first, picture_url: "https://www.petfinder.com/wp-content/uploads/2012/11/140272627-grooming-needs-senior-cat-632x475.jpg")
 end
 
 # seed stars

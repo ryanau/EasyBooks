@@ -16,15 +16,6 @@ ActiveRecord::Schema.define(version: 20151007160322) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "books", force: :cascade do |t|
-    t.string   "name",       null: false
-    t.string   "edition",    null: false
-    t.string   "condition",  null: false
-    t.integer  "post_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "comments", force: :cascade do |t|
     t.string   "content",    null: false
     t.integer  "user_id",    null: false
@@ -43,13 +34,6 @@ ActiveRecord::Schema.define(version: 20151007160322) do
     t.datetime "updated_at",    null: false
   end
 
-  create_table "entries", force: :cascade do |t|
-    t.integer  "user_id"
-    t.integer  "post_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "notifications", force: :cascade do |t|
     t.integer  "post_id"
     t.integer  "subscription_id"
@@ -61,9 +45,11 @@ ActiveRecord::Schema.define(version: 20151007160322) do
     t.float    "price",                       null: false
     t.string   "picture_url"
     t.string   "title",                       null: false
+    t.string   "description",                 null: false
     t.boolean  "sold",        default: false
     t.boolean  "public",      default: true
     t.string   "pickup"
+    t.string   "condition",                   null: false
     t.integer  "course_id",                   null: false
     t.integer  "seller_id",                   null: false
     t.integer  "buyer_id"
@@ -83,16 +69,6 @@ ActiveRecord::Schema.define(version: 20151007160322) do
     t.integer  "course_id",  null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-  end
-
-  create_table "suggestedbooks", force: :cascade do |t|
-    t.string   "name",        null: false
-    t.string   "edition",     null: false
-    t.string   "author",      null: false
-    t.float    "store_price"
-    t.integer  "course_id",   null: false
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
   end
 
   create_table "universities", force: :cascade do |t|
