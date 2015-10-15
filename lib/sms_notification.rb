@@ -18,13 +18,23 @@ module SmsNotification
     accepted = post.stars.find_by(accepted: true)
     if !accepted
       star = post.stars.where(sent: false).where.not(user_id: seller.id).first
-      if send_post_alert(star.user.phone, post)
+      if new_post_alert_command(star.id) && send_post_alert(star.user.phone, post, @command.random_num)
         star.update_attributes(sent: true)
       end
     end
   end
 
   private
+
+  def self.new_post_alert_command(star_id)
+    random = Faker::Number.number(6)
+    @command = Command.new(star_id: star_id, random_num: random, action: 'approve_post_alert')
+    if @command.save
+      @command
+    else
+      new_post_alert_command(star_id)
+    end
+  end
 
   def self.send_course_alert(to, course, seller, post)
     from = ENV['TWILIO_PHONE']
@@ -34,11 +44,11 @@ module SmsNotification
     twilio_sms(from, to, body)
   end
 
-  def self.send_post_alert(to, post)
+  def self.send_post_alert(to, post, random_num)
     from = ENV['TWILIO_PHONE']
     to = '+1' + to.to_s
     seller = post.seller.first_name
-    body = "Easybooks: #{seller} would like to know if you're interested in #{post.title} (#{post.condition}) for $#{post.price}. Reply with "
+    body = "Easybooks: #{seller} would like to know if you're interested in #{post.title} (#{post.condition}) for $#{post.price}.\n\nTo proceed, reply with '#{random_num}'.\n\nThis offer expires in 30mins."
     twilio_sms(from, to, body)
   end
 

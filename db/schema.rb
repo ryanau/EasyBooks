@@ -18,6 +18,7 @@ ActiveRecord::Schema.define(version: 20151015064139) do
 
   create_table "commands", force: :cascade do |t|
     t.integer  "star_id",    null: false
+    t.string   "random_num", null: false
     t.string   "action",     null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -68,6 +69,7 @@ ActiveRecord::Schema.define(version: 20151015064139) do
     t.integer  "post_id",                    null: false
     t.integer  "user_id",                    null: false
     t.boolean  "sent",       default: false
+    t.boolean  "accepted",   default: false
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
   end
