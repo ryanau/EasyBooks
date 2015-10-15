@@ -31,6 +31,10 @@ class SubscriptionsController < ApplicationController
       course_id = Course.find_by(department: arr[0], course_number: arr[1]).id
       if current_user.subscriptions.where(course_id: course_id).count == 0
         current_user.subscriptions.create(course_id: course_id)
+
+        # NotifySubscribedBuyers.perform_async(course_id, post.id, post.pickup, post.title, post.price, current_user.first_name)
+
+        
         render json: {message: "success"}
       else
         render json: {message: "this course has already been subscribed to"}

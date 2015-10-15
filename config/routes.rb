@@ -11,6 +11,7 @@ Rails.application.routes.draw do
     resources :stars, only: [:index, :create]
     
     delete '/stars', :to => 'stars#destroy'
+    get '/stars/count', :to => 'stars#count'
 
     put '/posts/mark_sold', :to => 'posts#mark_sold'
     get '/active_posts', :to => 'posts#active_posts'

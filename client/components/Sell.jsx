@@ -26,15 +26,17 @@ Sell = React.createClass({
 	},
 	getInitialState: function () {
 		return {
-			title: "",
-			price: "",
-			pickup: "",
-			courses: [{value: "1", label: "Loading..."}],
+			title: '',
+			price: '',
+			pickup: '',
+			description: '',
+			condition: '',
 			course_selected: null,
-			warning: "",
+			warning: null,
 			pic_file: null,
 			pic_url: null,
 			uploading: null,
+			courses: [{value: "1", label: "Loading..."}],
 		}
 	},
 	componentDidMount: function () {
@@ -60,17 +62,27 @@ Sell = React.createClass({
 	handleTitle: function (e) {
 		this.setState({
 			title: e.target.value
-		})
+		});
 	},
 	handlePrice: function (e) {
 		this.setState({
 			price: e.target.value
-		})
+		});
 	},
 	handlePickup: function (e) {
 		this.setState({
 			pickup: e.target.value
-		})
+		});
+	},
+	handleDescription: function (e) {
+		this.setState({
+			description: e.target.value
+		});
+	},
+	handleCondition: function (e, selectedIndex, menuItem) {
+		this.setState({
+			condition: menuItem.text,
+		});
 	},
 	searchChange: function (value) {
 		this.setState({
@@ -112,8 +124,10 @@ Sell = React.createClass({
 			pickup: this.state.pickup,
 			course_selected: this.state.course_selected,
 			pic_url: this.state.pic_url,
+			description: this.state.description,
+			condition: this.state.condition,
 		};
-		if (data.title == "" || data.price == "" || data.pickup == "") {
+		if (data.title == '' || data.price == '' || data.pickup == '' || data.description == '' || data.condition == '') {
 			this.setState({
 				warning: "Please fill out all required fields."
 			});
@@ -137,6 +151,13 @@ Sell = React.createClass({
   render: function () {
   	var courseList = this.state.courses;
   	var warning = this.state.warning;
+  	var conditions = [
+  		{ payload: '1', text: 'Select Condition'},
+	  	{ payload: '2', text: 'New' },
+	  	{ payload: '3', text: 'Like New' },
+	  	{ payload: '4', text: 'Good' },
+	  	{ payload: '5', text: 'Fair' },
+  	];
   	if (this.state.pic_file != null) {
   		var picPreview = <img src={this.state.pic_file[0].preview} />
   	}
@@ -168,6 +189,15 @@ Sell = React.createClass({
   				onChange={this.handlePickup}
   			  floatingLabelText="Pick Up Location" 
   			  hintText="Required"/>
+  			</div>
+  			<div>
+  			<TextField
+  				onChange={this.handleDescription}
+  			  floatingLabelText="Description" 
+  			  hintText="Required"/>
+  			</div>
+  			<div>
+  			<DropDownMenu menuItems={conditions} onChange={this.handleCondition}/>
   			</div>
   			<div>
   			<Select

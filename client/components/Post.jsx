@@ -34,11 +34,13 @@ Post = React.createClass({
 			seller_name: null,
 			star: null,
 			sold: null,
+			star_count: null,
 		}
 	},
 	componentDidMount: function () {
 		this.loadPost();
 		this.loadStar();
+		this.loadStarCount();
 	},
 	markSold: function () {
 		var path = location.pathname;
@@ -199,13 +201,37 @@ Post = React.createClass({
 				star: true
 			});
 		}
+		this.loadStarCount();
+	},
+	loadStarCount: function () {
+		var path = location.pathname;
+		var post_id = path.substring(7, path.length);
+		var data = {
+			post_id: post_id,
+		};
+		$.ajax({
+			url: this.props.origin + '/stars/count',
+			type: 'GET',
+			data: data,
+			dataType: 'json',
+			crossDomain: true,
+			headers: {'Authorization': localStorage.getItem('jwt-easybooks')},
+			success: function (response) {
+				this.setState({
+					star_count: response.star_count,
+				});
+			}.bind(this),
+			error: function (error) {
+				window.location = "/"
+			}.bind(this),
+		});
 	},
 	render: function () {
-		console.log(this.state.post)
 		if (this.state.post != null) {
 			var post = this.state.post;
 			var seller_id = this.state.seller_id;
 			var seller_name = this.state.seller_name;
+			var star_count = this.state.star_count;
 			if (this.state.post.seller_id == this.props.currentUser.id) {
 				var editButton = 
 				<RaisedButton
@@ -269,6 +295,7 @@ Post = React.createClass({
 				  autoHideDuration={1000}/>
 				<h4>Post</h4>
 				{starButton}
+				<h5>{star_count} user has subscribed to this post</h5>
 				<p>{post.title}</p>
 				<p>{post.price}</p>
 				<p>{seller_name}</p>
