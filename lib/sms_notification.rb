@@ -15,9 +15,12 @@ module SmsNotification
   def self.create_post_alert(post_id)
     post = Post.find(post_id)
     seller = post.seller
-    star = post.stars.where(sent: false).where.not(user_id: seller.id).first
-    if send_post_alert(star.user.phone, post)
-      star.update_attributes(sent: true)
+    accepted = post.stars.find_by(accepted: true)
+    if !accepted
+      star = post.stars.where(sent: false).where.not(user_id: seller.id).first
+      if send_post_alert(star.user.phone, post)
+        star.update_attributes(sent: true)
+      end
     end
   end
 
@@ -35,7 +38,7 @@ module SmsNotification
     from = ENV['TWILIO_PHONE']
     to = '+1' + to.to_s
     seller = post.seller.first_name
-    body = "Easybooks: #{seller} would like to know if you're interested in #{post.title} (#{post.condition}) for $#{post.price}!"
+    body = "Easybooks: #{seller} would like to know if you're interested in #{post.title} (#{post.condition}) for $#{post.price}. Reply with "
     twilio_sms(from, to, body)
   end
 

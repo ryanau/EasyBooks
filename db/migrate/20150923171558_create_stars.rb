@@ -4,6 +4,7 @@ class CreateStars < ActiveRecord::Migration
       t.integer :post_id, null: false
       t.integer :user_id, null: false
       t.boolean :sent, default: false
+      t.boolean :accepted, default: false
 
       t.timestamps null: false
     end
