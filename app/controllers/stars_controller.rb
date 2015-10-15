@@ -19,11 +19,11 @@ class StarsController < ApplicationController
   end
 
   def create
-    post_id = params[:post_id]
-    star = Post.find(post_id).stars.find_by(user_id: current_user.id)
-    if !star
-      Post.find(post_id).stars.create(user_id: current_user.id)
+    action = StarCreator.new(params, current_user)
+    if action.ok?
       render json: {message: "Starred"}
+    else
+      render json: 'failed to star', status: 400
     end
   end
 

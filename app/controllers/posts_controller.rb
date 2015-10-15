@@ -19,7 +19,8 @@ class PostsController < ApplicationController
   def create
     action = PostCreator.new(params, current_user)
     if action.ok?
-      # NotifySubscribedBuyers.perform_async(course_id, post.id, current_user.id)
+      post = action.post
+      CourseAlert.perform_async(post.course_id, post.id, current_user.id)
       render json: {post_id: action.post.id}
     else
       render json: {error_message: action.post}
