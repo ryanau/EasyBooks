@@ -1,8 +1,8 @@
 class PostAlert
   include Sidekiq::Worker
   sidekiq_options :retry => false
-  def perform(course_id, post_id, seller_id)
-    
+  def perform(post_id)
+    SmsNotification.create_post_alert(post_id)
   end
 end
 

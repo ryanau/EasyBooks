@@ -21,7 +21,7 @@ class StarsController < ApplicationController
   def create
     action = StarCreator.new(params, current_user)
     if action.ok?
-      # PostAlert.perform_async(post.course_id, post.id, current_user.id)
+      # PostAlert.perform_async(action.star.id)
       render json: {message: "Starred"}
     else
       render json: 'failed to star', status: 400
