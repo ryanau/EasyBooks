@@ -3,6 +3,7 @@ class CreateStars < ActiveRecord::Migration
     create_table :stars do |t|
       t.integer :post_id, null: false
       t.integer :user_id, null: false
+      t.boolean :sent, default: false
 
       t.timestamps null: false
     end
