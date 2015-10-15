@@ -6,7 +6,6 @@ module SmsNotification
     seller = User.find(seller_id)
 
     Subscription.where(course_id: course_id).each do |subscription| 
-        #lib/sms_notifications.rb
         send_course_alert(subscription.user.phone, course, seller, post)
         Notification.create(subscription_id: subscription.id, post_id: post.id)
     end
@@ -22,6 +21,12 @@ module SmsNotification
         star.update_attributes(sent: true)
       end
     end
+  end
+
+  def self.create_post_alert_approval_reply(to, message)
+    from = ENV['TWILIO_PHONE']
+    to = '+1' + to.to_s
+    twilio_sms(from, to, message)
   end
 
   private
@@ -40,7 +45,7 @@ module SmsNotification
     from = ENV['TWILIO_PHONE']
     to = '+1' + to.to_s
     course_name = course.department + " " + course.course_number
-    body = "EasyBooks: New Post for #{course_name}! #{post.title} (#{post.condition}): $#{post.price} by #{seller.first_name}!"
+    body = "EasyBooks: New post for #{course_name}! #{post.title} (#{post.condition}): $#{post.price} by #{seller.first_name}!\n\nClick here to star the post:"
     twilio_sms(from, to, body)
   end
 

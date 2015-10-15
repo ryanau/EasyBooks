@@ -1,10 +1,8 @@
 class SmsController < ApplicationController
   def approve
-    from_input = params[:From]
-    from = from_input[2, from_input.length]
-    body = params[:Body].upcase
-
-    p from_input
-    p body
+    action = SmsInputVerifier.new(params)
+    if action.ok?
+      SmsNotification.create_post_alert_approval_reply(action.from, action.message)
+    end
   end
 end
