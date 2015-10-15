@@ -14,9 +14,10 @@ module SmsNotification
 
   def self.create_post_alert(post_id)
     post = Post.find(post_id)
-
-    post.stars.each do |star|
-      send_post_alert(star.user.phone)
+    seller = post.seller
+    star = post.stars.where(sent: false).where.not(user_id: seller.id).first
+    if send_post_alert(star.user.phone, post)
+      star.update_attributes(sent: true)
     end
   end
 
@@ -30,9 +31,11 @@ module SmsNotification
     twilio_sms(from, to, body)
   end
 
-  def self.send_post_alert(to)
+  def self.send_post_alert(to, post)
     from = ENV['TWILIO_PHONE']
     to = '+1' + to.to_s
+    seller = post.seller.first_name
+    body = "Easybooks: #{seller} would like to know if you're interested in #{post.title} (#{post.condition}) for $#{post.price}!"
     twilio_sms(from, to, body)
   end
 

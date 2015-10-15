@@ -58,10 +58,11 @@ ActiveRecord::Schema.define(version: 20151007160322) do
   end
 
   create_table "stars", force: :cascade do |t|
-    t.integer  "post_id",    null: false
-    t.integer  "user_id",    null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.integer  "post_id",                    null: false
+    t.integer  "user_id",                    null: false
+    t.boolean  "sent",       default: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
   end
 
   create_table "subscriptions", force: :cascade do |t|
