@@ -12,6 +12,9 @@ module SmsNotification
     end
   end
 
+  def self.create_post_alert()
+  end
+
   private
 
   def self.course_alert_send(to, course, seller, post)

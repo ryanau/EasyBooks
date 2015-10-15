@@ -2,7 +2,7 @@ class Post < ActiveRecord::Base
   belongs_to :seller, :class_name => "User", :foreign_key => :seller_id
   belongs_to :buyer, :class_name => "User", :foreign_key => :buyer_id
 
-  has_many :stars
-  has_many :comments
-  has_many :notifications
+  has_many :stars, dependent: :destroy
+  has_many :comments, dependent: :destroy
+  has_many :notifications, dependent: :destroy
 end
