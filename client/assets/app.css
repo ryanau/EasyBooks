@@ -17,3 +17,8 @@ html * {
 	margin-left: 10%;
 	margin-right: 10%;
 }
+
+.publicpost {
+	height: 200px;
+	width: 200px;
+}
