@@ -14,7 +14,7 @@ class UsersController < ApplicationController
   end
 
   def login
-    user = User.find_by(email: params[:email]).downcase.try(:authenticate, params[:password])
+    user = User.find_by(email: params[:email].downcase).try(:authenticate, params[:password])
     if user
       token = JWT.encode({id: user.id, exp: 1.day.from_now.to_i}, ENV['SECRET_KEY_BASE'])
       render json: {message: "logged in", token: token}

@@ -28,6 +28,11 @@ module SmsNotification
     twilio_sms(from, to, message)
   end
 
+  def self.send_from_private_phone(from, to, message)
+    to = '+1' + to.to_s
+    twilio_sms(from, to, message)
+  end
+
   private
 
   def self.new_post_alert_command(star_id)
@@ -52,7 +57,7 @@ module SmsNotification
     from = ENV['TWILIO_PHONE']
     to = '+1' + to.to_s
     seller = post.seller.first_name
-    body = "Easybooks: #{seller} would like to know if you're interested in #{post.title} (#{post.condition}) for $#{post.price}.\n\nTo proceed, reply with '#{random_num}'.\n\nThis offer expires in 30mins."
+    body = "EasyBooks: #{seller} would like to know if you're interested in #{post.title} (#{post.condition}) for $#{post.price}.\n\nTo proceed, reply with '#{random_num}'.\n\nThis offer expires in 30mins."
     twilio_sms(from, to, body)
   end
 

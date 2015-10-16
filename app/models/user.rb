@@ -11,7 +11,7 @@ class User < ActiveRecord::Base
   has_many :buying_posts, :class_name => "Post", :foreign_key => :buyer_id
   has_many :comments, through: :posts
   has_many :comments, dependent: :destroy
-  has_many :conversations, through: :stars
-  has_many :conversations, dependent: :destroy
+  has_many :selling_conversations, :class_name => "Conversation", :foreign_key => :seller_id, dependent: :destroy
+  has_many :buying_conversations, :class_name => "Conversation", :foreign_key => :buyer_id
 
 end

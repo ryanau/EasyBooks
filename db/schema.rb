@@ -33,11 +33,13 @@ ActiveRecord::Schema.define(version: 20151016043656) do
   end
 
   create_table "conversations", force: :cascade do |t|
-    t.integer  "star_id",    null: false
-    t.integer  "user_id",    null: false
-    t.string   "phone_id",   null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.integer  "star_id",         null: false
+    t.integer  "seller_id",       null: false
+    t.integer  "buyer_id",        null: false
+    t.integer  "seller_phone_id", null: false
+    t.integer  "buyer_phone_id",  null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
   end
 
   create_table "courses", force: :cascade do |t|
