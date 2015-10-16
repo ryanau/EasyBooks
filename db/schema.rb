@@ -42,13 +42,6 @@ ActiveRecord::Schema.define(version: 20151015064139) do
     t.datetime "updated_at",    null: false
   end
 
-  create_table "notifications", force: :cascade do |t|
-    t.integer  "post_id"
-    t.integer  "subscription_id"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
-  end
-
   create_table "posts", force: :cascade do |t|
     t.float    "price",                       null: false
     t.string   "picture_url"

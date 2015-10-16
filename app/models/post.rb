@@ -4,5 +4,4 @@ class Post < ActiveRecord::Base
 
   has_many :stars, dependent: :destroy
   has_many :comments, dependent: :destroy
-  has_many :notifications, dependent: :destroy
 end
