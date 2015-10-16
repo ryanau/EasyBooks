@@ -27,6 +27,9 @@ end
   User.find(id).stars.create(post_id: id - 5)
 end
 
+# seed phone
+Phone.create(number: "+15102963497")
+
 # seed subscriptions
 # [1,2,3,4,5].each do |id|
 #   User.find(id).subscriptions.create(course_id: id)

@@ -7,7 +7,6 @@ module SmsNotification
 
     Subscription.where(course_id: course_id).each do |subscription| 
         send_course_alert(subscription.user.phone, course, seller, post)
-        Notification.create(subscription_id: subscription.id, post_id: post.id)
     end
   end
 
@@ -23,7 +22,7 @@ module SmsNotification
     end
   end
 
-  def self.create_post_alert_approval_reply(to, message)
+  def self.send_from_main_phone(to, message)
     from = ENV['TWILIO_PHONE']
     to = '+1' + to.to_s
     twilio_sms(from, to, message)

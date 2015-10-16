@@ -1,5 +1,4 @@
 class SmsInputVerifier
-  attr_reader :message, :from
   def initialize(params)
     @from = params[:From][2, params[:From].length]
     @body = params[:Body]
@@ -9,9 +8,10 @@ class SmsInputVerifier
     @post = {}
   end
 
-  def ok?
+  def proceed
     if verify_command
       check_input
+      send_sms(@from, @message)
     else
       @message = "Didn't recognize that command. Did you mistype?"
     end
@@ -27,7 +27,11 @@ class SmsInputVerifier
     if @command.action == 'approve_post_alert'
       @star.update_attributes(sent: true, accepted: true)
       @command.destroy
-      @message = "You can now talk to #{@post.seller.first_name}, the seller of #{@post.title} directly."
+      @message = "A message will arrive soon from #{@post.seller.first_name}, the seller of #{@post.title}. You can text the seller directly through private number.\n\nTo terminate the conversation, reply with 'EXIT' to this number.\n\nTo mark the transaction as completed, reply with 'DONE' to this number."
     end
+  end
+
+  def send_sms(from, message)
+    SmsNotification.send_from_main_phone(from, message)
   end
 end
