@@ -11,18 +11,15 @@ class SmsInputVerifier
   end
 
   def proceed
-    if '+1' + @to == ENV['TWILIO_PHONE'] && verify_command
+    if check_system_phone && verify_command
       check_input
-    elsif check_phone
-      user = User.find_by(phone: @from)
-      if conversation = Conversation.find_by(seller_phone_id: @phone.id, seller_id: user.id)
-        @message = @body
-        buyer = User.find(conversation.buyer_id)
-        SmsNotification.send_from_private_phone(@phone.number, buyer.phone, @message)
-      elsif conversation = Conversation.find_by(buyer_phone_id: @phone.id, buyer_id: user.id)
-        @message = @body
-        seller = User.find(conversation.seller_id)
-        SmsNotification.send_from_private_phone(@phone.number, seller.phone, @message)
+    elsif check_private_channel_phone
+      @recipient = User.find_by(phone: @from)
+      if find_private_channel(@recipient)
+        SmsNotification.send_from_private_phone(@phone.number, @recipient.phone, @body)
+      else
+        @message = "EasyBooks: You are not currently in any private channel."
+        SmsNotification.send_from_private_phone(@phone.number, @from, @message)
       end
     else
       @message = "EasyBooks: Didn't recognize that command. Did you mistype?"
@@ -32,7 +29,11 @@ class SmsInputVerifier
 
   private
 
-  def check_phone
+  def check_system_phone
+    '+1' + @to == ENV['TWILIO_PHONE']
+  end
+
+  def check_private_channel_phone
     @phone = Phone.find_by(number: '+1' + @to)
   end
 
@@ -49,6 +50,14 @@ class SmsInputVerifier
     end
   end
 
+  def find_private_channel(user)
+    if conversation = Conversation.find_by(seller_phone_id: @phone.id, seller_id: user.id)
+      @recipient = User.find(conversation.buyer_id)
+    elsif conversation = Conversation.find_by(buyer_phone_id: @phone.id, buyer_id: user.id)
+      @recipient = User.find(conversation.buyer_id)
+    end
+  end
+
   def approve_post
     @star.update_attributes(sent: true, accepted: true)
     @command.destroy
@@ -60,14 +69,8 @@ class SmsInputVerifier
     buyer = User.find_by(phone: @from)
     seller = @post.seller
 
-    seller_numbers = []
-    Conversation.where(seller_id: seller.id).each do |c|
-      seller_numbers << c.seller_phone.number
-    end
-    buyer_numbers = []
-    Conversation.where(buyer_id: buyer.id).each do |c|
-      buyer_numbers << c.buyer_phone.number
-    end
+    seller_numbers = Conversation.where(seller_id: seller.id).includes(:seller_phone).pluck(:number)
+    buyer_numbers = Conversation.where(buyer_id: buyer.id).includes(:buyer_phone).pluck(:number)
 
     seller_phone = Phone.where.not(number: seller_numbers).first
     buyer_phone = Phone.where.not(number: buyer_numbers).first
