@@ -17,20 +17,20 @@ university.courses.create(department: "ESPM", course_number: "50AC", year: "2015
 Phone.create(number: "+15102963497")
 
 # seed users
-10.times do
-  User.create(first_name: Faker::Name.first_name, last_name: Faker::Name.last_name, email: Faker::Internet.email, phone: Faker::Number.number(10), password: "1234", university_id: 1)
-end
+# 10.times do
+#   User.create(first_name: Faker::Name.first_name, last_name: Faker::Name.last_name, email: Faker::Internet.email, phone: Faker::Number.number(10), password: "1234", university_id: 1)
+# end
 
 # seed posts and books
-conditions = ['New', 'Like New', 'Good', 'Fair']
-[1,2,3,4,5].each do |id|
-  post = Post.create(seller_id: id, course_id: id, pickup: Faker::Address.country, price: Faker::Number.between(15, 100), title: Faker::Commerce.product_name, description: 'its good', condition: conditions.shuffle.first, picture_url: "https://www.petfinder.com/wp-content/uploads/2012/11/140272627-grooming-needs-senior-cat-632x475.jpg")
-end
+# conditions = ['New', 'Like New', 'Good', 'Fair']
+# [1,2,3,4,5].each do |id|
+#   post = Post.create(seller_id: id, course_id: id, pickup: Faker::Address.country, price: Faker::Number.between(15, 100), title: Faker::Commerce.product_name, description: 'its good', condition: conditions.shuffle.first, picture_url: "https://www.petfinder.com/wp-content/uploads/2012/11/140272627-grooming-needs-senior-cat-632x475.jpg")
+# end
 
 # seed stars
-[6,7,8,9,10].each do |id|
-  User.find(id).stars.create(post_id: id - 5)
-end
+# [6,7,8,9,10].each do |id|
+#   User.find(id).stars.create(post_id: id - 5)
+# end
 
 
 
