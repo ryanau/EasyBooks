@@ -5,7 +5,7 @@ module SmsNotification
     post = Post.find(post_id)
     seller = User.find(seller_id)
 
-    Subscription.where(course_id: course_id).each do |subscription| 
+    Subscription.where(course_id: course_id).each do |subscription|
         send_course_alert(subscription.user.phone, course, seller, post)
     end
   end

@@ -1,20 +1,39 @@
 class SmsInputVerifier
   def initialize(params)
+    @to = params[:To][2, params[:To].length]
     @from = params[:From][2, params[:From].length]
     @body = params[:Body]
     @command = {}
     @message = {}
     @star = {}
     @post = {}
+    @phone = {}
   end
 
   def proceed
-    if verify_command
+    if '+1' + @to == ENV['TWILIO_PHONE'] && verify_command
       check_input
+    elsif check_phone
+      user = User.find_by(phone: @from)
+      if conversation = Conversation.find_by(seller_phone_id: @phone.id, seller_id: user.id)
+        @message = @body
+        buyer = User.find(conversation.buyer_id)
+        SmsNotification.send_from_private_phone(@phone.number, buyer.phone, @message)
+      elsif conversation = Conversation.find_by(buyer_phone_id: @phone.id, buyer_id: user.id)
+        @message = @body
+        seller = User.find(conversation.seller_id)
+        SmsNotification.send_from_private_phone(@phone.number, seller.phone, @message)
+      end
     else
       @message = "EasyBooks: Didn't recognize that command. Did you mistype?"
       SmsNotification.send_from_main_phone(@from, @message)
     end
+  end
+
+  private
+
+  def check_phone
+    @phone = Phone.find_by(number: '+1' + @to)
   end
 
   def verify_command
@@ -58,8 +77,8 @@ class SmsInputVerifier
     to_buyer_message = "EasyBooks: This is a private channel between you and #{seller.first_name}, the seller of #{@post.title}: $#{@post.price} (#{@post.condition}). Start texting!\n\nFor help, refer to the instructions from #{system}."
     SmsNotification.send_from_private_phone(buyer_phone.number, buyer.phone, to_buyer_message)
 
-    # to_seller_message = "EasyBooks: This is a private channel between you and #{buyer.first_name}, who is interested in buying #{@post.title}. Start texting!\n\nFor help, refer to the instructions from #{system}."
-    # SmsNotification.send_from_private_phone(seller_phone.number, seller.phone, to_seller_message)
+    to_seller_message = "EasyBooks: This is a private channel between you and #{buyer.first_name}, who is interested in buying #{@post.title}. Start texting!\n\nFor help, refer to the instructions from #{system}."
+    SmsNotification.send_from_private_phone(seller_phone.number, seller.phone, to_seller_message)
   end
 end
 
