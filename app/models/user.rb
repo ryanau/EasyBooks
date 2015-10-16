@@ -14,4 +14,5 @@ class User < ActiveRecord::Base
   has_many :selling_conversations, :class_name => "Conversation", :foreign_key => :seller_id, dependent: :destroy
   has_many :buying_conversations, :class_name => "Conversation", :foreign_key => :buyer_id
 
+  validates_uniqueness_of :email, scope: :phone
 end
