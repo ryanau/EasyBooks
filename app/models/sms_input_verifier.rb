@@ -47,18 +47,21 @@ class SmsInputVerifier
   end
 
   def proceed_user_action
-    if @body == 'EXIT'
+    if @body.upcase == 'EXIT'
       @message = 'EasyBooks: This transaction has been terminated by the other party. This private channel is now closed.'
-      SmsNotification.send_from_private_phone(@phone.number, @from, @message)
+      SmsNotification.send_from_private_phone(@phone.number, @conversation.seller.phone, @message)
+      SmsNotification.send_from_private_phone(@phone.number, @conversation.buyer.phone, @message)
       star = Star.find(@conversation.star_id)
-      PostAlert.perform_async(action.star.post.id)
+      PostAlert.perform_async(star.post.id)
       star.destroy
-    elsif @body == 'DONE'
+    elsif @body.upcase == 'DONE'
       @message = 'EasyBooks: This transaction is marked as completed by the other party. This private channel is now closed.'
-      SmsNotification.send_from_private_phone(@phone.number, @from, @message)
+      SmsNotification.send_from_private_phone(@phone.number, @conversation.seller.phone, @message)
+      SmsNotification.send_from_private_phone(@phone.number, @conversation.buyer.phone, @message)
       star = Star.find(@conversation.star_id)
-      Post.find(star.post.id).update_attributes(sold: true, public: false)
-      Post.stars.destroy_all
+      post = Post.find(star.post.id)
+      post.update_attributes(sold: true, public: false)
+      post.stars.destroy_all
     end
   end
 
@@ -75,7 +78,7 @@ class SmsInputVerifier
     if @conversation = Conversation.find_by(seller_phone_id: @phone.id, seller_id: user.id)
       @recipient = User.find(@conversation.buyer_id)
     elsif @conversation = Conversation.find_by(buyer_phone_id: @phone.id, buyer_id: user.id)
-      @recipient = User.find(@conversation.buyer_id)
+      @recipient = User.find(@conversation.seller_id)
     end
   end
 
