@@ -101,10 +101,10 @@ class SmsInputVerifier
     Conversation.create(seller_id: seller.id, buyer_id: buyer.id, seller_phone_id: seller_phone.id, buyer_phone_id: buyer_phone.id, star_id: @star.id)
 
     system = ENV['TWILIO_PHONE']
-    to_buyer_message = "EasyBooks: This is a private channel between you and #{seller.first_name}, the seller of #{@post.title}: $#{@post.price} (#{@post.condition}). Start texting!\n\nTo terminate this conversation, reply with 'EXIT'.\n\nTo mark this transaction as completed, reply with 'DONE'."
+    to_buyer_message = "EasyBooks: This is a private channel between you and #{seller.first_name}, the seller of #{@post.title}: $#{@post.price} (#{@post.condition}). Start texting!\n\nTo terminate this conversation and unstar this post, reply with 'EXIT'.\n\nTo mark this transaction as completed, reply with 'DONE'."
     SmsNotification.send_from_private_phone(buyer_phone.number, buyer.phone, to_buyer_message)
 
-    to_seller_message = "EasyBooks: This is a private channel between you and #{buyer.first_name}, who is interested in buying #{@post.title}. Start texting!\n\nTo terminate this conversation, reply with 'EXIT'.\n\nTo mark this transaction as completed, reply with 'DONE'."
+    to_seller_message = "EasyBooks: This is a private channel between you and #{buyer.first_name}, who is interested in buying #{@post.title}. Start texting!\n\nTo terminate this conversation and wait for the next buyer, reply with 'EXIT'.\n\nTo mark this transaction as completed, reply with 'DONE'."
     SmsNotification.send_from_private_phone(seller_phone.number, seller.phone, to_seller_message)
   end
 end
