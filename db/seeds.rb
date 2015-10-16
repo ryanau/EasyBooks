@@ -1,4 +1,4 @@
-require 'Faker'
+
 
 # seed universities
 university = University.create(name: "University of California, Berkeley")

@@ -18,10 +18,9 @@ gem 'dotenv-rails'
 gem 'icalendar', '2.3.0'
 gem 'cloudinary'
 gem 'sidekiq', '3.5.0'
+gem 'faker', '1.5.0'
 
 group :development, :test do
-  gem 'dotenv-rails'
-  gem 'faker', '1.5.0'
   # gem 'pry-rails'
   # gem 'pry-byebug'
 end

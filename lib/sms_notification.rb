@@ -1,5 +1,4 @@
 module SmsNotification
-  require 'Faker'
   def self.create_course_alert(course_id, post_id, seller_id)
     course = Course.find(course_id)
     post = Post.find(post_id)
