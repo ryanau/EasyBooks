@@ -15,7 +15,7 @@ module SmsNotification
     accepted = post.stars.find_by(accepted: true)
     if !accepted
       star = post.stars.where(sent: false).where.not(user_id: seller.id).first
-      if new_post_alert_command(star.id) && send_post_alert(star.user.phone, post, @command.random_num)
+      if star && new_post_alert_command(star.id) && send_post_alert(star.user.phone, post, @command.random_num)
         star.update_attributes(sent: true)
       end
     end
