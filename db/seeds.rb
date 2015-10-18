@@ -1,3 +1,5 @@
+
+
 # seed universities
 university = University.create(name: "University of California, Berkeley")
 University.create(name: "University of Southern California")
@@ -10,6 +12,9 @@ university.courses.create(department: "CS", course_number: "70", year: "2015", s
 university.courses.create(department: "PE", course_number: "101", year: "2015", semester: "FALL")
 university.courses.create(department: "UGBA", course_number: "102A", year: "2015", semester: "FALL")
 university.courses.create(department: "ESPM", course_number: "50AC", year: "2015", semester: "SPRING")
+
+# seed phone
+Phone.create(number: "+15102963497")
 
 # seed users
 10.times do
@@ -26,6 +31,8 @@ end
 [6,7,8,9,10].each do |id|
   User.find(id).stars.create(post_id: id - 5)
 end
+
+
 
 # seed subscriptions
 # [1,2,3,4,5].each do |id|

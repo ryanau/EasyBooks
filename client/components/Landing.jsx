@@ -23,7 +23,7 @@ Landing = React.createClass({
   	if (this.props.signedIn) {
   		var display = (
 	  		<div>
-		  		<DashBoard origin={this.props.origin} />
+		  		<DashBoard origin={this.props.origin} currentUser={this.props.currentUser}/>
 	  		</div>
   		);
   	} else {

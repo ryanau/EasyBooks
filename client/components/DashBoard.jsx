@@ -23,6 +23,7 @@ Dashboard = React.createClass({
 		return (
 			<div id="dashboard">
 				<h1>DashBoard</h1>
+				<h3>Welcome Back {this.props.currentUser.first_name}</h3>
 				<RaisedButton
 					containerElement={<Link to="/schedule" />}
 					linkButton={true}
