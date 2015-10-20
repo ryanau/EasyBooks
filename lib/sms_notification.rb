@@ -48,7 +48,8 @@ module SmsNotification
     from = ENV['TWILIO_PHONE']
     to = '+1' + to.to_s
     course_name = course.department + " " + course.course_number
-    body = "EasyBooks: New post for #{course_name}! #{post.title} (#{post.condition}): $#{post.price} by #{seller.first_name}!\n\nClick here to star the post:"
+    root = Rails.root.join('posts/' + post.id)
+    body = "EasyBooks: New post for #{course_name}! #{post.title} (#{post.condition}): $#{post.price} by #{seller.first_name}!\n\nClick here to star the post: #{root}"
     twilio_sms(from, to, body)
   end
 

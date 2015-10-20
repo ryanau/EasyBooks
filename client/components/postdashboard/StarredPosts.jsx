@@ -47,7 +47,7 @@ StarredPosts = React.createClass({
 			var posts = this.state.posts.map(function (post, index) {
 				return (
 					<PublicPost key={post.id} origin={this.props.origin} post={post}/>
-				)
+				);
 			}.bind(this));
 		} else {
 			var posts = "Loading..."

@@ -51,7 +51,7 @@ App = React.createClass({
           <RouteHandler origin={this.props.origin} currentUser={this.state.currentUser} signedIn={this.state.signedIn}/>
         </div>
 			</div>
-		)
+		);
 	},
 });
 

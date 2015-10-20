@@ -24,7 +24,7 @@ Comment = React.createClass({
 			<div>
 				<p>{comment.content} by {comment.user.first_name} from {moment(comment.created_at).fromNow()}</p>
 			</div>
-		)
+		);
 	},
 });
 

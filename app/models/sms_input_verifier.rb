@@ -49,11 +49,11 @@ class SmsInputVerifier
   def proceed_user_action
     if @body.upcase == 'EXIT'
       @message = 'EasyBooks: This transaction has been terminated by the other party. This private channel is now closed.'
-      SmsNotification.send_from_private_phone(@phone.number, @conversation.seller.phone, @message)
-      SmsNotification.send_from_private_phone(@phone.number, @conversation.buyer.phone, @message)
       star = Star.find(@conversation.star_id)
       PostAlert.perform_async(star.post.id)
       star.destroy
+      SmsNotification.send_from_private_phone(@phone.number, @conversation.seller.phone, @message)
+      SmsNotification.send_from_private_phone(@phone.number, @conversation.buyer.phone, @message)
     elsif @body.upcase == 'DONE'
       @message = 'EasyBooks: This transaction is marked as completed by the other party. This private channel is now closed.'
       SmsNotification.send_from_private_phone(@phone.number, @conversation.seller.phone, @message)
