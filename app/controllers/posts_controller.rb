@@ -11,9 +11,9 @@ class PostsController < ApplicationController
       course_id = Course.find_by(department: arr[0], course_number: arr[1]).id
       posts = Post.where(public: true, course_id: course_id)
     else
-      posts = Post.where(public: true)
+      posts = Post.where(public: true).order(created_at: :DESC)
     end
-    render json: {data: posts}
+    render :json => posts, :include => {:stars => {:only => :post_id}}
   end
 
   def create
@@ -33,7 +33,7 @@ class PostsController < ApplicationController
     seller = Post.find(post_id).seller
     seller_id = seller.id
     seller_name = seller.first_name
-    render json: {post: post, seller_id: seller_id, seller_name: seller_name}
+  render json: {post: post, seller_id: seller_id, seller_name: seller_name}
   end
 
   def mark_sold
@@ -57,17 +57,17 @@ class PostsController < ApplicationController
 
   def active_posts
     posts = current_user.selling_posts.where(sold: false, public: true)
-    render json: {data: posts}
+    render :json => posts, :include => {:stars => {:only => :post_id}}
   end
 
   def starred_posts
     posts = current_user.posts
-    render json: {data: posts}
+    render :json => posts, :include => {:stars => {:only => :post_id}}
   end
 
   def archived_posts
     posts = current_user.selling_posts.where(sold: true, public: false)
-    render json: {data: posts}
+    render :json => posts, :include => {:stars => {:only => :post_id}}
   end
 
   def image_upload

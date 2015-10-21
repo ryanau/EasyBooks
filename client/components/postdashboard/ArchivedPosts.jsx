@@ -33,7 +33,7 @@ ArchivedPosts = React.createClass({
 			headers: {'Authorization': localStorage.getItem('jwt-easybooks')},
 			success: function (response) {
 				this.setState({
-					posts: response.data
+					posts: response
 				});
 			}.bind(this),
 			error: function (error) {
