@@ -2,6 +2,7 @@ var React = require('react');
 var $ = require('jquery');
 var Router = require('react-router');
 var Link = Router.Link;
+var Navigation = Router.Navigation;
 var moment = require('moment');
 
 var mui = require('material-ui');
@@ -11,12 +12,15 @@ var CardHeader = mui.CardHeader;
 var CardText = mui.CardText;
 var CardActions = mui.CardActions;
 var CardTitle = mui.CardTitle;
-var CardMedia = mui.CardMedia;
 var Snackbar = mui.Snackbar;
 var FlatButton = mui.FlatButton;
+var FontIcon = mui.FontIcon;
+var IconButton = mui.IconButton;
+var Colors = mui.Colors;
 
 
 PublicPost = React.createClass({
+  mixins: [ Navigation ],
 	childContextTypes: {
 	  muiTheme: React.PropTypes.object
 	},
@@ -25,15 +29,23 @@ PublicPost = React.createClass({
 	    muiTheme: ThemeManager.getCurrentTheme()
 	  };
 	},
+  redirectToPost: function () {
+    this.transitionTo('/posts/' + this.props.post.id);
+  },
   render: function () {
-  	var post = this.props.post
+    var post = this.props.post
+  	var course = post.course
   	return (
       <div className="publicpost">
-  			<Card key={post.id} initiallyExpanded={false}>
-  				<CardMedia overlay={
-  					<CardTitle title={<Link to={"/posts/" + post.id}>{post.title}</Link>} subtitle={"$" + post.price + " | Created " + moment(post.created_at).fromNow()} />}>
-  					<img src={post.picture_url} />
-  				</CardMedia>
+  			<Card key={post.id}>
+          <CardHeader 
+            title={course.department + ' ' + course.course_number + ': ' + post.title + ' (' + (post.condition) + ')'}
+            subtitle={"$" + post.price + " | " + post.stars.length + " Subscribers" + " | Created " + moment(post.created_at).fromNow()}
+            avatar={<IconButton onClick={this.redirectToPost} tooltip="See Detail" tooltipPosition="bottom-center" touch={true}><FontIcon className="material-icons">forward</FontIcon></IconButton>}>
+          </CardHeader>
+          <CardText>
+          {post.description}
+          </CardText>
   			</Card>
   		</div>
   	)

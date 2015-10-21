@@ -4,9 +4,9 @@ var Link = Router.Link;
 
 var mui = require('material-ui');
 var ThemeManager = new mui.Styles.ThemeManager();
+var RaisedButton = mui.RaisedButton;
 
-var SignUp = require('./SignUp.jsx');
-var LogIn = require('./LogIn.jsx');
+
 var DashBoard = require('./DashBoard.jsx');
 
 Landing = React.createClass({
@@ -29,8 +29,14 @@ Landing = React.createClass({
   	} else {
   		var display = (
 	  		<div>
-		  		<SignUp origin={this.props.origin} />
-		  		<LogIn origin={this.props.origin} />
+		  		<RaisedButton
+		  			containerElement={<Link to="/signup" />}
+		  			linkButton={true}
+		  			label={('no', 'Sign Up')}/>
+		  		<RaisedButton
+		  			containerElement={<Link to="/login" />}
+		  			linkButton={true}
+		  			label={('no', 'Log In')}/>
 	  		</div>
   		);
   	}

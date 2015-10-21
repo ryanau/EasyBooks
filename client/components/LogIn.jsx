@@ -5,9 +5,7 @@ var mui = require('material-ui');
 var ThemeManager = new mui.Styles.ThemeManager();
 var FlatButton = mui.FlatButton;
 var RaisedButton = mui.RaisedButton;
-var Dialog = mui.Dialog;
 var TextField = mui.TextField;
-var Snackbar = mui.Snackbar;
 
 LogIn = React.createClass({
 	childContextTypes: {
@@ -45,12 +43,6 @@ LogIn = React.createClass({
 			password: e.target.value
 		})
 	},
-	closeModal: function () {
-		this.refs.logInDialog.dismiss();
-	},
-	openModal: function () {
-		this.refs.logInDialog.show();
-	},
 	handleSubmit: function () {
 		var data = {
 			email: this.state.email,
@@ -74,39 +66,20 @@ LogIn = React.createClass({
 		});
 	},
 	render: function () {
-		var DialogAction = [
-			<div>
-			<FlatButton
-			  label="Cancel"
-			  onClick={this.closeModal}/>
-			<FlatButton
-			  label="Log In"
-			  onClick={this.handleSubmit}/> 
-			</div>
-		]
-		var logInDialog = 
-			<Dialog
-				ref="logInDialog"
-				title="Log In"
-				actions={DialogAction}
-				modal={true}>
-	  		<TextField
-	  			onChange={this.handleEmail}
-	  		  floatingLabelText="Email" 
-	  		  hintText="Required"/>
-	  		<TextField
-	  			onChange={this.handlePassword}
-	  		  floatingLabelText="Password" 
-	  		  hintText="Required"
-	  		  type="password"/>
-			</Dialog>
 		return (
 			<div>
-				{logInDialog}
-				<RaisedButton
-					secondary={true}
+				<TextField
+					onChange={this.handleEmail}
+				  floatingLabelText="Email" 
+				  hintText="Required"/>
+				<TextField
+					onChange={this.handlePassword}
+				  floatingLabelText="Password" 
+				  hintText="Required"
+				  type="password"/>
+				<FlatButton
 				  label="Log In"
-				  onClick={this.openModal}/>
+				  onClick={this.handleSubmit}/>
 			</div>
 		)
 	},

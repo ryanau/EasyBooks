@@ -28,5 +28,5 @@ Rails.application.routes.draw do
     post '/sms_inbound', :to => 'sms#approve'
   end
 
-  match '*all', to: 'client_app#show', via: [:get]
+  match '*all', to: 'client_app#index', via: [:get]
 end

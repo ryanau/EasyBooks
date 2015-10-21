@@ -33,7 +33,7 @@ ArchivedPosts = React.createClass({
 			headers: {'Authorization': localStorage.getItem('jwt-easybooks')},
 			success: function (response) {
 				this.setState({
-					posts: response.data
+					posts: response
 				});
 			}.bind(this),
 			error: function (error) {
@@ -46,7 +46,7 @@ ArchivedPosts = React.createClass({
 			var posts = this.state.posts.map(function (post, index) {
 				return (
 					<PublicPost key={post.id} origin={this.props.origin} post={post}/>
-				)
+				);
 			}.bind(this));
 		} else {
 			var posts = "Loading..."
@@ -56,7 +56,7 @@ ArchivedPosts = React.createClass({
 				<h4>Archived Posts</h4>
 				{posts}
 			</div>
-		)
+		);
 	},
 });
 

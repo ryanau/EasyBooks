@@ -8,6 +8,7 @@ class SmsInputVerifier
     @star = {}
     @post = {}
     @phone = {}
+    @conversation = {}
   end
 
   def proceed
@@ -16,7 +17,7 @@ class SmsInputVerifier
     elsif check_private_channel_phone
       @recipient = User.find_by(phone: @from)
       if find_private_channel(@recipient)
-        if @body == 'EXIT' || @body == 'DONE'
+        if @body.upcase == 'EXIT' || @body.upcase == 'DONE'
           proceed_user_action
         else
           SmsNotification.send_from_private_phone(@phone.number, @recipient.phone, @body)
@@ -46,12 +47,21 @@ class SmsInputVerifier
   end
 
   def proceed_user_action
-    if @body == 'EXIT'
+    if @body.upcase == 'EXIT'
       @message = 'EasyBooks: This transaction has been terminated by the other party. This private channel is now closed.'
-      SmsNotification.send_from_private_phone(@phone.number, @from, @message)
-    elsif @body == 'DONE'
+      star = Star.find(@conversation.star_id)
+      PostAlert.perform_async(star.post.id)
+      star.destroy
+      SmsNotification.send_from_private_phone(@phone.number, @conversation.seller.phone, @message)
+      SmsNotification.send_from_private_phone(@phone.number, @conversation.buyer.phone, @message)
+    elsif @body.upcase == 'DONE'
       @message = 'EasyBooks: This transaction is marked as completed by the other party. This private channel is now closed.'
-      SmsNotification.send_from_private_phone(@phone.number, @from, @message)
+      SmsNotification.send_from_private_phone(@phone.number, @conversation.seller.phone, @message)
+      SmsNotification.send_from_private_phone(@phone.number, @conversation.buyer.phone, @message)
+      star = Star.find(@conversation.star_id)
+      post = Post.find(star.post.id)
+      post.update_attributes(sold: true, public: false)
+      post.stars.destroy_all
     end
   end
 
@@ -65,10 +75,10 @@ class SmsInputVerifier
   end
 
   def find_private_channel(user)
-    if conversation = Conversation.find_by(seller_phone_id: @phone.id, seller_id: user.id)
-      @recipient = User.find(conversation.buyer_id)
-    elsif conversation = Conversation.find_by(buyer_phone_id: @phone.id, buyer_id: user.id)
-      @recipient = User.find(conversation.buyer_id)
+    if @conversation = Conversation.find_by(seller_phone_id: @phone.id, seller_id: user.id)
+      @recipient = User.find(@conversation.buyer_id)
+    elsif @conversation = Conversation.find_by(buyer_phone_id: @phone.id, buyer_id: user.id)
+      @recipient = User.find(@conversation.seller_id)
     end
   end
 
@@ -91,11 +101,11 @@ class SmsInputVerifier
     Conversation.create(seller_id: seller.id, buyer_id: buyer.id, seller_phone_id: seller_phone.id, buyer_phone_id: buyer_phone.id, star_id: @star.id)
 
     system = ENV['TWILIO_PHONE']
-    to_buyer_message = "EasyBooks: This is a private channel between you and #{seller.first_name}, the seller of #{@post.title}: $#{@post.price} (#{@post.condition}). Start texting!\n\nTo terminate this conversation, reply with 'EXIT'.\n\nTo mark this transaction as completed, reply with 'DONE'."
+    to_buyer_message = "EasyBooks: This is a private channel between you and #{seller.first_name}, the seller of #{@post.title}: $#{@post.price} (#{@post.condition}). Start texting!\n\nTo terminate this conversation and unstar this post, reply with 'EXIT'.\n\nTo mark this transaction as completed, reply with 'DONE'."
     SmsNotification.send_from_private_phone(buyer_phone.number, buyer.phone, to_buyer_message)
 
-    # to_seller_message = "EasyBooks: This is a private channel between you and #{buyer.first_name}, who is interested in buying #{@post.title}. Start texting!\n\nTo terminate this conversation, reply with 'EXIT'.\n\nTo mark this transaction as completed, reply with 'DONE'."
-    # SmsNotification.send_from_private_phone(seller_phone.number, seller.phone, to_seller_message)
+    to_seller_message = "EasyBooks: This is a private channel between you and #{buyer.first_name}, who is interested in buying #{@post.title}. Start texting!\n\nTo terminate this conversation and wait for the next buyer, reply with 'EXIT'.\n\nTo mark this transaction as completed, reply with 'DONE'."
+    SmsNotification.send_from_private_phone(seller_phone.number, seller.phone, to_seller_message)
   end
 end
 

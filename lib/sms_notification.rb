@@ -12,10 +12,10 @@ module SmsNotification
   def self.create_post_alert(post_id)
     post = Post.find(post_id)
     seller = post.seller
-    accepted = post.stars.find_by(accepted: true)
+    accepted = post.stars.find_by(sent: true)
     if !accepted
       star = post.stars.where(sent: false).where.not(user_id: seller.id).first
-      if new_post_alert_command(star.id) && send_post_alert(star.user.phone, post, @command.random_num)
+      if star && new_post_alert_command(star.id) && send_post_alert(star.user.phone, post, @command.random_num)
         star.update_attributes(sent: true)
       end
     end
@@ -48,7 +48,9 @@ module SmsNotification
     from = ENV['TWILIO_PHONE']
     to = '+1' + to.to_s
     course_name = course.department + " " + course.course_number
-    body = "EasyBooks: New post for #{course_name}! #{post.title} (#{post.condition}): $#{post.price} by #{seller.first_name}!\n\nClick here to star the post:"
+    post_id = post.id.to_s
+    root = "https://easybooks.herokuapp.com/posts/#{post_id}"
+    body = "EasyBooks: New post for #{course_name}! #{post.title} (#{post.condition}): $#{post.price} by #{seller.first_name}!\n\nClick here to star the post: #{root}"
     twilio_sms(from, to, body)
   end
 

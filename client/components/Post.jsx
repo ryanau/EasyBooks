@@ -299,6 +299,7 @@ Post = React.createClass({
 				<p>{post.title}</p>
 				<p>{post.price}</p>
 				<p>{seller_name}</p>
+				<img src={post.picture_url} />
 				{comments}
 				{editButton}
 				{deleteButton}
