@@ -33,12 +33,13 @@ PublicPost = React.createClass({
     this.transitionTo('/posts/' + this.props.post.id);
   },
   render: function () {
-  	var post = this.props.post
+    var post = this.props.post
+  	var course = post.course
   	return (
       <div className="publicpost">
   			<Card key={post.id}>
           <CardHeader 
-            title={post.title + ' (' + (post.condition) + ')'}
+            title={course.department + ' ' + course.course_number + ': ' + post.title + ' (' + (post.condition) + ')'}
             subtitle={"$" + post.price + " | " + post.stars.length + " Subscribers" + " | Created " + moment(post.created_at).fromNow()}
             avatar={<IconButton onClick={this.redirectToPost} tooltip="See Detail" tooltipPosition="bottom-center" touch={true}><FontIcon className="material-icons">forward</FontIcon></IconButton>}>
           </CardHeader>

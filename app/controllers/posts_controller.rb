@@ -13,7 +13,7 @@ class PostsController < ApplicationController
     else
       posts = Post.where(public: true).order(created_at: :DESC)
     end
-    render :json => posts, :include => {:stars => {:only => :post_id}}
+    render :json => posts.as_json(include: {stars: {only: :star_id}, course: {except: :updated_at}})
   end
 
   def create
