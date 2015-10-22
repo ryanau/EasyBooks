@@ -7,11 +7,10 @@ University.create(name: "Stanford University")
 
 
 # seed courses
-# university.courses.create(department: "ESPM", course_number: "50AC", year: "2015", semester: "FALL")
-# university.courses.create(department: "CS", course_number: "70", year: "2015", semester: "FALL")
-# university.courses.create(department: "PE", course_number: "101", year: "2015", semester: "FALL")
-# university.courses.create(department: "UGBA", course_number: "102A", year: "2015", semester: "FALL")
-# university.courses.create(department: "ESPM", course_number: "50AC", year: "2015", semester: "SPRING")
+university.courses.create(department: "CS", course_number: "70", year: "2016", semester: "SPRING")
+university.courses.create(department: "PE", course_number: "101", year: "2016", semester: "SPRING")
+university.courses.create(department: "UGBA", course_number: "102A", year: "2016", semester: "SPRING")
+university.courses.create(department: "ESPM", course_number: "50AC", year: "2016", semester: "SPRING")
 
 # CSV.foreach(File.path('spring_16_classes.csv')) do |row|
 #   if row[0] != "department"
