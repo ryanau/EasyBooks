@@ -23,7 +23,7 @@ class PostsController < ApplicationController
     action = PostCreator.new(params, current_user)
     if action.ok?
       post = action.post
-      # CourseAlert.perform_async(post.course_id, post.id, current_user.id)
+      CourseAlert.perform_async(post.course_id, post.id, current_user.id)
       render json: {post_id: action.post.id}
     else
       render json: {error_message: action.post}
