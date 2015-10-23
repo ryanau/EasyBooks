@@ -26,6 +26,10 @@ class SessionsController < ApplicationController
     end
   end
 
+  def environment
+    render json: {mode: Rails.env}
+  end
+
   private
 
   def auth_hash

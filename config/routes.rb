@@ -27,6 +27,7 @@ Rails.application.routes.draw do
     post '/register', :to => 'users#register'
 
     post '/sms_inbound', :to => 'sms#approve'
+    get '/environment', :to => 'sessions#environment'
   end
   get '/auth/facebook/callback', :to => 'sessions#create'
 

@@ -19,16 +19,34 @@ App = React.createClass({
     return {
       signedIn: false,
       currentUser: {id: null, first_name: null, pic: null, completed: false},
-      mode: "production",
+      mode: "development",
     }
   },
   componentWillMount: function () {
     var jwt = new Uri(location.search).getQueryParamValue('jwt');
-    console.log(jwt)
     if (!!jwt) {localStorage.setItem('jwt-easybooks', jwt);}
   },
   componentDidMount: function () {
     if (!!localStorage.getItem('jwt-easybooks')) {this.currentUserFromAPI();}
+    this.checkEnvironment();
+  },
+  checkEnvironment: function () {
+    $.ajax({
+      url: this.props.origin + '/environment',
+      type: 'GET',
+      dataType: 'json',
+      crossDomain: true,
+      headers: {'Authorization': localStorage.getItem('jwt-easybooks'),
+      },
+      success: function (response) {
+        this.setState({
+          mode: response.mode
+        });
+      }.bind(this),
+      error: function(error) {
+        window.location = "/"
+      }.bind(this),
+    });
   },
   currentUserFromAPI: function () {
     $.ajax({
