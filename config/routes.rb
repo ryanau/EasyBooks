@@ -17,7 +17,7 @@ Rails.application.routes.draw do
     get '/active_posts', :to => 'posts#active_posts'
     get '/starred_posts', :to => 'posts#starred_posts'
     get '/archived_posts', :to => 'posts#archived_posts'
-
+    get '/mutual_friends', :to => 'posts#mutual_friends'
 
     put '/subscriptions', :to => 'subscriptions#update'
     post '/image_upload', :to => 'posts#image_upload'

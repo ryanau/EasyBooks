@@ -17,6 +17,7 @@ var FlatButton = mui.FlatButton;
 var FontIcon = mui.FontIcon;
 var IconButton = mui.IconButton;
 var Colors = mui.Colors;
+var Avatar = mui.Avatar;
 
 PublicPost = React.createClass({
   mixins: [ Navigation ],
@@ -32,16 +33,41 @@ PublicPost = React.createClass({
     return {
       star: null,
       star_count: this.props.post.stars.length,
+      mutual_friends_count: null,
+      mutual_friends: null,
     }
   },
   componentDidMount: function () {
     this.loadStar();
+    this.loadMutualFriends();
   },
   redirectToPost: function () {
     this.transitionTo('/posts/' + this.props.post.id);
   },
+  loadMutualFriends: function () {
+    var post_id = this.props.post.id;
+    var data = {
+      post_id: post_id,
+    };
+    $.ajax({
+      url: this.props.origin + '/mutual_friends',
+      type: 'GET',
+      data: data,
+      dataType: 'json',
+      crossDomain: true,
+      headers: {'Authorization': localStorage.getItem('jwt-easybooks')},
+      success: function (response) {
+        this.setState({
+          mutual_friends_count: response.mutual_friends_count,
+          mutual_friends: response.mutual_friends,
+        })
+      }.bind(this),
+      error: function (error) {
+        window.location = "/"
+      }.bind(this),
+    });
+  },
   loadStar: function () {
-    var path = location.pathname;
     var post_id = this.props.post.id;
     var data = {
       post_id: post_id,
@@ -70,7 +96,6 @@ PublicPost = React.createClass({
     });
   },
   starPost: function () {
-    var path = location.pathname;
     var post_id = this.props.post.id;
     if (this.state.star) {
       var data = {
@@ -118,7 +143,6 @@ PublicPost = React.createClass({
     this.loadStarCount();
   },
   loadStarCount: function () {
-    var path = location.pathname;
     var post_id = this.props.post.id;
     var data = {
       post_id: post_id,
@@ -152,6 +176,13 @@ PublicPost = React.createClass({
         <IconButton onClick={this.starPost} tooltip="Follow this post"><FontIcon className="material-icons">star</FontIcon></IconButton>
       }
     }
+    if (this.state.mutual_friends != null) {
+      var avatars = this.state.mutual_friends.map(function (friend, index) {
+        return (
+          <Avatar key={index} src={friend[1]} style={{marginRight: "3px"}}/>
+        )
+      }.bind(this))
+    }
   	return (
       <div className="publicpost">
         <Snackbar
@@ -169,9 +200,13 @@ PublicPost = React.createClass({
             avatar={post.seller.pic}>
           </CardHeader>
           <CardText>
-          <IconButton onClick={this.redirectToPost} tooltip="See Detail" tooltipPosition="top-right" touch={true}><FontIcon className="material-icons">forward</FontIcon></IconButton>
-          {starButton}
-          {post.description}
+            <IconButton onClick={this.redirectToPost} tooltip="See Detail" tooltipPosition="top-right" touch={true}><FontIcon className="material-icons">forward</FontIcon></IconButton>
+            {starButton}
+            <p>{post.description}</p>
+            <h4>{this.state.mutual_friends_count} Mutual Friends with {post.seller.first_name}</h4>
+            <div>
+            {avatars}
+            </div>
           </CardText>
   			</Card>
   		</div>
