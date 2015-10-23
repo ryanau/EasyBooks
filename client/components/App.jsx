@@ -53,6 +53,7 @@ App = React.createClass({
     });
   },
 	render: function () {
+    console.log(this.state.mode)
 		return (
 			<div>
         <div className="container">

@@ -20,11 +20,9 @@ Landing = React.createClass({
 	  };
 	},
   render: function () {
-  	if (this.props.mode === "development") {
-  		var link = 'http://localhost:3000/auth/facebook'
-  	} else {
-  		var link = 'https://easybooks.herokuapp.com/auth/facebook'
-  	}
+  	console.log(this.props.mode)
+  	if (this.props.mode === "development") { var link = 'http://localhost:3000/auth/facebook' } 
+  	if (this.props.mode === "production") { var link = 'https://easybooks.herokuapp.com/auth/facebook' }
   	if (this.props.signedIn && this.props.currentUser.completed) {
   		var display = (
 	  		<div>
