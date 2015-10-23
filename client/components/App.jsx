@@ -19,14 +19,13 @@ App = React.createClass({
     return {
       signedIn: false,
       currentUser: {id: null, first_name: null, pic: null, completed: false},
-      mode: "development",
+      mode: "production",
     }
   },
   componentWillMount: function () {
     var jwt = new Uri(location.search).getQueryParamValue('jwt');
     console.log(jwt)
     if (!!jwt) {localStorage.setItem('jwt-easybooks', jwt);}
-    console.log(localStorage.jwt)
   },
   componentDidMount: function () {
     if (!!localStorage.getItem('jwt-easybooks')) {this.currentUserFromAPI();}
@@ -53,7 +52,6 @@ App = React.createClass({
     });
   },
 	render: function () {
-    console.log(this.state.mode)
 		return (
 			<div>
         <div className="container">
