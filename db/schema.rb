@@ -97,11 +97,14 @@ ActiveRecord::Schema.define(version: 20151016043656) do
   end
 
   create_table "users", force: :cascade do |t|
+    t.string   "uid",             null: false
     t.string   "first_name",      null: false
     t.string   "last_name",       null: false
-    t.string   "email",           null: false
-    t.string   "phone",           null: false
-    t.string   "password_digest", null: false
+    t.string   "email"
+    t.string   "phone"
+    t.string   "token",           null: false
+    t.string   "pic",             null: false
+    t.string   "password_digest"
     t.integer  "university_id"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false

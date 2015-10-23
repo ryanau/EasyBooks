@@ -27,6 +27,7 @@ Rails.application.routes.draw do
 
     post '/sms_inbound', :to => 'sms#approve'
   end
+  get '/auth/facebook/callback', :to => 'sessions#create'
 
   match '*all', to: 'client_app#index', via: [:get]
 end

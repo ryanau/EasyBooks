@@ -19,6 +19,8 @@ gem 'icalendar', '2.3.0'
 gem 'cloudinary'
 gem 'sidekiq', '3.5.0'
 gem 'faker', '1.5.0'
+gem 'omniauth-facebook'
+gem "koala", "~> 2.2"
 
 group :development, :test do
   # gem 'pry-rails'

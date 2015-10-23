@@ -19,7 +19,7 @@ university.courses.create(department: "ESPM", course_number: "50AC", year: "2016
 # end
 
 # seed me
-User.create(first_name: "Ryan", last_name: "Au", email: "test@test.com", phone: "6265005826", password: "1234", university_id: 1)
+# User.create(first_name: "Ryan", last_name: "Au", email: "test@test.com", phone: "6265005826", password: "1234", university_id: 1)
 
 # seed phone
 Phone.create(number: "+15102963497")

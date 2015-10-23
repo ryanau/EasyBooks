@@ -41,7 +41,7 @@ SubscribedCourse = React.createClass({
 		var course = this.props.course
 		return (
 			<div>
-				<p>{course.course.department + course.course.course_number}</p>
+				<p>{course.course.department + ' ' + course.course.course_number}</p>
 
 				<Toggle
 				  ref="toggle"

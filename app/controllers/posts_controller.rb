@@ -2,6 +2,8 @@ class PostsController < ApplicationController
   before_action :authentication, only: [:index, :create, :show, :image_upload, :active_posts, :destroy, :starred_posts, :mark_sold, :archived_posts]
 
   def index
+    start_point = params[:start_point].to_i
+    end_point = params[:end_point].to_i
     if params[:course_selected] != nil && params[:course_selected] != ""
       course_selected = params[:course_selected]
       arr = []
@@ -9,9 +11,9 @@ class PostsController < ApplicationController
       total = course_selected.length - course_selected[course_selected.reverse.index(/\s{1}/, 1) * -1.. -1].length - 2
       arr.unshift(course_selected[0..total])
       course_id = Course.find_by(department: arr[0], course_number: arr[1]).id
-      posts = Post.where(public: true, course_id: course_id)
+      posts = Post.where(public: true, course_id: course_id)[start_point..end_point]
     else
-      posts = Post.where(public: true).order(created_at: :DESC)
+      posts = Post.where(public: true).order(created_at: :DESC)[start_point..end_point]
     end
     render :json => posts.as_json(include: {stars: {only: :star_id}, course: {except: :updated_at}})
   end
@@ -57,17 +59,17 @@ class PostsController < ApplicationController
 
   def active_posts
     posts = current_user.selling_posts.where(sold: false, public: true)
-    render :json => posts, :include => {:stars => {:only => :post_id}}
+    render :json => posts.as_json(include: {stars: {only: :star_id}, course: {except: :updated_at}})  
   end
 
   def starred_posts
     posts = current_user.posts
-    render :json => posts, :include => {:stars => {:only => :post_id}}
+    render :json => posts.as_json(include: {stars: {only: :star_id}, course: {except: :updated_at}})  
   end
 
   def archived_posts
     posts = current_user.selling_posts.where(sold: true, public: false)
-    render :json => posts, :include => {:stars => {:only => :post_id}}
+    render :json => posts.as_json(include: {stars: {only: :star_id}, course: {except: :updated_at}})  
   end
 
   def image_upload

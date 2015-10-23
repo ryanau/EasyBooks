@@ -1,6 +1,7 @@
 var React = require('react');
 var Router = require('react-router');
 var RouteHandler = Router.RouteHandler;
+var Uri = require('jsuri');
 var $ = require('jquery');
 
 App = React.createClass({
@@ -8,22 +9,26 @@ App = React.createClass({
     return {
 
       // comment the following line when in development
-      origin: '/api',
+      // origin: '/api',
 
       // comment the following line when deploying to heroku
-      // origin: 'http://localhost:3000/api'
+      origin: 'http://localhost:3000/api'
     }
   },
   getInitialState: function () {
     return {
       signedIn: false,
-      current_user: {id: null, first_name: null},
+      current_user: {id: null, first_name: null, pic: null},
     }
   },
+  componentWillMount: function () {
+    var jwt = new Uri(location.search).getQueryParamValue('jwt');
+    console.log(jwt)
+    if (!!jwt) {localStorage.setItem('jwt-easybooks', jwt);}
+    console.log(localStorage.jwt)
+  },
   componentDidMount: function () {
-  	if (!!localStorage.getItem('jwt-easybooks')) {
-			this.currentUserFromAPI();
-  	};
+    if (!!localStorage.getItem('jwt-easybooks')) {this.currentUserFromAPI();}
   },
   currentUserFromAPI: function () {
     $.ajax({
