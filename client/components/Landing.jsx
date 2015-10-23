@@ -43,14 +43,17 @@ Landing = React.createClass({
 		  			containerElement={<Link to="/login" />}
 		  			linkButton={true}
 		  			label={('no', 'Log In')}/>
+		  		<div>
+		  		<h4>Please use FB login</h4>
 	  			<RaisedButton
 					  linkButton={true}
 					  label="Log In via FB"
 					  // comment the following line in development
-					  // href={'https://easybook.herokuapp.com/auth/facebook'}/>
+					  href={'https://easybooks.herokuapp.com/auth/facebook'}/>
 
 					  // comment the following line when deploying to heroku
-					  href={'http://localhost:3000/auth/facebook'}/>
+					  // href={'http://localhost:3000/auth/facebook'}/>
+				  </div>
 	  		</div>
   		);
   	}

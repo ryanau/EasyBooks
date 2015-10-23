@@ -15,26 +15,20 @@ class SessionsController < ApplicationController
       query = {jwt: jwt}.to_query
 
       # comment the following line for development
-      # redirect_to "https://easybooks.herokuapp.com/?#{query}"
+      redirect_to "https://easybooks.herokuapp.com/?#{query}"
 
       # comment the following line when deploying on heroku
-      redirect_to "http://localhost:8080/?#{query}"
+      # redirect_to "http://localhost:8080/?#{query}"
     else
-      p 'create usrs'
-      p uid
-      p token
-      p pic
-      p arr[0]
-      p arr[1]
       user = User.create!(uid: uid, first_name: arr[0], last_name: arr[1], token: token, pic: pic, university_id: 1)
       jwt = JWT.encode({id: user.id, first_name: arr[0], last_name: arr[1], pic: pic, exp: 1.day.from_now.to_i}, ENV['SECRET_KEY_BASE'])
       query = {jwt: jwt}.to_query
 
       # comment the following line for development
-      # redirect_to "https://easybooks.herokuapp.com/?#{query}"
+      redirect_to "https://easybooks.herokuapp.com/?#{query}"
 
       # comment the following line when deploying on heroku
-      redirect_to "http://localhost:8080/?#{query}"
+      # redirect_to "http://localhost:8080/?#{query}"
     end
   end
 
