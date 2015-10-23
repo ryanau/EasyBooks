@@ -39,7 +39,7 @@ Dashboard = React.createClass({
 					linkButton={true}
 					secondary={true}
 					label={('no', 'Your Posts')}/>
-				<MarketPlace origin={this.props.origin}/>
+				<MarketPlace origin={this.props.origin} currentUser={this.props.currentUser}/>
 			</div>
 		)
 	},

@@ -82,7 +82,7 @@ MarketPlace = React.createClass({
 				 		label={('no', 'Sell')}/>
   				</ToolbarGroup>
 			 	</Toolbar>
-  			<PublicPosts origin={this.props.origin} course_selected={this.state.course_selected}/>
+  			<PublicPosts origin={this.props.origin} course_selected={this.state.course_selected} currentUser={this.props.currentUser}/>
   		</div>
   	)
   }

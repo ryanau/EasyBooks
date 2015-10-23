@@ -143,12 +143,14 @@ PublicPost = React.createClass({
   render: function () {
     var post = this.props.post
   	var course = post.course
-    if (this.state.star) {
-      var starButton = 
-      <IconButton onClick={this.starPost} tooltip="Unfollow this post" iconStyle={{color: "#FFFF00"}}><FontIcon className="material-icons">star</FontIcon></IconButton>
-    } else {
-      var starButton = 
-      <IconButton onClick={this.starPost} tooltip="Follow this post"><FontIcon className="material-icons">star</FontIcon></IconButton>
+    if (post.seller_id != this.props.currentUser.id) {
+      if (this.state.star) {
+        var starButton = 
+        <IconButton onClick={this.starPost} tooltip="Unfollow this post" iconStyle={{color: "#FFFF00"}}><FontIcon className="material-icons">star</FontIcon></IconButton>
+      } else {
+        var starButton = 
+        <IconButton onClick={this.starPost} tooltip="Follow this post"><FontIcon className="material-icons">star</FontIcon></IconButton>
+      }
     }
   	return (
       <div className="publicpost">
@@ -162,12 +164,13 @@ PublicPost = React.createClass({
           autoHideDuration={1000}/>
   			<Card key={post.id}>
           <CardHeader 
-            title={course.department + ' ' + course.course_number + ': ' + post.title + ' (' + (post.condition) + ')'}
+            title={course.department + ' ' + course.course_number + ': ' + post.title + ' (' + (post.condition) + ') | Post by ' + post.seller.first_name}
             subtitle={"$" + post.price + " | " + this.state.star_count + " Subscribers" + " | Created " + moment(post.created_at).fromNow()}
-            avatar={starButton}>
+            avatar={post.seller.pic}>
           </CardHeader>
           <CardText>
-          <IconButton onClick={this.redirectToPost} tooltip="See Detail" tooltipPosition="bottom-center" touch={true}><FontIcon className="material-icons">forward</FontIcon></IconButton>
+          <IconButton onClick={this.redirectToPost} tooltip="See Detail" tooltipPosition="top-right" touch={true}><FontIcon className="material-icons">forward</FontIcon></IconButton>
+          {starButton}
           {post.description}
           </CardText>
   			</Card>

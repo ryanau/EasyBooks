@@ -15,14 +15,14 @@ class PostsController < ApplicationController
     else
       posts = Post.where(public: true).order(created_at: :DESC)[start_point..end_point]
     end
-    render :json => posts.as_json(include: {stars: {only: :star_id}, course: {except: :updated_at}})
+    render :json => posts.as_json(include: {stars: {only: :star_id}, course: {except: :updated_at}, seller: {only: [:pic, :first_name]}})
   end
 
   def create
     action = PostCreator.new(params, current_user)
     if action.ok?
       post = action.post
-      CourseAlert.perform_async(post.course_id, post.id, current_user.id)
+      # CourseAlert.perform_async(post.course_id, post.id, current_user.id)
       render json: {post_id: action.post.id}
     else
       render json: {error_message: action.post}
@@ -59,7 +59,7 @@ class PostsController < ApplicationController
 
   def active_posts
     posts = current_user.selling_posts.where(sold: false, public: true)
-    render :json => posts.as_json(include: {stars: {only: :star_id}, course: {except: :updated_at}})  
+    render :json => posts.as_json(include: {stars: {only: :star_id}, course: {only: :updated_at}})  
   end
 
   def starred_posts
