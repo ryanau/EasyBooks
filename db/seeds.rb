@@ -12,11 +12,11 @@ university.courses.create(department: "PE", course_number: "101", year: "2016", 
 university.courses.create(department: "UGBA", course_number: "102A", year: "2016", semester: "SPRING")
 university.courses.create(department: "ESPM", course_number: "50AC", year: "2016", semester: "SPRING")
 
-# CSV.foreach(File.path('spring_16_classes.csv')) do |row|
-#   if row[0] != "department"
-#     university.courses.create(department: row[0], course_number: row[1], year: "2016", semester: "SPRING")
-#   end
-# end
+CSV.foreach(File.path('spring_16_classes.csv')) do |row|
+  if row[0] != "department"
+    university.courses.create(department: row[0], course_number: row[1], year: "2016", semester: "SPRING")
+  end
+end
 
 # seed me
 # User.create(first_name: "Ryan", last_name: "Au", email: "test@test.com", phone: "6265005826", password: "1234", university_id: 1)

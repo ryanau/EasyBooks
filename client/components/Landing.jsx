@@ -20,6 +20,11 @@ Landing = React.createClass({
 	  };
 	},
   render: function () {
+  	if (this.props.mode === "development") {
+  		var link = 'http://localhost:3000/auth/facebook'
+  	} else {
+  		var link = 'https://easybooks.herokuapp.com/auth/facebook'
+  	}
   	if (this.props.signedIn && this.props.currentUser.completed) {
   		var display = (
 	  		<div>
@@ -48,11 +53,7 @@ Landing = React.createClass({
 	  			<RaisedButton
 					  linkButton={true}
 					  label="Log In via FB"
-					  // comment the following line in development
-					  href={'https://easybooks.herokuapp.com/auth/facebook'}/>
-
-					  // comment the following line when deploying to heroku
-					  // href={'http://localhost:3000/auth/facebook'}/>
+					  href={link}/>
 				  </div>
 	  		</div>
   		);

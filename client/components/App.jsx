@@ -19,6 +19,7 @@ App = React.createClass({
     return {
       signedIn: false,
       currentUser: {id: null, first_name: null, pic: null, completed: false},
+      mode: "development",
     }
   },
   componentWillMount: function () {
@@ -43,6 +44,7 @@ App = React.createClass({
         this.setState({
           signedIn: true, 
           currentUser: {id: response.id, first_name: response.first_name, pic: response.pic, completed: response.completed},
+          mode: response.mode
         });
       }.bind(this),
       error: function(error) {
@@ -54,7 +56,7 @@ App = React.createClass({
 		return (
 			<div>
         <div className="container">
-          <RouteHandler origin={this.props.origin} currentUser={this.state.currentUser} signedIn={this.state.signedIn}/>
+          <RouteHandler origin={this.props.origin} currentUser={this.state.currentUser} signedIn={this.state.signedIn} mode={this.state.mode}/>
         </div>
 			</div>
 		);
