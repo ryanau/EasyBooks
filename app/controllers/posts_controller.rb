@@ -59,17 +59,17 @@ class PostsController < ApplicationController
 
   def active_posts
     posts = current_user.selling_posts.where(sold: false, public: true)
-    render :json => posts.as_json(include: {stars: {only: :star_id}, course: {only: :updated_at}})  
+    render :json => posts.as_json(include: {stars: {only: :star_id}, course: {only: [:department, :course_number]}, seller: {only: [:pic, :first_name]}})  
   end
 
   def starred_posts
     posts = current_user.posts
-    render :json => posts.as_json(include: {stars: {only: :star_id}, course: {except: :updated_at}})  
+    render :json => posts.as_json(include: {stars: {only: :star_id}, course: {only: [:department, :course_number]}, seller: {only: [:pic, :first_name]}})  
   end
 
   def archived_posts
     posts = current_user.selling_posts.where(sold: true, public: false)
-    render :json => posts.as_json(include: {stars: {only: :star_id}, course: {except: :updated_at}})  
+    render :json => posts.as_json(include: {stars: {only: :star_id}, course: {only: [:department, :course_number]}, seller: {only: [:pic, :first_name]}})  
   end
 
   def image_upload

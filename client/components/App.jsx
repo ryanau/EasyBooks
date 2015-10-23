@@ -57,7 +57,6 @@ App = React.createClass({
       headers: {'Authorization': localStorage.getItem('jwt-easybooks'),
       },
       success: function (response) {
-        console.log(response)
         this.setState({
           signedIn: true, 
           currentUser: {id: response.id, first_name: response.first_name, pic: response.pic, completed: response.completed},

@@ -77,7 +77,6 @@ PublicPosts = React.createClass({
 		});
 	},
 	handleInfiniteLoad: function() {
-    console.log('before load')
     this.setState({
       isInfiniteLoading: true
     });
