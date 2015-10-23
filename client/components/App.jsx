@@ -18,7 +18,7 @@ App = React.createClass({
   getInitialState: function () {
     return {
       signedIn: false,
-      current_user: {id: null, first_name: null, pic: null},
+      currentUser: {id: null, first_name: null, pic: null, completed: false},
     }
   },
   componentWillMount: function () {
@@ -39,9 +39,10 @@ App = React.createClass({
       headers: {'Authorization': localStorage.getItem('jwt-easybooks'),
       },
       success: function (response) {
+        console.log(response)
         this.setState({
           signedIn: true, 
-          currentUser: {id: response.id, first_name: response.first_name},
+          currentUser: {id: response.id, first_name: response.first_name, pic: response.pic, completed: response.completed},
         });
       }.bind(this),
       error: function(error) {

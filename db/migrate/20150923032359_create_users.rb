@@ -9,6 +9,7 @@ class CreateUsers < ActiveRecord::Migration
       t.string :token, null: false
       t.string :pic, null: false
       t.string :password_digest
+      t.boolean :completed, default: false
 
       t.integer :university_id
       

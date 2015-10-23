@@ -8,6 +8,7 @@ var RaisedButton = mui.RaisedButton;
 
 
 var DashBoard = require('./DashBoard.jsx');
+var Register = require('./Register.jsx');
 
 Landing = React.createClass({
 	childContextTypes: {
@@ -19,13 +20,18 @@ Landing = React.createClass({
 	  };
 	},
   render: function () {
-  	console.log("signed in" + this.props.signedIn);
-  	if (this.props.signedIn) {
+  	if (this.props.signedIn && this.props.currentUser.completed) {
   		var display = (
 	  		<div>
 		  		<DashBoard origin={this.props.origin} currentUser={this.props.currentUser}/>
 	  		</div>
   		);
+  	} else if (this.props.currentUser.completed == false && this.props.signedIn) {
+  		var display = (
+  			<div>
+  				<Register origin={this.props.origin} currentUser={this.props.currentUser}/>
+  			</div>
+  		)
   	} else {
   		var display = (
 	  		<div>
@@ -41,7 +47,7 @@ Landing = React.createClass({
 					  linkButton={true}
 					  label="Log In via FB"
 					  // comment the following line in development
-					  // href={'https://easybook.herokuapp.com/auth/venmo'}/>
+					  // href={'https://easybook.herokuapp.com/auth/facebook'}/>
 
 					  // comment the following line when deploying to heroku
 					  href={'http://localhost:3000/auth/facebook'}/>

@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   match '*all', to: 'application#cors_preflight_check', via: [:options]
 
   scope :api do
-    resources :users, only: [:create]
+    # resources :users, only: [:create]
     resources :universities, only: [:index]
     resources :subscriptions, only: [:index, :create]
     resources :posts, only: [:index, :show, :create, :destroy]
@@ -22,8 +22,9 @@ Rails.application.routes.draw do
     put '/subscriptions', :to => 'subscriptions#update'
     post '/image_upload', :to => 'posts#image_upload'
     post '/parse_calendar', :to => 'subscriptions#parse_calendar'
-    get '/login', :to => 'users#login'
+    # get '/login', :to => 'users#login'
     get '/current_user', :to => 'users#current'
+    post '/register', :to => 'users#register'
 
     post '/sms_inbound', :to => 'sms#approve'
   end
