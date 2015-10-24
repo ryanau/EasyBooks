@@ -45,27 +45,30 @@ PublicPost = React.createClass({
     this.transitionTo('/posts/' + this.props.post.id);
   },
   loadMutualFriends: function () {
+    var post = this.props.post
     var post_id = this.props.post.id;
-    var data = {
-      post_id: post_id,
-    };
-    $.ajax({
-      url: this.props.origin + '/mutual_friends',
-      type: 'GET',
-      data: data,
-      dataType: 'json',
-      crossDomain: true,
-      headers: {'Authorization': localStorage.getItem('jwt-easybooks')},
-      success: function (response) {
-        this.setState({
-          mutual_friends_count: response.mutual_friends_count,
-          mutual_friends: response.mutual_friends,
-        })
-      }.bind(this),
-      error: function (error) {
-        window.location = "/"
-      }.bind(this),
-    });
+    if (post.seller_id != this.props.currentUser.id) {
+      var data = {
+        post_id: post_id,
+      };
+      $.ajax({
+        url: this.props.origin + '/mutual_friends',
+        type: 'GET',
+        data: data,
+        dataType: 'json',
+        crossDomain: true,
+        headers: {'Authorization': localStorage.getItem('jwt-easybooks')},
+        success: function (response) {
+          this.setState({
+            mutual_friends_count: response.mutual_friends_count,
+            mutual_friends: response.mutual_friends,
+          })
+        }.bind(this),
+        error: function (error) {
+          window.location = "/"
+        }.bind(this),
+      });
+    }
   },
   loadStar: function () {
     var post_id = this.props.post.id;
@@ -182,6 +185,7 @@ PublicPost = React.createClass({
         var starButton = 
         <IconButton onClick={this.starPost} tooltip="Follow this post"><FontIcon className="material-icons">star</FontIcon></IconButton>
       }
+      var mutual = this.state.mutual_friends_count + " Mutual Friends with " + post.seller.first_name
     }
   	return (
       <div className="publicpost">
@@ -203,7 +207,7 @@ PublicPost = React.createClass({
             <IconButton onClick={this.redirectToPost} tooltip="See Detail" tooltipPosition="top-right" touch={true}><FontIcon className="material-icons">forward</FontIcon></IconButton>
             {starButton}
             <p>{post.description}</p>
-            <h4>{this.state.mutual_friends_count} Mutual Friends with {post.seller.first_name}</h4>
+            <h4>{mutual}</h4>
             <div>
             {avatars}
             </div>
