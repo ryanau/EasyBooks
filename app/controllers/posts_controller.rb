@@ -23,7 +23,7 @@ class PostsController < ApplicationController
     action = PostCreator.new(params, current_user)
     if action.ok?
       post = action.post
-      CourseAlert.perform_async(post.course_id, post.id, current_user.id)
+      # CourseAlert.perform_async(post.course_id, post.id, current_user.id)
       render json: {post_id: action.post.id}
     else
       render json: {error_message: action.post}
@@ -31,39 +31,17 @@ class PostsController < ApplicationController
   end
 
   def show
-    post_id = params[:post_id]
-    post = Post.find(post_id)
-    seller = Post.find(post_id).seller
-    seller_id = seller.id
-    seller_name = seller.first_name
-
-    
-    render json: {post: post, seller_id: seller_id, seller_name: seller_name}
+    post = Post.find(params[:post_id])
+    if post.sold && post.seller_id != current_user.id
+      render json: {error_message: "Post not found"}
+    else
+      render :json => post.as_json(include: {seller: {only: [:id, :first_name]}})
+    end
   end
 
   def mutual_friends
-    post_id = params[:post_id]
-    post = Post.find(post_id)
-    seller = Post.find(post_id).seller
-
-    key = ENV['FACEBOOK_SECRET']
-    data = current_user.token
-
-    appsecret_proof = OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), key, data)
-
-    response = HTTParty.get("https://graph.facebook.com/v2.5/#{seller.uid}?fields=context.fields%28all_mutual_friends%29&access_token=#{data}",
-        :body => {
-                  'access_token' => data,
-                  'appsecret_proof' => appsecret_proof,
-                  })
-    count = response.parsed_response["context"]["all_mutual_friends"]["summary"]["total_count"]
-
-    friends = []
-    response.parsed_response["context"]["all_mutual_friends"]["data"].each do |el|
-      arr = [el["name"], el["picture"]["data"]["url"]]
-      friends << arr
-    end
-    render json: {mutual_friends_count: count, mutual_friends: friends}
+    result = find_mutual_friends(params[:post_id])
+    render json: {mutual_friends_count: result[:count], mutual_friends: result[:friends]}
   end
 
   def mark_sold
@@ -74,6 +52,7 @@ class PostsController < ApplicationController
       response = false
     else
       post.update_attributes(sold: true, public: false)
+      post.stars.destroy_all
       response = true
     end
     render json: {sold: response}
@@ -113,5 +92,31 @@ class PostsController < ApplicationController
     }
     response = Cloudinary::Uploader.upload(pic_address, params)
     render json: {pic_url: response["url"]}
+  end
+
+  private
+  def find_mutual_friends(post_id)
+    post_id = params[:post_id]
+    post = Post.find(post_id)
+    seller = Post.find(post_id).seller
+
+    key = ENV['FACEBOOK_SECRET']
+    data = current_user.token
+
+    appsecret_proof = OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), key, data)
+
+    response = HTTParty.get("https://graph.facebook.com/v2.5/#{seller.uid}?fields=context.fields%28all_mutual_friends%29&access_token=#{data}",
+        :body => {
+                  'access_token' => data,
+                  'appsecret_proof' => appsecret_proof,
+                  })
+    count = response.parsed_response["context"]["all_mutual_friends"]["summary"]["total_count"]
+
+    friends = []
+    response.parsed_response["context"]["all_mutual_friends"]["data"].each do |el|
+      arr = [el["name"], el["picture"]["data"]["url"]]
+      friends << arr
+    end
+    {count: count, friends: friends}
   end
 end

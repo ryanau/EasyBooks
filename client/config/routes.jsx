@@ -8,7 +8,6 @@ var ScheduleUploader = require('../components/ScheduleUploader.jsx');
 var Subscriptions = require('../components/Subscriptions.jsx');
 var Login = require('../components/LogIn.jsx');
 var SignUp = require('../components/SignUp.jsx');
-// var PostEdit = require('../components/PostEdit.jsx');
 var PostDashboard = require('../components/PostDashboard.jsx');
 
 

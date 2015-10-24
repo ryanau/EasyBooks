@@ -35,6 +35,7 @@ Post = React.createClass({
 			star: null,
 			sold: null,
 			star_count: null,
+			not_found: null,
 		}
 	},
 	componentDidMount: function () {
@@ -115,13 +116,19 @@ Post = React.createClass({
 			dataType: 'json',
 			crossDomain: true,
 			headers: {'Authorization': localStorage.getItem('jwt-easybooks')},
-			success: function (response) {
-				this.setState({
-					post: response.post,
-					seller_id: response.seller_id,
-					seller_name: response.seller_name,
-					sold: response.post.sold,
-				});
+			success: function (post) {
+				if (post.error_message) {
+					this.setState({
+						not_found: true
+					})
+				} else {
+					this.setState({
+						post: post,
+						seller_id: post.seller_id,
+						seller_name: post.seller.first_name,
+						sold: post.sold,
+					});
+				}
 			}.bind(this),
 			error: function (error) {
 				window.location = "/"
@@ -227,17 +234,12 @@ Post = React.createClass({
 		});
 	},
 	render: function () {
-		if (this.state.post != null) {
+		if (this.state.post != null && !this.state.not_found) {
 			var post = this.state.post;
 			var seller_id = this.state.seller_id;
 			var seller_name = this.state.seller_name;
 			var star_count = this.state.star_count;
 			if (this.state.post.seller_id == this.props.currentUser.id) {
-				var editButton = 
-				<RaisedButton
-				  label="Edit Post"
-				  onClick={this.editPost}
-				  secondary={true}/>;
 				var deleteButton = 
 				<RaisedButton
 				  label="Delete Post"
@@ -266,10 +268,18 @@ Post = React.createClass({
 				}
 			}
 			var comments = <Comments origin={this.props.origin} post_id={post.id}/>;
+			var post = 
+				<div>
+				<p>{post.title}</p>
+				<p>{post.price}</p>
+				<p>{seller_name}</p>
+				<img src={post.picture_url} />
+				</div>
+			var subscribers = <h5>{star_count} user has subscribed to this post</h5>
+		} else if (this.state.not_found) {
+			var message = "Post Not Found"
 		} else {
-			var post = "Loading..."
-			var seller_id = ""
-			var seller_name = ""
+			var message = "Loading..."
 		}
 		return (
 			<div>
@@ -294,14 +304,11 @@ Post = React.createClass({
 				  message='Post Marked as Available'
 				  autoHideDuration={1000}/>
 				<h4>Post</h4>
+				{message}
+				{post}
 				{starButton}
-				<h5>{star_count} user has subscribed to this post</h5>
-				<p>{post.title}</p>
-				<p>{post.price}</p>
-				<p>{seller_name}</p>
-				<img src={post.picture_url} />
+				{subscribers}
 				{comments}
-				{editButton}
 				{deleteButton}
 				{soldButton}
 			</div>
