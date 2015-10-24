@@ -168,6 +168,13 @@ PublicPost = React.createClass({
     var post = this.props.post
   	var course = post.course
     if (post.seller_id != this.props.currentUser.id) {
+      if (this.state.mutual_friends != null) {
+        var avatars = this.state.mutual_friends.map(function (friend, index) {
+          return (
+            <Avatar key={index} src={friend[1]} style={{marginRight: "3px"}}/>
+          )
+        }.bind(this))
+      }
       if (this.state.star) {
         var starButton = 
         <IconButton onClick={this.starPost} tooltip="Unfollow this post" iconStyle={{color: "#FFFF00"}}><FontIcon className="material-icons">star</FontIcon></IconButton>
@@ -175,13 +182,6 @@ PublicPost = React.createClass({
         var starButton = 
         <IconButton onClick={this.starPost} tooltip="Follow this post"><FontIcon className="material-icons">star</FontIcon></IconButton>
       }
-    }
-    if (this.state.mutual_friends != null) {
-      var avatars = this.state.mutual_friends.map(function (friend, index) {
-        return (
-          <Avatar key={index} src={friend[1]} style={{marginRight: "3px"}}/>
-        )
-      }.bind(this))
     }
   	return (
       <div className="publicpost">
