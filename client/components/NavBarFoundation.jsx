@@ -18,13 +18,13 @@ var MenuItem = require('react-bootstrap').MenuItem;
 var ReactRouterBootstrap = require('react-router-bootstrap')
   , NavItemLink = ReactRouterBootstrap.NavItemLink
   , ButtonLink = ReactRouterBootstrap.ButtonLink
-  , ListGroupItemLink = ReactRouterBootstrap.ListGroupItemLink;
+  , ListGroupItemLink = ReactRouterBootstrap.ListGroupItemLink
 
 var LinkContainer = require('react-router-bootstrap').LinkContainer;
 
 module.exports = React.createClass({
   handleSignOutLink: function() {
-    localStorage.setItem('jwt-easybooks','');
+    localStorage.removeItem('jwt-easybooks');
     location = '/';
   },
   childContextTypes: {
@@ -62,13 +62,15 @@ module.exports = React.createClass({
     } else {
       var homeLink = <Link to="/">EasyBooks</Link>
     }
+    var Brand = <Link to='/' className='navbar-brand'>EasyBooks</Link>;
     return (
       <div>
         <Navbar inverse toggleNavKey={0}>
-            <NavBrand>React-Bootstrap</NavBrand>
+            <NavBrand>{Brand}</NavBrand>
             <Nav right eventKey={0}>
+              <NavItemLink to="/">Buy</NavItemLink>
               <NavItemLink to="/sell">Sell</NavItemLink>
-              <NavItem eventKey={2} href="#">Link</NavItem>
+              <NavItemLink to="/logout">Log Out</NavItemLink>
               <NavDropdown eventKey={3} title="Dropdown" id="collapsible-navbar-dropdown">
                 <MenuItem eventKey="1">Action</MenuItem>
                 <MenuItem eventKey="2">Another action</MenuItem>

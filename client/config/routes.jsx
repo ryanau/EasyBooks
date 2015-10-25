@@ -8,6 +8,7 @@ var ScheduleUploader = require('../components/ScheduleUploader.jsx');
 var Subscriptions = require('../components/Subscriptions.jsx');
 var Login = require('../components/LogIn.jsx');
 var SignUp = require('../components/SignUp.jsx');
+var LogOut = require('../components/LogOut.jsx');
 var PostDashboard = require('../components/PostDashboard.jsx');
 
 var DefaultRoute = Router.DefaultRoute;
@@ -18,6 +19,7 @@ module.exports = (
   <Route name="app" path="/" handler={App}>
 	  <DefaultRoute name="landing" handler={Landing} />
 	  <Route name="signup" path="signup" handler={SignUp} />
+	  <Route name="logout" path="logout" handler={LogOut} />
 	  <Route name="login" path="login" handler={Login} />
 	  <Route name="postdashboard" path="postdashboard" handler={PostDashboard} />
 	  <Route name="sell" handler={Sell} />
