@@ -38,7 +38,7 @@ module.exports = React.createClass({
     var yourPosts = <Link to='/postdashboard'>Your Posts</Link>; 
     var subscriptions = <Link to='/subscriptions'>Subscriptions</Link>; 
     var schedule = <Link to='/schedule'>Schedule Uploader</Link>; 
-    if (this.props.signedIn && this.props.completed) {
+    if (this.props.signedIn && this.props.currentUser.completed) {
       var control = 
         <Navbar inverse toggleNavKey={0}>
           <NavBrand>{brand}</NavBrand>
