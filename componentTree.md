@@ -1,14 +1,19 @@
 App
 	-- Landing
-		-- SignUp
-		-- LogIn
+		-- xSignUp
+		-- xLogIn
+		-- Register
 		-- DashBoard
 			-- MarketPlace
 				-- PublicPosts
 					-- PublicPost
-			-- CalendarUploader
+			-- ScheduleUploader
 				-- Course
-			-- Subscription
+			-- Subscriptions
 				-- SubscribedCourse
+				-- AddSubscription
 	-- Sell
 	-- Post
+		-- Comments
+			-- Comment
+			-- CommentBox

@@ -21,25 +21,9 @@ Dashboard = React.createClass({
 	},
 	render: function () {
 		return (
-			<div id="dashboard">
-				<h1>DashBoard</h1>
+			<div>
 				<h3>Welcome Back {this.props.currentUser.first_name}</h3>
-				<RaisedButton
-					containerElement={<Link to="/schedule" />}
-					linkButton={true}
-					secondary={true}
-					label={('no', 'Upload Your Schedule')}/>
-				<RaisedButton
-					containerElement={<Link to="/subscriptions" />}
-					linkButton={true}
-					secondary={true}
-					label={('no', 'Subscriptions')}/>
-				<RaisedButton
-					containerElement={<Link to="/postdashboard" />}
-					linkButton={true}
-					secondary={true}
-					label={('no', 'Your Posts')}/>
-				<MarketPlace origin={this.props.origin}/>
+				<MarketPlace origin={this.props.origin} currentUser={this.props.currentUser}/>
 			</div>
 		)
 	},

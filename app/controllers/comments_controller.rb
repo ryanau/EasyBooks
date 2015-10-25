@@ -2,13 +2,7 @@ class CommentsController < ApplicationController
   before_action :authentication, only: [:index, :create]
 
   def index
-    post = Post.find(params[:post_id])
-    comments = post.comments
-    # respond_to do |format|
-    #   render :json => comments.to_json(:include => { :user => {:only => :first_name}})
-    # end
-    # render json: {comments: comments}
-
+    comments = Post.find(params[:post_id]).comments
     render :json => comments, :include => {:user => {:only => :first_name}}
   end
 

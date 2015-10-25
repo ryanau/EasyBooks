@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
   validates :email, uniqueness: true
-  has_secure_password
+  # has_secure_password
 
   belongs_to :university
   has_many :courses, through: :subscriptions

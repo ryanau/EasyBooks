@@ -46,7 +46,7 @@ StarredPosts = React.createClass({
 		if (this.state.posts != null) {
 			var posts = this.state.posts.map(function (post, index) {
 				return (
-					<PublicPost key={post.id} origin={this.props.origin} post={post}/>
+					<PublicPost key={post.id} origin={this.props.origin} post={post} currentUser={this.props.currentUser}/>
 				);
 			}.bind(this));
 		} else {
