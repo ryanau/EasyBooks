@@ -37,14 +37,6 @@ Landing = React.createClass({
   	} else {
   		var display = (
 	  		<div>
-		  		<RaisedButton
-		  			containerElement={<Link to="/signup" />}
-		  			linkButton={true}
-		  			label={('no', 'Sign Up')}/>
-		  		<RaisedButton
-		  			containerElement={<Link to="/login" />}
-		  			linkButton={true}
-		  			label={('no', 'Log In')}/>
 		  		<div>
 		  		<h4>Please use FB login</h4>
 	  			<RaisedButton

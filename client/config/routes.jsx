@@ -10,11 +10,9 @@ var Login = require('../components/LogIn.jsx');
 var SignUp = require('../components/SignUp.jsx');
 var PostDashboard = require('../components/PostDashboard.jsx');
 
-
 var DefaultRoute = Router.DefaultRoute;
 var Route = Router.Route;
 var NotFoundRoute = Router.NotFoundRoute;
-
 
 module.exports = (
   <Route name="app" path="/" handler={App}>

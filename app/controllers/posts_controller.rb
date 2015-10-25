@@ -5,14 +5,10 @@ class PostsController < ApplicationController
   def index
     start_point = params[:start_point].to_i
     end_point = params[:end_point].to_i
-    if params[:course_selected] != nil && params[:course_selected] != ""
-      course_selected = params[:course_selected]
-      arr = []
-      arr.unshift(course_selected[course_selected.reverse.index(/\s{1}/, 1) * -1.. -1])
-      total = course_selected.length - course_selected[course_selected.reverse.index(/\s{1}/, 1) * -1.. -1].length - 2
-      arr.unshift(course_selected[0..total])
-      course_id = Course.find_by(department: arr[0], course_number: arr[1]).id
-      posts = Post.where(public: true, course_id: course_id)[start_point..end_point]
+    course_selected = params[:course_selected]
+    if course_selected != nil && course_selected != ""
+      result = find_course(course_selected)
+      posts = Post.where(public: true, course_id: result[:course_id])[start_point..end_point]
     else
       posts = Post.where(public: true).order(created_at: :DESC)[start_point..end_point]
     end
@@ -95,23 +91,30 @@ class PostsController < ApplicationController
   end
 
   private
+
+  def find_course(course_selected)
+    arr = []
+    arr.unshift(course_selected[course_selected.reverse.index(/\s{1}/, 1) * -1.. -1])
+    total = course_selected.length - course_selected[course_selected.reverse.index(/\s{1}/, 1) * -1.. -1].length - 2
+    arr.unshift(course_selected[0..total])
+    course_id = Course.find_by(department: arr[0], course_number: arr[1]).id
+    {course_id: course_id}
+  end
   def find_mutual_friends(post_id)
     post_id = params[:post_id]
     post = Post.find(post_id)
-    seller = Post.find(post_id).seller
+    seller = post.seller
 
     key = ENV['FACEBOOK_SECRET']
     data = current_user.token
 
     appsecret_proof = OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), key, data)
-
     response = HTTParty.get("https://graph.facebook.com/v2.5/#{seller.uid}?fields=context.fields%28all_mutual_friends%29&access_token=#{data}",
         :body => {
                   'access_token' => data,
                   'appsecret_proof' => appsecret_proof,
                   })
     count = response.parsed_response["context"]["all_mutual_friends"]["summary"]["total_count"]
-
     friends = []
     response.parsed_response["context"]["all_mutual_friends"]["data"].each do |el|
       arr = [el["name"], el["picture"]["data"]["url"]]

@@ -4,6 +4,9 @@ var RouteHandler = Router.RouteHandler;
 var Uri = require('jsuri');
 var $ = require('jquery');
 
+var NavBarFoundation = require('./NavBarFoundation.jsx');
+
+
 App = React.createClass({
 	getDefaultProps: function() {
     return {
@@ -71,6 +74,7 @@ App = React.createClass({
 	render: function () {
 		return (
 			<div>
+        <NavBarFoundation signedIn={this.state.signedIn}/>
         <div className="container">
           <RouteHandler origin={this.props.origin} currentUser={this.state.currentUser} signedIn={this.state.signedIn} mode={this.state.mode}/>
         </div>
