@@ -33,6 +33,6 @@ class UsersController < ApplicationController
   end
 
   def current
-    render json: {id: current_user.id, first_name: current_user.first_name, completed: current_user.completed, pic: current_user.pic}
+    render json: {id: current_user.id, first_name: current_user.first_name, completed: current_user.completed, pic: current_user.pic, completed: current_user.completed}
   end
 end
