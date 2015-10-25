@@ -4,7 +4,7 @@ var RouteHandler = Router.RouteHandler;
 var Uri = require('jsuri');
 var $ = require('jquery');
 
-var NavBarFoundation = require('./NavBarFoundation.jsx');
+var NavBar = require('./NavBar.jsx');
 
 
 App = React.createClass({
@@ -67,14 +67,15 @@ App = React.createClass({
         });
       }.bind(this),
       error: function(error) {
-        window.location = "/"
+        localStorage.removeItem('jwt-easybooks');
+        location = '/';
       }.bind(this),
     });
   },
 	render: function () {
 		return (
 			<div>
-        <NavBarFoundation signedIn={this.state.signedIn}/>
+        <NavBar signedIn={this.state.signedIn}/>
         <div className="container">
           <RouteHandler origin={this.props.origin} currentUser={this.state.currentUser} signedIn={this.state.signedIn} mode={this.state.mode}/>
         </div>

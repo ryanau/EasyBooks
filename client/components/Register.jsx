@@ -94,9 +94,6 @@ Register = React.createClass({
 		return (
 			<div>
 				<div>
-				<DropDownMenu menuItems={universityList} autoScrollBodyContent={true} onChange={this.handleDropDownMenu}/>
-				</div>
-				<div>
 				<TextField
 					onChange={this.handlePhone}
 				  floatingLabelText="Phone Number" 
@@ -107,6 +104,9 @@ Register = React.createClass({
 					onChange={this.handleEmail}
 				  floatingLabelText="Email" 
 				  hintText="Required"/>
+				</div>
+				<div>
+				<DropDownMenu menuItems={universityList} autoScrollBodyContent={true} onChange={this.handleDropDownMenu}/>
 				</div>
 				<RaisedButton
 				  label="Complete Registration"

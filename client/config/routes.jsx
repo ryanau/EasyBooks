@@ -24,7 +24,7 @@ module.exports = (
 	  <Route name="postdashboard" path="postdashboard" handler={PostDashboard} />
 	  <Route name="sell" handler={Sell} />
 	  <Route name="posts/:id" path="posts/:id" handler={Post} />
-	  <Route name="scheduleUploader" path="schedule" handler={ScheduleUploader} />
-	  <Route name="Subscriptions" path="subscriptions" handler={Subscriptions} />
+	  <Route name="scheduleuploader" path="schedule" handler={ScheduleUploader} />
+	  <Route name="subscriptions" path="subscriptions" handler={Subscriptions} />
   </Route>
 );

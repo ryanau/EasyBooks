@@ -8,11 +8,22 @@ var AppBar = mui.AppBar;
 var FlatButton = mui.FlatButton;
 var FontIcon = mui.FontIcon;
 
+var Navbar = require('react-bootstrap').Navbar;
+var NavItem = require('react-bootstrap').NavItem;
+var NavBrand = require('react-bootstrap').NavBrand;
+var NavDropdown = require('react-bootstrap').NavDropdown;
+var Nav = require('react-bootstrap').Nav;
+var MenuItem = require('react-bootstrap').MenuItem;
+var ListGroup = require('react-bootstrap').ListGroup;
+var DropdownButton = require('react-bootstrap').DropdownButton;
+
+var ReactRouterBootstrap = require('react-router-bootstrap')
+  , NavItemLink = ReactRouterBootstrap.NavItemLink
+  , ButtonLink = ReactRouterBootstrap.ButtonLink
+  , ListGroupItemLink = ReactRouterBootstrap.ListGroupItemLink
+  , MenuItemLink = ReactRouterBootstrap.MenuItemLink
+
 module.exports = React.createClass({
-  handleSignOutLink: function() {
-    localStorage.setItem('jwt-easybooks','');
-    location = '/';
-  },
   childContextTypes: {
     muiTheme: React.PropTypes.object
   },
@@ -23,49 +34,34 @@ module.exports = React.createClass({
   },
 
   render: function() {
-    if (this.props.signedIn) {
-      var homeLink = <Link to="app">EasyBooks</Link>
-      var signingLink = 
-        <div>
-        <FlatButton
-          containerElement={<Link to="sell" />}
-          linkButton={true}
-          hoverColor={'#FF9800'}
-          rippleColor={'#FF9800'}
-          style={{backgroundColor: '#FF9800',
-                  color: '#002e32',
-                  lineHeight: '18px'}}
-          label={('no', 'Sell')}/>
-        <FlatButton
-          onClick={this.handleSignOutLink}
-          hoverColor={'#FF9800'}
-          rippleColor={'#FF9800'}
-          style={{backgroundColor: '#FF9800',
-                  color: '#002e32',
-                  lineHeight: '18px'}}
-          label={('no', 'SignOut')}/>
-        </div>
+    var brand = <Link to='/' className='navbar-brand'>EasyBooks</Link>; 
+    var yourPosts = <Link to='/postdashboard'>Your Posts</Link>; 
+    var subscriptions = <Link to='/subscriptions'>Subscriptions</Link>; 
+    var schedule = <Link to='/schedule'>Schedule Uploader</Link>; 
+    if (this.props.signedIn && this.props.completed) {
+      var control = 
+        <Navbar inverse toggleNavKey={0}>
+          <NavBrand>{brand}</NavBrand>
+          <Nav right eventKey={0}>
+            <NavItemLink to="/">Buy</NavItemLink>
+            <NavItemLink to="/sell">Sell</NavItemLink>
+            <NavDropdown eventKey={3} title="Profile" id="collapsible-navbar-dropdown">
+              <MenuItem>{yourPosts}</MenuItem>
+              <MenuItem>{subscriptions}</MenuItem>
+              <MenuItem>{schedule}</MenuItem>
+            </NavDropdown>
+            <NavItemLink to="/logout">Log Out</NavItemLink>
+          </Nav>
+        </Navbar>
     } else {
-      var homeLink = <Link to="/">EasyBooks</Link>
+      var control = 
+      <Navbar inverse toggleNavKey={0}>
+        <NavBrand>{brand}</NavBrand>
+      </Navbar>
     }
     return (
-      <div className="fixed">
-        <AppBar 
-          iconElementLeft={<FlatButton
-                            containerElement={<Link to="app" />}
-                            linkButton={true}
-                            hoverColor={'#FF9800'}
-                            rippleColor={'#FF9800'}
-                            style={{backgroundColor: '#FF9800',
-                                    color: '#002e32',
-                                    fontSize:'18px',
-                                    fontFamily: 'Lato', 
-                                    fontWeight: "700"}}
-                            label={('no', 'EasyBooks')}/>}
-          style={{marginBottom: '0px',
-                  backgroundColor: '#FF9800',
-                  minHeight: '0px'}}
-          iconElementRight={signingLink}/>
+      <div>
+        {control}
       </div>
     );
   }
