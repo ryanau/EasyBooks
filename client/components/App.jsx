@@ -76,7 +76,7 @@ App = React.createClass({
 		return (
 			<div>
         <NavBar signedIn={this.state.signedIn} currentUser={this.state.currentUser}/>
-        <div className="container">
+        <div>
           <RouteHandler origin={this.props.origin} currentUser={this.state.currentUser} signedIn={this.state.signedIn} mode={this.state.mode}/>
         </div>
 			</div>

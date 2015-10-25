@@ -29,13 +29,13 @@ PostDashBoard = React.createClass({
 			<div>
 				<h4>Post DashBoard</h4>
 				<Tabs>
-					<Tab label="Starred Posts" >
+					<Tab label="Starred" >
 						<StarredPosts origin={this.props.origin} currentUser={this.props.currentUser}/>
 					</Tab>
-				  <Tab label="Active Posts" >
+				  <Tab label="Active" >
 				    <ActivePosts origin={this.props.origin} currentUser={this.props.currentUser}/>
 				  </Tab>
-				  <Tab label="Archived Posts" >
+				  <Tab label="Sold" >
 				    <ArchivedPosts origin={this.props.origin} currentUser={this.props.currentUser}/>
 				  </Tab>
 				</Tabs>

@@ -188,7 +188,7 @@ PublicPost = React.createClass({
       var mutual = this.state.mutual_friends_count + " Mutual Friends with " + post.seller.first_name
     }
   	return (
-      <div className="publicpost">
+      <div>
         <Snackbar
           ref="postStarred"
           message='Post Followed'

@@ -13,6 +13,7 @@ LogOut = React.createClass({
   render: function () {
     return (
       <div>
+        <h4>Sad to see you leave :(</h4>
       </div>
     )
   },
