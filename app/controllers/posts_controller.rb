@@ -114,11 +114,16 @@ class PostsController < ApplicationController
                   'access_token' => data,
                   'appsecret_proof' => appsecret_proof,
                   })
+    begin
     count = response.parsed_response["context"]["all_mutual_friends"]["summary"]["total_count"]
     friends = []
     response.parsed_response["context"]["all_mutual_friends"]["data"].each do |el|
       arr = [el["name"], el["picture"]["data"]["url"]]
       friends << arr
+    end
+    rescue
+      count = "0"
+      friends = []
     end
     {count: count, friends: friends}
   end
