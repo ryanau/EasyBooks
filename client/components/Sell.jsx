@@ -8,11 +8,15 @@ var Select = require('react-select');
 
 var mui = require('material-ui');
 var ThemeManager = new mui.Styles.ThemeManager();
-var TextField = mui.TextField;
 var DropDownMenu = mui.DropDownMenu;
-var FlatButton = mui.FlatButton;
 var Paper = mui.Paper;
 var LinearProgress = mui.LinearProgress;
+
+var Input = require('react-bootstrap').Input;
+var MenuItem = require('react-bootstrap').MenuItem;
+var Dropdown = require('react-bootstrap').Dropdown;
+var Button = require('react-bootstrap').Button;
+var Panel = require('react-bootstrap').Panel;
 
 Sell = React.createClass({
 	mixins: [ Navigation ],
@@ -30,13 +34,14 @@ Sell = React.createClass({
 			price: '',
 			pickup: '',
 			description: '',
-			condition: '',
+			condition: "Good",
 			course_selected: null,
 			warning: null,
 			pic_file: null,
 			pic_url: null,
 			uploading: null,
 			courses: [{value: "1", label: "Loading..."}],
+			isLoading: false,
 		}
 	},
 	componentDidMount: function () {
@@ -57,31 +62,6 @@ Sell = React.createClass({
 			error: function (error) {
 				window.location = "/"
 			}.bind(this),
-		});
-	},
-	handleTitle: function (e) {
-		this.setState({
-			title: e.target.value
-		});
-	},
-	handlePrice: function (e) {
-		this.setState({
-			price: e.target.value
-		});
-	},
-	handlePickup: function (e) {
-		this.setState({
-			pickup: e.target.value
-		});
-	},
-	handleDescription: function (e) {
-		this.setState({
-			description: e.target.value
-		});
-	},
-	handleCondition: function (e, selectedIndex, menuItem) {
-		this.setState({
-			condition: menuItem.text,
 		});
 	},
 	searchChange: function (value) {
@@ -127,11 +107,14 @@ Sell = React.createClass({
 			description: this.state.description,
 			condition: this.state.condition,
 		};
-		if (data.title == '' || data.price == '' || data.pickup == '' || data.description == '' || data.condition == '') {
+		if (data.title == '' || data.price == '' || data.condition == '') {
 			this.setState({
 				warning: "Please fill out all required fields."
 			});
-		} else {
+		} else if (this.validateTitle() == 'success' && this.validatePrice() == 'success'){
+			this.setState({
+				isLoading: true,
+			})
 			$.ajax({
 				url: this.props.origin + '/posts',
 				type: 'POST',
@@ -146,18 +129,45 @@ Sell = React.createClass({
 					window.location = "/"
 				}.bind(this),
 			});
+		} else {
+			this.setState({
+				warning: "The input format is not correct."
+			});
 		}
+	},
+	handleChange: function () {
+	  this.setState({
+	    title: this.refs.title.getValue(),
+	    description: this.refs.description.getValue(),
+	    price: this.refs.price.getValue(),
+	    pickup: this.refs.pickup.getValue(),
+	  });
+	},
+	validateTitle: function () {
+	  var length = this.state.title.length;
+	  if (length > 0) {
+	  	return 'success';
+	  } else {
+	  	return 'error';
+	  }
+	},
+	validatePrice: function () {
+		var length = this.state.price.length;
+		var content = this.state.price;
+		if (length > 0 && content.match(/^[0-9]*$/)) {
+			return 'success';
+		} else {
+			return 'error';
+		}
+	},
+	changeCondition: function (e) {
+		this.setState({
+			condition: e.target.innerHTML,
+		})
 	},
   render: function () {
   	var courseList = this.state.courses;
   	var warning = this.state.warning;
-  	var conditions = [
-  		{ payload: '1', text: 'Select Condition'},
-	  	{ payload: '2', text: 'New' },
-	  	{ payload: '3', text: 'Like New' },
-	  	{ payload: '4', text: 'Good' },
-	  	{ payload: '5', text: 'Fair' },
-  	];
   	if (this.state.pic_file != null) {
   		var picPreview = <img src={this.state.pic_file[0].preview} />
   	}
@@ -173,50 +183,88 @@ Sell = React.createClass({
   	}
   	return (
   		<div>
-  			<h4>Sell</h4>
-  			<TextField
-  				onChange={this.handleTitle}
-  			  floatingLabelText="Title" 
-  			  hintText="Required"/>
-  			<div>
-  			<TextField
-  				onChange={this.handlePrice}
-  			  floatingLabelText="Price" 
-  			  hintText="Required"/>
-  			</div>
-  			<div>
-  			<TextField
-  				onChange={this.handlePickup}
-  			  floatingLabelText="Pick Up Location" 
-  			  hintText="Required"/>
-  			</div>
-  			<div>
-  			<TextField
-  				onChange={this.handleDescription}
-  			  floatingLabelText="Description" 
-  			  hintText="Required"/>
-  			</div>
-  			<div>
-  			<DropDownMenu menuItems={conditions} onChange={this.handleCondition}/>
-  			</div>
-  			<div>
-  			<Select
-  			  name="form-field-name"
-  			  value="Please type the course name or use the dropdown menu"
-  			  options={courseList}
-  			  onChange={this.searchChange}
-  			  searchable={true}/>
-  			</div>
-  			<div>
-					{uploadingProgress}
-  			</div>
-  			<div>{picPreview}</div>
-  			<div>
-  			<FlatButton
-  			  label="Sell Book"
-  			  onClick={this.handleSubmit}/>
-  			</div>
-  			{warning}
+	  			<form className="form-horizontal">
+		  			<Input
+			        type="text"
+			        value={this.state.title}
+			        placeholder="e.g. Stats20 Textbook"
+			        label="Post Title"
+			        help="Required"
+			        bsStyle={this.validateTitle()}
+			        hasFeedback
+			        ref="title"
+			        groupClassName="group-class"
+			        labelClassName="label-class"
+			        onChange={this.handleChange} />
+		  			<Input
+			        type="text"
+			        value={this.state.price}
+			        placeholder="e.g. 36"
+			        addonBefore="$" 
+			        addonAfter=".00"
+			        label="Price"
+			        help="Required"
+			        bsStyle={this.validatePrice()}
+			        hasFeedback
+			        ref="price"
+			        groupClassName="group-class"
+			        labelClassName="label-class"
+			        onChange={this.handleChange} />
+		  			<Input
+			        type="text"
+			        value={this.state.description}
+			        placeholder="e.g. slightly highlighted, international edition"
+			        label="Description"
+			        help="Optional"
+			        hasFeedback
+			        ref="description"
+			        groupClassName="group-class"
+			        labelClassName="label-class"
+			        onChange={this.handleChange} />
+						<Input
+			        type="text"
+			        value={this.state.pickup}
+			        placeholder="e.g. Unit 1"
+			        label="Pick Up Location"
+			        help="Optional"
+			        hasFeedback
+			        ref="pickup"
+			        groupClassName="group-class"
+			        labelClassName="label-class"
+			        onChange={this.handleChange} />
+			      <h5><strong>Select Condition</strong></h5>
+		  			<Dropdown id="condition">
+		  				<Dropdown.Toggle>
+		  			  	{this.state.condition}
+		  			  </Dropdown.Toggle>
+				      <Dropdown.Menu>
+				        <MenuItem eventKey="1" onSelect={this.changeCondition}>New</MenuItem>
+				        <MenuItem eventKey="2" onSelect={this.changeCondition}>Like New</MenuItem>
+				        <MenuItem eventKey="3" onSelect={this.changeCondition}>Good</MenuItem>
+				        <MenuItem eventKey="4" onSelect={this.changeCondition}>Fair</MenuItem>
+				      </Dropdown.Menu>
+				    </Dropdown>
+		  			<h5><strong>Select Course Name</strong></h5>
+		  			<Select
+		  			  name="form-field-name"
+		  			  value="Type the course name or click the dropdown button on the right"
+		  			  options={courseList}
+		  			  onChange={this.searchChange}
+		  			  searchable={true}/>
+		  			<div>
+							{uploadingProgress}
+		  			</div>
+		  			<div>{picPreview}</div>
+		  			<div>
+		  			<Button
+			        bsStyle="primary"
+			        disabled={this.state.isLoading}
+			        onClick={!this.state.isLoading ? this.handleSubmit : null}>
+			        {this.state.isLoading ? 'Putting it on the rack...' : 'Sell Book'}
+			      </Button>
+		  			</div>
+		  			{warning}
+	  			</form>
   		</div>
   	)
   }

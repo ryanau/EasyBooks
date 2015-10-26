@@ -54,7 +54,6 @@ StarredPosts = React.createClass({
 		};
 		return (
 			<div>
-				<h4>Starred Posts</h4>
 				{posts}
 			</div>
 		)

@@ -81,7 +81,6 @@ AddSubscription = React.createClass({
 		var searchOptions = this.state.courses;
 		return (
 			<div>
-				<h5>Add Subscription</h5>
 				<Select
 				  name="form-field-name"
 				  value="Please type the course name or use the dropdown menu"

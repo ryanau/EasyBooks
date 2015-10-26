@@ -9,7 +9,10 @@ var Link = Router.Link;
 var mui = require('material-ui');
 var ThemeManager = new mui.Styles.ThemeManager();
 var Snackbar = mui.Snackbar;
-var RaisedButton = mui.RaisedButton;
+
+var Panel = require('react-bootstrap').Panel;
+var Button = require('react-bootstrap').Button;
+var ButtonToolbar = require('react-bootstrap').ButtonToolbar;
 
 var SubscribedCourse = require('./SubscribedCourse.jsx');
 var AddSubscription = require('./AddSubscription.jsx');
@@ -95,18 +98,12 @@ Subscriptions = React.createClass({
 				)
 			}.bind(this));
 			var updateSubscriptionButton = 
-			<RaisedButton
-			  label="Update Subscriptions"
-			  onClick={this.updateSubscription}
-			  secondary={true}/>;
+			<Button onClick={this.updateSubscription} bsStyle="success">Update Subscription</Button>
 			if (this.state.add_show) {
 				var subscription_component = <AddSubscription origin={this.props.origin} reload={this.reload}/>
 			} else {
 				var showAddSubscription = 
-				<RaisedButton
-				  label="Add Subscription"
-				  onClick={this.showSubscription}
-				  secondary={true}/>;
+				<Button onClick={this.showSubscription} bsStyle="primary">Add Course</Button>
 			}
 		} else {
 			var subscriptions = "Loading..."
@@ -117,11 +114,18 @@ Subscriptions = React.createClass({
 				  ref="subscriptionsUpdated"
 				  message='Subscriptions Updated. Redirecting...'
 				  autoHideDuration={1000}/>
-				<h4>Subscriptions</h4>
-				{subscriptions}
-				{subscription_component}
-				{updateSubscriptionButton}
-				{showAddSubscription}
+				<Panel header="Manage Subscriptions">
+					<div>
+					{subscriptions}
+					{subscription_component}
+					</div>
+					<div>
+					<ButtonToolbar>
+						{showAddSubscription}
+						{updateSubscriptionButton}
+					</ButtonToolbar>
+					</div>
+				</Panel>
 			</div>
 		)
 	},

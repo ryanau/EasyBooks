@@ -61,7 +61,7 @@ MarketPlace = React.createClass({
   		<div>
         <Select
           name="form-field-name"
-          value="Please type the course name or use the dropdown menu"
+          value="Type the course name or click the dropdown button on the right"
           options={searchOptions}
           onChange={this.searchChange}
           searchable={true}/>

@@ -54,7 +54,6 @@ ActivePosts = React.createClass({
 		};
 		return (
 			<div>
-				<h4>Active Posts</h4>
 				{posts}
 			</div>
 		);

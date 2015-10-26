@@ -7,6 +7,10 @@ var Infinite = require('react-infinite');
 var mui = require('material-ui');
 var ThemeManager = new mui.Styles.ThemeManager();
 
+var Panel = require('react-bootstrap').Panel;
+var ReactRouterBootstrap = require('react-router-bootstrap')
+  , ButtonLink = ReactRouterBootstrap.ButtonLink;
+
 var PublicPost = require('./PublicPost.jsx');
 
 PublicPosts = React.createClass({
@@ -108,19 +112,32 @@ PublicPosts = React.createClass({
 
   },
   render: function () {
-  	if (this.state.posts != null) {
+  	var header = "this.state.course_selected"
+  	if (this.state.course_selected.courses.length == 0) {
+  		var header = "Post for All Courses"
+  	} else {
+  		var header = "Posts for " + this.state.course_selected.courses[0]
+  	}
+  	if (this.state.posts == null) {
+  		var posts = "Loading..."
+  	} else if (this.state.posts.length > 0) {
   		var posts = this.state.posts.map(function (post, index) {
   			return (
   				<PublicPost key={post.id} origin={this.props.origin} post={post} currentUser={this.props.currentUser}/>
   			)
   		}.bind(this));
   	} else {
-  		var posts = "Loading..."
+  		var posts = 
+  		<div>
+  		<h5>No post available... Click below get notified when posts for {this.state.course_selected.courses[0]} become availabe!</h5>
+  		<ButtonLink onClick={this.showSubscription} bsStyle="primary" to="/subscriptions">Add Subscription</ButtonLink>
+  		</div>
   	};
   	return (
   		<div>
-  			<h3>Public Posts</h3>
-  			{posts}
+  			<Panel header={header} bsStyle="info">
+	  			{posts}
+	  		</Panel>
   		</div>
   	)
   }

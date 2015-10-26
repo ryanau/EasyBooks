@@ -187,6 +187,12 @@ PublicPost = React.createClass({
       }
       var mutual = this.state.mutual_friends_count + " Mutual Friends with " + post.seller.first_name
     }
+    if (post.description) {
+      var postDescription = <p>Extra info: {post.description}</p>
+    }
+    if (post.pickup) {
+      var postPickUp = <p>Pick up at: {post.pickup}</p>
+    }
   	return (
       <div>
         <Snackbar
@@ -206,7 +212,8 @@ PublicPost = React.createClass({
           <CardText>
             <IconButton onClick={this.redirectToPost} tooltip="See Detail" tooltipPosition="top-right" touch={true}><FontIcon className="material-icons">forward</FontIcon></IconButton>
             {starButton}
-            <p>{post.description}</p>
+            {postDescription}
+            {postPickUp}
             <h4>{mutual}</h4>
             <div>
             {avatars}
