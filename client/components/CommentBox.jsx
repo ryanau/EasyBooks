@@ -5,9 +5,11 @@ var Link = Router.Link;
 
 var mui = require('material-ui');
 var ThemeManager = new mui.Styles.ThemeManager();
-var TextField = mui.TextField;
 var Snackbar = mui.Snackbar;
-var RaisedButton = mui.RaisedButton;
+
+var Button = require('react-bootstrap').Button;
+var Input = require('react-bootstrap').Input;
+var Col = require('react-bootstrap').Col;
 
 CommentBox = React.createClass({
 	childContextTypes: {
@@ -20,16 +22,24 @@ CommentBox = React.createClass({
 	},
 	getInitialState: function () {
 		return {
-			comment: null,
+			comment: '',
 		}
 	},
-	handleComment: function (e) {
+	handleComment: function () {
 		this.setState({
-			comment: e.target.value,
+			comment: this.refs.comment.getValue(),
 		})
 	},
 	clearComment: function () {
-		this.refs.commentText.clearValue();
+		this.refs.comment.clearValue();
+	},
+	validateComment: function () {
+		var length = this.state.comment.length;
+		if (length > 0) {
+			return 'success';
+		} else {
+			return 'error';
+		}
 	},
 	addComment: function () {
 		var data = {
@@ -45,11 +55,10 @@ CommentBox = React.createClass({
 				crossDomain: true,
 				headers: {'Authorization': localStorage.getItem('jwt-easybooks')},
 				success: function (response) {
-					this.refs.commentAdded.show();
-					this.clearComment();
 					this.props.updateComments();
+					this.refs.commentAdded.show();
 					this.setState({
-						comment: null,
+						comment: '',
 					});
 				}.bind(this),
 				error: function (error) {
@@ -61,20 +70,25 @@ CommentBox = React.createClass({
 	render: function () {
 		return (
 			<div>
-				<h4>Comment Box</h4>
 				<Snackbar
 				  ref="commentAdded"
 				  message='Comment Added'
 				  autoHideDuration={2000}/>
-				<TextField
-					ref="commentText"
-					onChange={this.handleComment}
-				  floatingLabelText="Comment" 
-				  hintText="Required"/>
-			  <RaisedButton
-			    label="Comment"
-			    onClick={this.addComment}
-			    secondary={true}/>
+				<Col xs={9} md={9}>
+	  			<Input
+		        type="text"
+		        placeoholder="Add Comment"
+		        value={this.state.comment}
+		        bsStyle={this.validateComment()}
+		        hasFeedback
+		        ref="comment"
+		        groupClassName="group-class"
+		        labelClassName="label-class"
+		        onChange={this.handleComment} />
+	      </Col>
+	      <Col xs={3} md={3}>
+			  <Button onClick={this.addComment} bsStyle="primary">Comment</Button>
+			  </Col>
 			</div>
 		)
 	},

@@ -190,7 +190,7 @@ Sell = React.createClass({
 		  			<Input
 			        type="text"
 			        value={this.state.title}
-			        placeholder="e.g. Stats20 Textbook"
+			        placeholder="e.g. Statistics by Freedman, Pisani, and Purves (4th edition)"
 			        label="Book Name"
 			        help="Required"
 			        bsStyle={this.validateTitle()}

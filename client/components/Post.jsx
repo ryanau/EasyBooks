@@ -260,7 +260,7 @@ Post = React.createClass({
 					<IconButton onClick={this.starPost} tooltip="Follow this post"><FontIcon className="material-icons">star</FontIcon></IconButton>
 				}
 			}
-			var comments = <Comments origin={this.props.origin} post_id={post.id}/>;
+			var comments = <Comments origin={this.props.origin} post_id={post.id} seller_id={post.seller.id}/>;
 			var post = 
 				<div>
 				<p>{post.title}</p>
@@ -303,11 +303,11 @@ Post = React.createClass({
 				  {post}
 				  {starButton}
 				  {subscribers}
-				  {comments}
 				  <ButtonToolbar>
 					  {deleteButton}
 					  {soldButton}
 				  </ButtonToolbar>
+				  {comments}
 				</Panel>
 			</div>
 		)

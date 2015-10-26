@@ -7,7 +7,9 @@ var moment = require('moment');
 
 var mui = require('material-ui');
 var ThemeManager = new mui.Styles.ThemeManager();
-var RaisedButton = mui.RaisedButton;
+var Avatar = mui.Avatar;
+
+var Image = require('react-bootstrap').Image;
 
 Comment = React.createClass({
 	childContextTypes: {
@@ -20,9 +22,14 @@ Comment = React.createClass({
 	},
 	render: function () {
 		var comment = this.props.comment;
+		if (comment.user.id == this.props.seller_id) {
+			var user = 'Seller'
+		} else {
+			var user = comment.user.first_name + ' ' + comment.user.last_name
+		}
 		return (
 			<div>
-				<p>{comment.content} by {comment.user.first_name} from {moment(comment.created_at).fromNow()}</p>
+				<p><Avatar src={comment.user.pic} style={{marginRight: "3px"}}/><strong>{user}</strong> ({moment(comment.created_at).fromNow()}): {comment.content}</p>
 			</div>
 		);
 	},
