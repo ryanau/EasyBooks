@@ -192,13 +192,13 @@ PublicPost = React.createClass({
       if (this.state.star) {
         var actionButtons = 
         <CardActions>
-          <IconButton onClick={this.starPost} tooltip="Unfollow this post" iconStyle={{color: "#FFFF00"}}><FontIcon className="material-icons">star</FontIcon></IconButton>
+          <IconButton onClick={this.starPost} tooltip="Unfollow this post" tooltipPosition="top-right" iconStyle={{color: "#FFFF00"}}><FontIcon className="material-icons">star</FontIcon></IconButton>
           <IconButton onClick={this.redirectToPost} tooltip="See Detail" tooltipPosition="top-right" touch={true}><FontIcon className="material-icons">forward</FontIcon></IconButton>
         </CardActions>
       } else {
         var actionButtons = 
         <CardActions>
-          <IconButton onClick={this.starPost} tooltip="Follow this post"><FontIcon className="material-icons">star</FontIcon></IconButton>
+          <IconButton onClick={this.starPost} tooltipPosition="top-right" tooltip="Follow this post"><FontIcon className="material-icons">star</FontIcon></IconButton>
           <IconButton onClick={this.redirectToPost} tooltip="See Detail" tooltipPosition="top-right" touch={true}><FontIcon className="material-icons">forward</FontIcon></IconButton>
         </CardActions>
       }
