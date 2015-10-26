@@ -12,7 +12,7 @@ class PostsController < ApplicationController
     else
       posts = Post.where(public: true).order(created_at: :DESC)[start_point..end_point]
     end
-    render :json => posts.as_json(include: {stars: {only: :star_id}, course: {except: :updated_at}, seller: {only: [:pic, :first_name]}})
+    render :json => posts.as_json(include: {stars: {only: :star_id}, course: {except: :updated_at}, seller: {only: [:pic, :first_name, :last_name]}})
   end
 
   def create
