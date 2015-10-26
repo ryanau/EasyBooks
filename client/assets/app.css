@@ -11,3 +11,26 @@ html * {
 .sellinput {
 	margin: 10px;
 }
+
+.dropzone {
+	width: 100%;
+	border-style: dotted;
+	border-width: 2px;
+}
+
+.dropzone_active {
+	width: 100%;
+	border-style: dotted;
+	border-width: 2px;
+	background-color: grey;
+}
+
+.picPreview {
+	width: 50%;
+	height: 50%;
+}
+
+img {
+	width: 50%;
+	height: 50%;
+}

@@ -74,27 +74,31 @@ ScheduleUploader = React.createClass({
 		}
 	},
 	uploadCalendar: function (file) {
-		var data = new FormData();
-		data.append("calendar", file[0]);
-		$.ajax({
-			url: this.props.origin + '/parse_calendar',
-			type: 'POST',
-			data: data,
-			dataType: 'json',
-			processData: false,
-			contentType: false,
-			crossDomain: true,
-			headers: {'Authorization': localStorage.getItem('jwt-easybooks'),
-			},
-			success: function (response) {
-				this.setState({
-					courses: response.courses
-				});
-			}.bind(this),
-			error: function (error) {
-				window.location = "/"
-			}.bind(this),
-		});
+		if (file[0].name.split('.').pop() == "ics") {
+			var data = new FormData();
+			data.append("calendar", file[0]);
+			$.ajax({
+				url: this.props.origin + '/parse_calendar',
+				type: 'POST',
+				data: data,
+				dataType: 'json',
+				processData: false,
+				contentType: false,
+				crossDomain: true,
+				headers: {'Authorization': localStorage.getItem('jwt-easybooks'),
+				},
+				success: function (response) {
+					this.setState({
+						courses: response.courses
+					});
+				}.bind(this),
+				error: function (error) {
+					window.location = "/"
+				}.bind(this),
+			});
+		} else {
+			alert("Only file with a .ics extension is allowed. Download it from Ninjacourses or ScheduleBuilder!")
+		}
 	},
 	render: function () {
 		if (this.state.courses != null) {
@@ -112,13 +116,9 @@ ScheduleUploader = React.createClass({
 		return (
 			<div>
 				<Panel header="Schedule Uploader">
-				<div id="drop">
-				<Paper zDepth={2}>
-					<Dropzone onDrop={this.uploadCalendar} multiple={false}>
-	          <div><h3>Drag or click here to upload your calendar file</h3></div>
-	        </Dropzone>
-				</Paper>
-				</div>
+  			<Dropzone onDrop={this.uploadCalendar} className="dropzone" activeClassName="dropzone_active" multiple={false}>
+          <div><h5>Drag or click here to upload your .ics calendar file from Ninjacourses and ScheduleBuilder</h5></div>
+        </Dropzone>
 				{courses}
 				{uploadButton}
 				{warning}

@@ -188,8 +188,6 @@ PublicPost = React.createClass({
         }.bind(this))
         var mutual = this.state.mutual_friends_count + " Mutual Friends"
         var lastCount = this.state.mutual_friends_count - 10 + ' +'
-      } else {
-        var mutual = "You don't have any Mutual Friend with the seller"
       }
       if (this.state.star) {
         var actionButtons = 
@@ -207,6 +205,7 @@ PublicPost = React.createClass({
       var seller = post.seller.first_name + ' ' + post.seller.last_name
     } else {
       var seller = "you"
+      var mutual = ":P"
       var actionButtons = 
       <CardActions>
         <IconButton onClick={this.redirectToPost} tooltip="See Detail" tooltipPosition="top-right" touch={true}><FontIcon className="material-icons">forward</FontIcon></IconButton>

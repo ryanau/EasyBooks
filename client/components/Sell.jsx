@@ -70,32 +70,37 @@ Sell = React.createClass({
 		});
 	},
 	onDrop: function (file) {
-		this.setState({
-			uploading: true,
-		});
-		var data = new FormData();
-		data.append("pic_file", file[0]);
-		$.ajax({
-			url: this.props.origin + '/image_upload',
-			type: 'POST',
-			data: data,
-			dataType: 'json',
-			processData: false,
-			contentType: false,
-			crossDomain: true,
-			headers: {'Authorization': localStorage.getItem('jwt-easybooks'),
-			},
-			success: function (response) {
-				this.setState({
-					pic_file: file,
-					pic_url: response.pic_url,
-					uploading: false,
-				})
-			}.bind(this),
-			error: function (error) {
-				window.location = "/"
-			}.bind(this),
-		});
+		var extension = file[0].name.split('.').pop()
+		if ( extension == "jpg" || extension == "jpeg" || extension == "png") {
+			this.setState({
+				uploading: true,
+			});
+			var data = new FormData();
+			data.append("pic_file", file[0]);
+			$.ajax({
+				url: this.props.origin + '/image_upload',
+				type: 'POST',
+				data: data,
+				dataType: 'json',
+				processData: false,
+				contentType: false,
+				crossDomain: true,
+				headers: {'Authorization': localStorage.getItem('jwt-easybooks'),
+				},
+				success: function (response) {
+					this.setState({
+						pic_file: file,
+						pic_url: response.pic_url,
+						uploading: false,
+					})
+				}.bind(this),
+				error: function (error) {
+					window.location = "/"
+				}.bind(this),
+			});
+		} else {
+			alert("Only image file with extension of .jpg, .png, .jpeg is allowed!")
+		}
 	},
 	handleSubmit: function () {
 		var data = {
@@ -175,11 +180,9 @@ Sell = React.createClass({
   		var uploadingProgress = <LinearProgress mode="indeterminate" />
   	} else if (this.state.uploading == null) {
   		var uploadingProgress = 
-				<Paper zDepth={2}>
-					<Dropzone onDrop={this.onDrop} multiple={false}>
-	          <div><h3>Drag or click here to upload your pictures</h3></div>
-	        </Dropzone>
-				</Paper>
+				<Dropzone onDrop={this.onDrop} className="dropzone" activeClassName="dropzone_active" multiple={false}>
+	        <div><h5>Drag or click here to upload your picture for the book (ONE only)</h5></div>
+	      </Dropzone>
   	}
   	return (
   		<div>
@@ -188,7 +191,7 @@ Sell = React.createClass({
 			        type="text"
 			        value={this.state.title}
 			        placeholder="e.g. Stats20 Textbook"
-			        label="Post Title"
+			        label="Book Name"
 			        help="Required"
 			        bsStyle={this.validateTitle()}
 			        hasFeedback
