@@ -21,7 +21,7 @@ App = React.createClass({
   getInitialState: function () {
     return {
       signedIn: false,
-      currentUser: {id: null, first_name: null, pic: null, completed: false},
+      currentUser: {id: null, first_name: null, last_name: null, pic: null, completed: false},
       mode: "development",
     }
   },
@@ -62,7 +62,7 @@ App = React.createClass({
       success: function (response) {
         this.setState({
           signedIn: true, 
-          currentUser: {id: response.id, first_name: response.first_name, pic: response.pic, completed: response.completed},
+          currentUser: {id: response.id, first_name: response.first_name, last_name: response.last_name, pic: response.pic, completed: response.completed},
           mode: response.mode
         });
       }.bind(this),

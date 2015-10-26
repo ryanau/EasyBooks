@@ -184,15 +184,25 @@ PublicPost = React.createClass({
         var mutual = "You don't have any Mutual Friend with the seller"
       }
       if (this.state.star) {
-        var starButton = 
-        <IconButton onClick={this.starPost} tooltip="Unfollow this post" iconStyle={{color: "#FFFF00"}}><FontIcon className="material-icons">star</FontIcon></IconButton>
+        var actionButtons = 
+        <CardActions>
+          <IconButton onClick={this.starPost} tooltip="Unfollow this post" iconStyle={{color: "#FFFF00"}}><FontIcon className="material-icons">star</FontIcon></IconButton>
+          <IconButton onClick={this.redirectToPost} tooltip="See Detail" tooltipPosition="top-right" touch={true}><FontIcon className="material-icons">forward</FontIcon></IconButton>
+        </CardActions>
       } else {
-        var starButton = 
-        <IconButton onClick={this.starPost} tooltip="Follow this post"><FontIcon className="material-icons">star</FontIcon></IconButton>
+        var actionButtons = 
+        <CardActions>
+          <IconButton onClick={this.starPost} tooltip="Follow this post"><FontIcon className="material-icons">star</FontIcon></IconButton>
+          <IconButton onClick={this.redirectToPost} tooltip="See Detail" tooltipPosition="top-right" touch={true}><FontIcon className="material-icons">forward</FontIcon></IconButton>
+        </CardActions>
       }
-      var seller = post.seller.first_name
+      var seller = post.seller.first_name + ' ' + post.seller.last_name
     } else {
       var seller = "you"
+      var actionButtons = 
+      <CardActions>
+        <IconButton onClick={this.redirectToPost} tooltip="See Detail" tooltipPosition="top-right" touch={true}><FontIcon className="material-icons">forward</FontIcon></IconButton>
+      </CardActions>
     } 
     if (post.description) {
       var postDescription = <p>Extra info: {post.description}</p>
@@ -212,15 +222,15 @@ PublicPost = React.createClass({
           autoHideDuration={1000}/>
   			<Card key={post.id}>
           <CardHeader 
-            title={course.department + ' ' + course.course_number + ': ' + post.title + ' (' + (post.condition) + ') | Post by ' + seller}
-            subtitle={"$" + post.price + " | " + this.state.star_count + " Subscribers" + " | Created " + moment(post.created_at).fromNow()}
+            title={course.department + ' ' + course.course_number}
+            subtitle={"Post by " + seller + ' ' + moment(post.created_at).fromNow()}
             avatar={post.seller.pic}>
           </CardHeader>
+          <CardTitle title={post.title + ' (' + (post.condition) + ')'} subtitle={"$" + post.price + " | " + this.state.star_count + " Subscribers"}/>
+          {actionButtons}
           <CardText>
             {postDescription}
             {postPickUp}
-            <IconButton onClick={this.redirectToPost} tooltip="See Detail" tooltipPosition="top-right" touch={true}><FontIcon className="material-icons">forward</FontIcon></IconButton>
-            {starButton}
             <h5>{mutual}</h5>
             <div>
             {avatars}
