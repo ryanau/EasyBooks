@@ -173,13 +173,21 @@ PublicPost = React.createClass({
     var post = this.props.post
   	var course = post.course
     if (post.seller_id != this.props.currentUser.id) {
-      if (this.state.mutual_friends != null) {
+      if (this.state.mutual_friends != null && this.state.mutual_friends.length < 10) {
         var avatars = this.state.mutual_friends.map(function (friend, index) {
           return (
             <Avatar key={index} src={friend[1]} style={{marginRight: "3px"}}/>
           )
         }.bind(this))
-        var mutual = this.state.mutual_friends_count + " Mutual Friends with " + post.seller.first_name
+        var mutual = this.state.mutual_friends_count + " Mutual Friends"
+      } else if (this.state.mutual_friends != null && this.state.mutual_friends.length > 10) {
+        var avatars = this.state.mutual_friends.slice(0,10).map(function (friend, index) {
+          return (
+            <Avatar key={index} src={friend[1]} style={{marginRight: "3px"}}/>
+          )
+        }.bind(this))
+        var mutual = this.state.mutual_friends_count + " Mutual Friends"
+        var lastCount = this.state.mutual_friends_count - 10 + ' +'
       } else {
         var mutual = "You don't have any Mutual Friend with the seller"
       }
@@ -232,7 +240,7 @@ PublicPost = React.createClass({
             {postDescription}
             {postPickUp}
             <div>
-            {avatars}
+            {avatars}{lastCount}
             </div>
           </CardText>
   			</Card>
