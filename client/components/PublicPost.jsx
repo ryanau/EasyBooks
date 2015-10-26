@@ -59,10 +59,12 @@ PublicPost = React.createClass({
         crossDomain: true,
         headers: {'Authorization': localStorage.getItem('jwt-easybooks')},
         success: function (response) {
-          this.setState({
-            mutual_friends_count: response.mutual_friends_count,
-            mutual_friends: response.mutual_friends,
-          })
+          if (response.mutual_friends_count != null) {
+            this.setState({
+              mutual_friends_count: response.mutual_friends_count,
+              mutual_friends: response.mutual_friends,
+            })
+          }
         }.bind(this),
         error: function (error) {
           window.location = "/"
@@ -177,6 +179,9 @@ PublicPost = React.createClass({
             <Avatar key={index} src={friend[1]} style={{marginRight: "3px"}}/>
           )
         }.bind(this))
+        var mutual = this.state.mutual_friends_count + " Mutual Friends with " + post.seller.first_name
+      } else {
+        var mutual = "You don't have any Mutual Friend with the seller"
       }
       if (this.state.star) {
         var starButton = 
@@ -185,8 +190,10 @@ PublicPost = React.createClass({
         var starButton = 
         <IconButton onClick={this.starPost} tooltip="Follow this post"><FontIcon className="material-icons">star</FontIcon></IconButton>
       }
-      var mutual = this.state.mutual_friends_count + " Mutual Friends with " + post.seller.first_name
-    }
+      var seller = post.seller.first_name
+    } else {
+      var seller = "you"
+    } 
     if (post.description) {
       var postDescription = <p>Extra info: {post.description}</p>
     }
@@ -205,16 +212,16 @@ PublicPost = React.createClass({
           autoHideDuration={1000}/>
   			<Card key={post.id}>
           <CardHeader 
-            title={course.department + ' ' + course.course_number + ': ' + post.title + ' (' + (post.condition) + ') | Post by ' + post.seller.first_name}
+            title={course.department + ' ' + course.course_number + ': ' + post.title + ' (' + (post.condition) + ') | Post by ' + seller}
             subtitle={"$" + post.price + " | " + this.state.star_count + " Subscribers" + " | Created " + moment(post.created_at).fromNow()}
             avatar={post.seller.pic}>
           </CardHeader>
           <CardText>
-            <IconButton onClick={this.redirectToPost} tooltip="See Detail" tooltipPosition="top-right" touch={true}><FontIcon className="material-icons">forward</FontIcon></IconButton>
-            {starButton}
             {postDescription}
             {postPickUp}
-            <h4>{mutual}</h4>
+            <IconButton onClick={this.redirectToPost} tooltip="See Detail" tooltipPosition="top-right" touch={true}><FontIcon className="material-icons">forward</FontIcon></IconButton>
+            {starButton}
+            <h5>{mutual}</h5>
             <div>
             {avatars}
             </div>
