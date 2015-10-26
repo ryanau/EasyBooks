@@ -228,14 +228,15 @@ PublicPost = React.createClass({
           message='Post Unfollowed'
           autoHideDuration={1000}/>
   			<Card key={post.id}>
-          <CardTitle title={course.department + ' ' + course.course_number + ': ' + post.title + ' (' + (post.condition) + ')'} subtitle={"$" + post.price + " | " + this.state.star_count + " Subscribers | " + moment(post.created_at).fromNow()}/>
-          <CardHeader 
+          <CardTitle title={course.department + ' ' + course.course_number + ': ' + post.title + ' (' + (post.condition) + ')'} subtitle={"$" + post.price + " | " + this.state.star_count + " Subscribers | " + moment(post.created_at).fromNow()} actAsExpander={true}
+            showExpandableButton={true}/>
+          <CardHeader expandable={true}
             title={"By " + seller}
             subtitle={mutual}
             avatar={post.seller.pic}>
           </CardHeader>
           {actionButtons}
-          <CardText>
+          <CardText expandable={true}>
             {postDescription}
             {postPickUp}
             <div>

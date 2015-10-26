@@ -27,7 +27,7 @@ PostDashBoard = React.createClass({
 	},
 	render: function () {
 		return (
-			<div>
+			<div className="container col-md-8 col-md-offset-2">
 				<Panel header="Your Posts" bsStyle="info">
 					<Tabs defaultActiveKey={1}>
 						<Tab eventKey={1} title="Starred">

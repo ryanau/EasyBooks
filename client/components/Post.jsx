@@ -277,7 +277,7 @@ Post = React.createClass({
 			var message = "Loading..."
 		}
 		return (
-			<div>
+			<div className="container col-md-8 col-md-offset-2">
 				<Snackbar
 				  ref="postDeleted"
 				  message='Post Deleted. Redirecting...'

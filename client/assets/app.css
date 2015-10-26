@@ -34,3 +34,46 @@ img {
 	width: 50%;
 	height: 50%;
 }
+
+#parent {
+   display: table;
+   width: 100%;
+   margin-top: 200px;
+}
+
+#form_login {
+   display: table-cell;
+   text-align: center;
+   vertical-align: middle;
+}
+
+/*#landing {
+	background: url(/berkeley.jpg) no-repeat center center fixed; 
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}*/
+
+#landing {
+  /* Set rules to fill background */
+  min-height: 100%;
+  min-width: 1024px;
+	
+  /* Set up proportionate scaling */
+  width: 100%;
+  height: auto;
+	
+  /* Set up positioning */
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -100;
+}
+
+@media screen and (max-width: 1024px) { /* Specific to this particular image */
+  #landing {
+    left: 50%;
+    margin-left: -512px;   /* 50% */
+  }
+}

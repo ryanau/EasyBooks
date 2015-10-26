@@ -114,7 +114,7 @@ ScheduleUploader = React.createClass({
 			var courses = "Loading...";
 		}
 		return (
-			<div>
+			<div className="container col-md-8 col-md-offset-2">
 				<Panel header="Schedule Uploader">
   			<Dropzone onDrop={this.uploadCalendar} className="dropzone" activeClassName="dropzone_active" multiple={false}>
           <div><h5>Drag or click here to upload your .ics calendar file from Ninjacourses and ScheduleBuilder</h5></div>

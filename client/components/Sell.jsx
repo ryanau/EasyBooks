@@ -185,7 +185,7 @@ Sell = React.createClass({
 	      </Dropzone>
   	}
   	return (
-  		<div>
+  		<div className="container col-md-8 col-md-offset-2">
 	  			<form className="form-horizontal">
 		  			<Input
 			        type="text"
