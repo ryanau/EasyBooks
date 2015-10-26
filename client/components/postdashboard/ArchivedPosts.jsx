@@ -53,7 +53,6 @@ ArchivedPosts = React.createClass({
 		};
 		return (
 			<div>
-				<h4>Archived Posts</h4>
 				{posts}
 			</div>
 		);

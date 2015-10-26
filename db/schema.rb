@@ -62,7 +62,7 @@ ActiveRecord::Schema.define(version: 20151016043656) do
     t.float    "price",                       null: false
     t.string   "picture_url"
     t.string   "title",                       null: false
-    t.string   "description",                 null: false
+    t.string   "description"
     t.boolean  "sold",        default: false
     t.boolean  "public",      default: true
     t.string   "pickup"

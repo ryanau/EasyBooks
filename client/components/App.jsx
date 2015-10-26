@@ -12,10 +12,10 @@ App = React.createClass({
     return {
 
       // comment the following line when in development
-      origin: '/api',
+      // origin: '/api',
 
       // comment the following line when deploying to heroku
-      // origin: 'http://localhost:3000/api'
+      origin: 'http://localhost:3000/api'
     }
   },
   getInitialState: function () {
@@ -76,7 +76,7 @@ App = React.createClass({
 		return (
 			<div>
         <NavBar signedIn={this.state.signedIn} currentUser={this.state.currentUser}/>
-        <div>
+        <div className="container col-md-8 col-md-offset-2">
           <RouteHandler origin={this.props.origin} currentUser={this.state.currentUser} signedIn={this.state.signedIn} mode={this.state.mode}/>
         </div>
 			</div>
