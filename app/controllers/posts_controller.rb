@@ -31,7 +31,7 @@ class PostsController < ApplicationController
     if post.sold && post.seller_id != current_user.id
       render json: {error_message: "Post not found"}
     else
-      render :json => post.as_json(include: {seller: {only: [:id, :first_name]}})
+      render :json => post.as_json(include: {seller: {only: [:id, :first_name, :last_name, :pic]}})
     end
   end
 

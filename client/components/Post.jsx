@@ -2,18 +2,14 @@ var React = require('react');
 var $ = require('jquery');
 var Router = require('react-router');
 var Navigation = Router.Navigation;
-var TimerMixin = require('react-timer-mixin');
-
-var Uri = require('jsuri');
-var Link = Router.Link;
+var moment = require('moment');
 
 var mui = require('material-ui');
 var ThemeManager = new mui.Styles.ThemeManager();
-var RaisedButton = mui.RaisedButton;
 var FontIcon = mui.FontIcon;
 var IconButton = mui.IconButton;
 var Snackbar = mui.Snackbar;
-var Colors = mui.Colors;
+var Avatar = mui.Avatar;
 
 var Panel = require('react-bootstrap').Panel;
 var Button = require('react-bootstrap').Button;
@@ -22,7 +18,7 @@ var ButtonToolbar = require('react-bootstrap').ButtonToolbar;
 var Comments = require('./Comments.jsx');
 
 Post = React.createClass({
-	mixins: [ Navigation, TimerMixin ],
+	mixins: [ Navigation ],
 	childContextTypes: {
 	  muiTheme: React.PropTypes.object
 	},
@@ -264,8 +260,8 @@ Post = React.createClass({
 			var post = 
 				<div>
 				<p>{post.title}</p>
-				<p>{post.price}</p>
-				<p>{post.seller.first_name}</p>
+				<p>${post.price}</p>
+				<p><Avatar src={post.seller.pic} style={{marginRight: "3px"}}/>{post.seller.first_name + ' ' + post.seller.last_name + ' | ' + moment(post.created_at).fromNow()}</p>
 				<div className="imgBox">
 				<img src={post.picture_url} />
 				</div>
