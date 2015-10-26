@@ -109,7 +109,7 @@ Subscriptions = React.createClass({
 			var subscriptions = "Loading..."
 		}
 		return (
-			<div>
+			<div className="container col-md-8 col-md-offset-2">
 				<Snackbar
 				  ref="subscriptionsUpdated"
 				  message='Subscriptions Updated. Redirecting...'

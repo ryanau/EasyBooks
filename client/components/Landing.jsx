@@ -4,8 +4,9 @@ var Link = Router.Link;
 
 var mui = require('material-ui');
 var ThemeManager = new mui.Styles.ThemeManager();
-var RaisedButton = mui.RaisedButton;
 
+var Button = require('react-bootstrap').Button;
+var Well = require('react-bootstrap').Well;
 
 var DashBoard = require('./DashBoard.jsx');
 var Register = require('./Register.jsx');
@@ -36,20 +37,20 @@ Landing = React.createClass({
   		)
   	} else {
   		var display = (
-	  		<div>
-		  		<div>
-		  		<h4>Please use FB login</h4>
-	  			<RaisedButton
-					  linkButton={true}
-					  label="Log In via FB"
-					  href={link}/>
-				  </div>
-	  		</div>
+        <div className="container col-md-8 col-md-offset-2">
+        <img id="landing" src="/berkeley.jpg"/>
+				  <div id="parent">
+  			    <form id="form_login">
+  			    <h3>Buying and Selling Books is Never this Easy!</h3>
+  					<Button href={link} bsStyle="primary">Log In via Facebook</Button>
+  			    </form>
+          </div>
+				</div>
   		);
   	}
   	return (
   		<div>
-	  		{display}
+        {display}
   		</div>
   	)
   }

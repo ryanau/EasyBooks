@@ -3,10 +3,11 @@ var $ = require('jquery');
 
 var mui = require('material-ui');
 var ThemeManager = new mui.Styles.ThemeManager();
-var RaisedButton = mui.RaisedButton;
 var DropDownMenu = mui.DropDownMenu;
 
 var Input = require('react-bootstrap').Input;
+var Button = require('react-bootstrap').Button;
+var ButtonToolbar = require('react-bootstrap').ButtonToolbar;
 
 Register = React.createClass({
 	childContextTypes: {
@@ -109,8 +110,15 @@ Register = React.createClass({
 		if (this.state.warning != "") {
 			var warning = this.state.warning;
 		}
-		return (
+		if (this.state.phone.length > 0) {
+			var dropdown = 
 			<div>
+				<h5><strong>Select University</strong></h5>
+				<DropDownMenu menuItems={universityList} autoScrollBodyContent={true} onChange={this.handleDropDownMenu}/>
+			</div>
+		}
+		return (
+			<div className="container col-md-8 col-md-offset-2">
   			<Input
 	        type="text"
 	        value={this.state.phone}
@@ -135,10 +143,10 @@ Register = React.createClass({
 	        groupClassName="group-class"
 	        labelClassName="label-class"
 	        onChange={this.handleChange} />
-					<DropDownMenu menuItems={universityList} autoScrollBodyContent={true} onChange={this.handleDropDownMenu}/>
-				<RaisedButton
-				  label="Complete Registration"
-				  onClick={this.handleSubmit}/>
+	        {dropdown}
+	      <ButtonToolbar>
+		      <Button onClick={this.handleSubmit} bsStyle="success">Complete Registration</Button>
+	      </ButtonToolbar>
 				{warning}
 			</div>
 		);

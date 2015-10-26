@@ -59,10 +59,12 @@ PublicPost = React.createClass({
         crossDomain: true,
         headers: {'Authorization': localStorage.getItem('jwt-easybooks')},
         success: function (response) {
-          this.setState({
-            mutual_friends_count: response.mutual_friends_count,
-            mutual_friends: response.mutual_friends,
-          })
+          if (response.mutual_friends_count != null) {
+            this.setState({
+              mutual_friends_count: response.mutual_friends_count,
+              mutual_friends: response.mutual_friends,
+            })
+          }
         }.bind(this),
         error: function (error) {
           window.location = "/"
@@ -171,22 +173,44 @@ PublicPost = React.createClass({
     var post = this.props.post
   	var course = post.course
     if (post.seller_id != this.props.currentUser.id) {
-      if (this.state.mutual_friends != null) {
+      if (this.state.mutual_friends != null && this.state.mutual_friends.length < 10) {
         var avatars = this.state.mutual_friends.map(function (friend, index) {
           return (
             <Avatar key={index} src={friend[1]} style={{marginRight: "3px"}}/>
           )
         }.bind(this))
+        var mutual = this.state.mutual_friends_count + " Mutual Friends"
+      } else if (this.state.mutual_friends != null && this.state.mutual_friends.length > 10) {
+        var avatars = this.state.mutual_friends.slice(0,10).map(function (friend, index) {
+          return (
+            <Avatar key={index} src={friend[1]} style={{marginRight: "3px"}}/>
+          )
+        }.bind(this))
+        var mutual = this.state.mutual_friends_count + " Mutual Friends"
+        var lastCount = this.state.mutual_friends_count - 10 + ' +'
       }
       if (this.state.star) {
-        var starButton = 
-        <IconButton onClick={this.starPost} tooltip="Unfollow this post" iconStyle={{color: "#FFFF00"}}><FontIcon className="material-icons">star</FontIcon></IconButton>
+        var actionButtons = 
+        <CardActions>
+          <IconButton onClick={this.starPost} tooltip="Unfollow this post" iconStyle={{color: "#FFFF00"}}><FontIcon className="material-icons">star</FontIcon></IconButton>
+          <IconButton onClick={this.redirectToPost} tooltip="See Detail" tooltipPosition="top-right" touch={true}><FontIcon className="material-icons">forward</FontIcon></IconButton>
+        </CardActions>
       } else {
-        var starButton = 
-        <IconButton onClick={this.starPost} tooltip="Follow this post"><FontIcon className="material-icons">star</FontIcon></IconButton>
+        var actionButtons = 
+        <CardActions>
+          <IconButton onClick={this.starPost} tooltip="Follow this post"><FontIcon className="material-icons">star</FontIcon></IconButton>
+          <IconButton onClick={this.redirectToPost} tooltip="See Detail" tooltipPosition="top-right" touch={true}><FontIcon className="material-icons">forward</FontIcon></IconButton>
+        </CardActions>
       }
-      var mutual = this.state.mutual_friends_count + " Mutual Friends with " + post.seller.first_name
-    }
+      var seller = post.seller.first_name + ' ' + post.seller.last_name
+    } else {
+      var seller = "you"
+      var mutual = ":P"
+      var actionButtons = 
+      <CardActions>
+        <IconButton onClick={this.redirectToPost} tooltip="See Detail" tooltipPosition="top-right" touch={true}><FontIcon className="material-icons">forward</FontIcon></IconButton>
+      </CardActions>
+    } 
     if (post.description) {
       var postDescription = <p>Extra info: {post.description}</p>
     }
@@ -204,19 +228,19 @@ PublicPost = React.createClass({
           message='Post Unfollowed'
           autoHideDuration={1000}/>
   			<Card key={post.id}>
-          <CardHeader 
-            title={course.department + ' ' + course.course_number + ': ' + post.title + ' (' + (post.condition) + ') | Post by ' + post.seller.first_name}
-            subtitle={"$" + post.price + " | " + this.state.star_count + " Subscribers" + " | Created " + moment(post.created_at).fromNow()}
+          <CardTitle title={course.department + ' ' + course.course_number + ': ' + post.title + ' (' + (post.condition) + ')'} subtitle={"$" + post.price + " | " + this.state.star_count + " Subscribers | " + moment(post.created_at).fromNow()} actAsExpander={true}
+            showExpandableButton={true}/>
+          <CardHeader expandable={true}
+            title={"By " + seller}
+            subtitle={mutual}
             avatar={post.seller.pic}>
           </CardHeader>
-          <CardText>
-            <IconButton onClick={this.redirectToPost} tooltip="See Detail" tooltipPosition="top-right" touch={true}><FontIcon className="material-icons">forward</FontIcon></IconButton>
-            {starButton}
+          {actionButtons}
+          <CardText expandable={true}>
             {postDescription}
             {postPickUp}
-            <h4>{mutual}</h4>
             <div>
-            {avatars}
+            {avatars}{lastCount}
             </div>
           </CardText>
   			</Card>

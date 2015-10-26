@@ -12,7 +12,7 @@ class PostsController < ApplicationController
     else
       posts = Post.where(public: true).order(created_at: :DESC)[start_point..end_point]
     end
-    render :json => posts.as_json(include: {stars: {only: :star_id}, course: {except: :updated_at}, seller: {only: [:pic, :first_name]}})
+    render :json => posts.as_json(include: {stars: {only: :star_id}, course: {except: :updated_at}, seller: {only: [:pic, :first_name, :last_name]}})
   end
 
   def create
@@ -61,17 +61,17 @@ class PostsController < ApplicationController
   end
 
   def active_posts
-    posts = current_user.selling_posts.where(sold: false, public: true)
+    posts = current_user.selling_posts.where(sold: false, public: true).order(created_at: :DESC)
     render :json => posts.as_json(include: {stars: {only: :star_id}, course: {only: [:department, :course_number]}, seller: {only: [:pic, :first_name]}})  
   end
 
   def starred_posts
-    posts = current_user.posts
+    posts = current_user.posts.order(created_at: :DESC)
     render :json => posts.as_json(include: {stars: {only: :star_id}, course: {only: [:department, :course_number]}, seller: {only: [:pic, :first_name]}})  
   end
 
   def archived_posts
-    posts = current_user.selling_posts.where(sold: true, public: false)
+    posts = current_user.selling_posts.where(sold: true, public: false).order(created_at: :DESC)
     render :json => posts.as_json(include: {stars: {only: :star_id}, course: {only: [:department, :course_number]}, seller: {only: [:pic, :first_name]}})  
   end
 
@@ -114,11 +114,16 @@ class PostsController < ApplicationController
                   'access_token' => data,
                   'appsecret_proof' => appsecret_proof,
                   })
+    begin
     count = response.parsed_response["context"]["all_mutual_friends"]["summary"]["total_count"]
     friends = []
     response.parsed_response["context"]["all_mutual_friends"]["data"].each do |el|
       arr = [el["name"], el["picture"]["data"]["url"]]
       friends << arr
+    end
+    rescue
+      count = "0"
+      friends = []
     end
     {count: count, friends: friends}
   end

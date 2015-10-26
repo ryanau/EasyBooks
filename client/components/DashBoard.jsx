@@ -21,7 +21,7 @@ Dashboard = React.createClass({
 	},
 	render: function () {
 		return (
-			<div>
+			<div className="container col-md-8 col-md-offset-2">
 				<h3>Welcome Back {this.props.currentUser.first_name}</h3>
 				<MarketPlace origin={this.props.origin} currentUser={this.props.currentUser}/>
 			</div>

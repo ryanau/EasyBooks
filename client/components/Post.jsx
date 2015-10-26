@@ -15,6 +15,10 @@ var IconButton = mui.IconButton;
 var Snackbar = mui.Snackbar;
 var Colors = mui.Colors;
 
+var Panel = require('react-bootstrap').Panel;
+var Button = require('react-bootstrap').Button;
+var ButtonToolbar = require('react-bootstrap').ButtonToolbar;
+
 var Comments = require('./Comments.jsx');
 
 Post = React.createClass({
@@ -236,27 +240,16 @@ Post = React.createClass({
 	render: function () {
 		if (this.state.post != null && !this.state.not_found) {
 			var post = this.state.post;
-			var seller_id = this.state.seller_id;
-			var seller_name = this.state.seller_name;
 			var star_count = this.state.star_count;
-			if (this.state.post.seller_id == this.props.currentUser.id) {
+			if (post.seller_id == this.props.currentUser.id) {
 				var deleteButton = 
-				<RaisedButton
-				  label="Delete Post"
-				  onClick={this.deletePost}
-				  primary={true}/>;
+				  <Button onClick={this.deletePost} bsStyle="danger">Delete Post</Button>
 				if (this.state.sold) {
 					var soldButton = 
-					<RaisedButton
-					  label="Mark as Available"
-					  onClick={this.markSold}
-					  primary={true}/>;
+					<Button onClick={this.markSold} bsStyle="success">Mark as Available</Button>
 				} else {
 					var soldButton = 
-					<RaisedButton
-					  label="Mark as Sold"
-					  onClick={this.markSold}
-					  primary={true}/>;
+					<Button onClick={this.markSold} bsStyle="success">Mark as Sold</Button>
 				}
 			} else {
 				if (this.state.star) {
@@ -272,8 +265,10 @@ Post = React.createClass({
 				<div>
 				<p>{post.title}</p>
 				<p>{post.price}</p>
-				<p>{seller_name}</p>
+				<p>{post.seller.first_name}</p>
+				<div className="imgBox">
 				<img src={post.picture_url} />
+				</div>
 				</div>
 			var subscribers = <h5>{star_count} user has subscribed to this post</h5>
 		} else if (this.state.not_found) {
@@ -282,7 +277,7 @@ Post = React.createClass({
 			var message = "Loading..."
 		}
 		return (
-			<div>
+			<div className="container col-md-8 col-md-offset-2">
 				<Snackbar
 				  ref="postDeleted"
 				  message='Post Deleted. Redirecting...'
@@ -303,14 +298,17 @@ Post = React.createClass({
 				  ref="markAvailable"
 				  message='Post Marked as Available'
 				  autoHideDuration={1000}/>
-				<h4>Post</h4>
-				{message}
-				{post}
-				{starButton}
-				{subscribers}
-				{comments}
-				{deleteButton}
-				{soldButton}
+				<Panel header="Post" bsStyle="info">
+				  {message}
+				  {post}
+				  {starButton}
+				  {subscribers}
+				  {comments}
+				  <ButtonToolbar>
+					  {deleteButton}
+					  {soldButton}
+				  </ButtonToolbar>
+				</Panel>
 			</div>
 		)
 	},
