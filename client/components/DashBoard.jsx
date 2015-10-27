@@ -7,21 +7,55 @@ var mui = require('material-ui');
 var ThemeManager = new mui.Styles.ThemeManager();
 var RaisedButton = mui.RaisedButton;
 
+var Alert = require('react-bootstrap').Alert;
+
 var MarketPlace = require('./MarketPlace.jsx');
 
 Dashboard = React.createClass({
 	childContextTypes: {
 	  muiTheme: React.PropTypes.object
 	},
-
 	getChildContext: function () {
 	  return {
 	    muiTheme: ThemeManager.getCurrentTheme()
 	  };
 	},
+	getInitialState: function () {
+		return {
+			starred: null,
+		}
+	},
+	componentDidMount: function () {
+		this.loadStarred();
+	},
+	loadStarred: function () {
+		$.ajax({
+			url: this.props.origin + '/stars/starred',
+			type: 'GET',
+			dataType: 'json',
+			crossDomain: true,
+			headers: {'Authorization': localStorage.getItem('jwt-easybooks')},
+			success: function (response) {
+				this.setState({
+					starred: response.starred,
+				})
+			}.bind(this),
+			error: function (error) {
+				window.location = "/"
+			}.bind(this),
+		});
+	},
 	render: function () {
+  	if (this.state.starred == false) {
+  		var followReminder =
+			<Alert bsStyle="info">
+				<h4>Friendly Reminder :)</h4>
+		  	<p>You are not following any post... Star a post to follow so you will instantly get connected to the seller if you are the first subscriber in line!</p>
+		  </Alert>
+  	}
 		return (
 			<div className="container col-md-8 col-md-offset-2">
+				{followReminder}
 				<h3>Welcome Back {this.props.currentUser.first_name}</h3>
 				<MarketPlace origin={this.props.origin} currentUser={this.props.currentUser}/>
 			</div>

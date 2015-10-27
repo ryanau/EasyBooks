@@ -8,7 +8,7 @@ class PostsController < ApplicationController
     course_selected = params[:course_selected]
     if course_selected != nil && course_selected != ""
       result = find_course(course_selected)
-      posts = Post.where(public: true, course_id: result[:course_id])[start_point..end_point]
+      posts = Post.where(public: true, course_id: result[:course_id]).order(created_at: :DESC)[start_point..end_point]
     else
       posts = Post.where(public: true).order(created_at: :DESC)[start_point..end_point]
     end

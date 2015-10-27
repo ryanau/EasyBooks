@@ -17,6 +17,7 @@ var MenuItem = require('react-bootstrap').MenuItem;
 var Dropdown = require('react-bootstrap').Dropdown;
 var Button = require('react-bootstrap').Button;
 var Panel = require('react-bootstrap').Panel;
+var Alert = require('react-bootstrap').Alert;
 
 Sell = React.createClass({
 	mixins: [ Navigation ],
@@ -112,9 +113,9 @@ Sell = React.createClass({
 			description: this.state.description,
 			condition: this.state.condition,
 		};
-		if (data.title == '' || data.price == '' || data.condition == '') {
+		if (data.title == '' || data.price == '' || data.condition == '' || data.course_selected == null) {
 			this.setState({
-				warning: "Please fill out all required fields."
+				warning: "Please fill out all required fields. Did you select the Course?"
 			});
 		} else if (this.validateTitle() == 'success' && this.validatePrice() == 'success'){
 			this.setState({
@@ -172,7 +173,13 @@ Sell = React.createClass({
 	},
   render: function () {
   	var courseList = this.state.courses;
-  	var warning = this.state.warning;
+  	if (this.state.warning != null) {
+  		var warning =
+			<Alert bsStyle="danger">
+				<h4>Error!</h4>
+		  	<p>{this.state.warning}</p>
+		  </Alert>
+  	}
   	if (this.state.pic_file != null) {
   		var picPreview = <img src={this.state.pic_file[0].preview} />
   	}
@@ -187,6 +194,7 @@ Sell = React.createClass({
   	return (
   		<div className="container col-md-8 col-md-offset-2">
 	  			<form className="form-horizontal">
+	  				{warning}
 		  			<Input
 			        type="text"
 			        value={this.state.title}
@@ -266,7 +274,6 @@ Sell = React.createClass({
 			        {this.state.isLoading ? 'Putting it on the rack...' : 'Sell Book'}
 			      </Button>
 		  			</div>
-		  			{warning}
 	  			</form>
   		</div>
   	)

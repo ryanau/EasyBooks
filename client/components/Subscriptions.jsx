@@ -120,7 +120,7 @@ Subscriptions = React.createClass({
 					{subscription_component}
 					</div>
 					<div>
-					<ButtonToolbar>
+					<ButtonToolbar className="mT10">
 						{showAddSubscription}
 						{updateSubscriptionButton}
 					</ButtonToolbar>

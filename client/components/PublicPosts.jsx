@@ -129,12 +129,12 @@ PublicPosts = React.createClass({
   	} else {
   		var posts = 
   		<div>
-  		<h5>No post available... Click below to get notified when posts for {this.state.course_selected.courses[0]} become availabe!</h5>
+  		<h5>No post available... Add this course to your subscribed list to get instant text notifications when posts for {this.state.course_selected.courses[0]} become availabe!</h5>
   		<ButtonLink onClick={this.showSubscription} bsStyle="primary" to="/subscriptions">Add Subscription</ButtonLink>
   		</div>
   	};
   	return (
-  		<div>
+  		<div className="mT10">
   			<Panel header={header} bsStyle="info">
 	  			{posts}
 	  		</Panel>

@@ -6,6 +6,8 @@ var Link = Router.Link;
 var mui = require('material-ui');
 var ThemeManager = new mui.Styles.ThemeManager();
 
+var Alert = require('react-bootstrap').Alert;
+
 var PublicPost = require('../PublicPost.jsx');
 
 StarredPosts = React.createClass({
@@ -44,16 +46,25 @@ StarredPosts = React.createClass({
 	},
 	render: function () {
 		if (this.state.posts != null) {
-			var posts = this.state.posts.map(function (post, index) {
-				return (
-					<PublicPost key={post.id} origin={this.props.origin} post={post} currentUser={this.props.currentUser}/>
-				);
-			}.bind(this));
-		} else {
+			if (this.state.posts.length == 0) {
+			  		var followReminder =
+						<Alert bsStyle="info">
+							<h4>Friendly Reminder :)</h4>
+					  	<p>You are not following any post... Star a post to follow so you will instantly get connected to the seller if you are the first subscriber in line!</p>
+					  </Alert>
+			} else {
+				var posts = this.state.posts.map(function (post, index) {
+					return (
+						<PublicPost key={post.id} origin={this.props.origin} post={post} currentUser={this.props.currentUser}/>
+					);
+				}.bind(this));
+			}
+  	} else {
 			var posts = "Loading..."
 		};
 		return (
-			<div>
+			<div className="mT10">
+				{followReminder}
 				{posts}
 			</div>
 		)

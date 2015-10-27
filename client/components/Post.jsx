@@ -259,7 +259,7 @@ Post = React.createClass({
 			var comments = <Comments origin={this.props.origin} post_id={post.id} seller_id={post.seller.id}/>;
 			var post = 
 				<div>
-				<p>{post.title}</p>
+				<h3>{post.title}</h3>
 				<p>${post.price}</p>
 				<p><Avatar src={post.seller.pic} style={{marginRight: "3px"}}/>{post.seller.first_name + ' ' + post.seller.last_name + ' | ' + moment(post.created_at).fromNow()}</p>
 				<div className="imgBox">

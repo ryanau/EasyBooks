@@ -12,6 +12,7 @@ Rails.application.routes.draw do
     
     delete '/stars', :to => 'stars#destroy'
     get '/stars/count', :to => 'stars#count'
+    get '/stars/starred', :to => 'stars#starred'
 
     put '/posts/mark_sold', :to => 'posts#mark_sold'
     get '/active_posts', :to => 'posts#active_posts'

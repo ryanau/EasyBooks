@@ -53,7 +53,7 @@ ActivePosts = React.createClass({
 			var posts = "Loading..."
 		};
 		return (
-			<div>
+			<div className="mT10">
 				{posts}
 			</div>
 		);

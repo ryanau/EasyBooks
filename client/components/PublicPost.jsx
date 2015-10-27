@@ -19,6 +19,8 @@ var IconButton = mui.IconButton;
 var Colors = mui.Colors;
 var Avatar = mui.Avatar;
 
+var Label = require('react-bootstrap').Label;
+
 PublicPost = React.createClass({
   mixins: [ Navigation ],
 	childContextTypes: {
@@ -217,6 +219,20 @@ PublicPost = React.createClass({
     if (post.pickup) {
       var postPickUp = <p>Pick up at: {post.pickup}</p>
     }
+    switch (post.condition) {
+      case "New":
+        var condition = <Label bsStyle="success">New</Label>
+        break;
+      case "Like New":
+        var condition = <Label bsStyle="default">Like New</Label>
+        break;
+      case "Good":
+        var condition = <Label bsStyle="primary">Good</Label>
+        break;
+      case "Fair":
+        var condition = <Label bsStyle="warning">Fair</Label>
+        break;
+    }
   	return (
       <div>
         <Snackbar
@@ -228,7 +244,7 @@ PublicPost = React.createClass({
           message='Post Unfollowed'
           autoHideDuration={1000}/>
   			<Card key={post.id}>
-          <CardTitle title={course.department + ' ' + course.course_number + ': ' + post.title + ' (' + (post.condition) + ')'} subtitle={"$" + post.price + " | " + this.state.star_count + " Subscribers | " + moment(post.created_at).fromNow()} actAsExpander={true}
+          <CardHeader avatar={condition} title={course.department + ' ' + course.course_number + ': ' + post.title} subtitle={"$" + post.price + " | " + this.state.star_count + " Subscribers | " + moment(post.created_at).fromNow()} actAsExpander={true}
             showExpandableButton={true}/>
           <CardHeader expandable={true}
             title={"By " + seller}
