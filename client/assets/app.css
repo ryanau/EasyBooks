@@ -79,9 +79,9 @@ img {
   z-index: -100;
 }
 
-.transparent {
+/*.transparent {
   background: transparent;
-}
+}*/
 
 @media screen and (max-width: 1024px) { /* Specific to this particular image */
   #landing {
