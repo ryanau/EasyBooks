@@ -13,6 +13,7 @@ var Snackbar = mui.Snackbar;
 var Panel = require('react-bootstrap').Panel;
 var Button = require('react-bootstrap').Button;
 var ButtonToolbar = require('react-bootstrap').ButtonToolbar;
+var Glyphicon = require('react-bootstrap').Glyphicon;
 
 var SubscribedCourse = require('./SubscribedCourse.jsx');
 var AddSubscription = require('./AddSubscription.jsx');
@@ -98,12 +99,12 @@ Subscriptions = React.createClass({
 				)
 			}.bind(this));
 			var updateSubscriptionButton = 
-			<Button onClick={this.updateSubscription} bsStyle="success">Update Subscription</Button>
+			<Button onClick={this.updateSubscription} bsStyle="success"><Glyphicon glyph="ok"/> Update Subscription</Button>
 			if (this.state.add_show) {
 				var subscription_component = <AddSubscription origin={this.props.origin} reload={this.reload}/>
 			} else {
 				var showAddSubscription = 
-				<Button onClick={this.showSubscription} bsStyle="primary">Add Course</Button>
+				<Button onClick={this.showSubscription} bsStyle="primary"><Glyphicon glyph="plus"/> Add Course</Button>
 			}
 		} else {
 			var subscriptions = "Loading..."

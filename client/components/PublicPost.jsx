@@ -125,6 +125,7 @@ PublicPost = React.createClass({
       this.setState({
         star: false
       });
+      this.loadStarCount();
     } else {
       var data = {
         post_id: post_id,
@@ -146,8 +147,8 @@ PublicPost = React.createClass({
       this.setState({
         star: true
       });
+      this.loadStarCount();
     }
-    this.loadStarCount();
   },
   loadStarCount: function () {
     var post_id = this.props.post.id;

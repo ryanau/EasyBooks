@@ -8,8 +8,10 @@ var mui = require('material-ui');
 var ThemeManager = new mui.Styles.ThemeManager();
 
 var Panel = require('react-bootstrap').Panel;
+var Glyphicon = require('react-bootstrap').Glyphicon;
+
 var ReactRouterBootstrap = require('react-router-bootstrap')
-  , ButtonLink = ReactRouterBootstrap.ButtonLink;
+  , ButtonLink = ReactRouterBootstrap.ButtonLink
 
 var PublicPost = require('./PublicPost.jsx');
 
@@ -130,7 +132,7 @@ PublicPosts = React.createClass({
   		var posts = 
   		<div>
   		<h5>No post available... Add this course to your subscribed list to get instant text notifications when posts for {this.state.course_selected.courses[0]} become availabe!</h5>
-  		<ButtonLink onClick={this.showSubscription} bsStyle="primary" to="/subscriptions">Add Subscription</ButtonLink>
+  		<ButtonLink onClick={this.showSubscription} bsStyle="primary" to="/subscriptions"><Glyphicon glyph="plus"/> Add Subscription</ButtonLink>
   		</div>
   	};
   	return (

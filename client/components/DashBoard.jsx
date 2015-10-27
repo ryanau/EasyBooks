@@ -49,7 +49,7 @@ Dashboard = React.createClass({
   	if (this.state.starred == false) {
   		var followReminder =
 			<Alert bsStyle="info">
-				<h4>Friendly Reminder :)</h4>
+				<h4>Star a Post!</h4>
 		  	<p>You are not following any post... Star a post to follow so you will instantly get connected to the seller if you are the first subscriber in line!</p>
 		  </Alert>
   	}

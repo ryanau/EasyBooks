@@ -16,6 +16,7 @@ var Nav = require('react-bootstrap').Nav;
 var MenuItem = require('react-bootstrap').MenuItem;
 var ListGroup = require('react-bootstrap').ListGroup;
 var DropdownButton = require('react-bootstrap').DropdownButton;
+var Glyphicon = require('react-bootstrap').Glyphicon;
 
 var ReactRouterBootstrap = require('react-router-bootstrap')
   , NavItemLink = ReactRouterBootstrap.NavItemLink
@@ -40,7 +41,7 @@ module.exports = React.createClass({
     var schedule = <Link to='/schedule'>Schedule Uploader</Link>; 
     if (this.props.signedIn && this.props.currentUser.completed) {
       var control = 
-        <Navbar inverse toggleNavKey={0}>
+        <Navbar inverse toggleNavKey={0} fixedTop={true} className="transparent">
           <NavBrand>{brand}</NavBrand>
           <Nav right eventKey={0}>
             <NavItemLink to="/">Buy</NavItemLink>
@@ -50,12 +51,12 @@ module.exports = React.createClass({
               <MenuItem>{subscriptions}</MenuItem>
               <MenuItem>{schedule}</MenuItem>
             </NavDropdown>
-            <NavItemLink to="/logout">Log Out</NavItemLink>
+            <NavItemLink to="/logout"><Glyphicon glyph="log-out"/></NavItemLink>
           </Nav>
         </Navbar>
     } else {
       var control = 
-      <Navbar inverse toggleNavKey={0}>
+      <Navbar inverse toggleNavKey={0} fixedTop={true} className="transparent">
         <NavBrand>{brand}</NavBrand>
       </Navbar>
     }

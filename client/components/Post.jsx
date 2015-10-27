@@ -14,6 +14,7 @@ var Avatar = mui.Avatar;
 var Panel = require('react-bootstrap').Panel;
 var Button = require('react-bootstrap').Button;
 var ButtonToolbar = require('react-bootstrap').ButtonToolbar;
+var Glyphicon = require('react-bootstrap').Glyphicon;
 
 var Comments = require('./Comments.jsx');
 
@@ -239,7 +240,7 @@ Post = React.createClass({
 			var star_count = this.state.star_count;
 			if (post.seller_id == this.props.currentUser.id) {
 				var deleteButton = 
-				  <Button onClick={this.deletePost} bsStyle="danger">Delete Post</Button>
+				  <Button onClick={this.deletePost} bsStyle="danger"><Glyphicon glyph="trash"/></Button>
 				if (this.state.sold) {
 					var soldButton = 
 					<Button onClick={this.markSold} bsStyle="success">Mark as Available</Button>

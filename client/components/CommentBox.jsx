@@ -10,6 +10,7 @@ var Snackbar = mui.Snackbar;
 var Button = require('react-bootstrap').Button;
 var Input = require('react-bootstrap').Input;
 var Col = require('react-bootstrap').Col;
+var Glyphicon = require('react-bootstrap').Glyphicon;
 
 CommentBox = React.createClass({
 	childContextTypes: {
@@ -87,7 +88,7 @@ CommentBox = React.createClass({
 		        onChange={this.handleComment} />
 	      </Col>
 	      <Col xs={4} md={3}>
-			  <Button onClick={this.addComment} bsStyle="primary">Comment</Button>
+			  <Button onClick={this.addComment} bsStyle="primary"><Glyphicon glyph="comment"/></Button>
 			  </Col>
 			</div>
 		)
