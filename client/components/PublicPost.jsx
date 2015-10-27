@@ -20,6 +20,8 @@ var Colors = mui.Colors;
 var Avatar = mui.Avatar;
 
 var Label = require('react-bootstrap').Label;
+var Button = require('react-bootstrap').Button;
+var Glyphicon = require('react-bootstrap').Glyphicon;
 
 PublicPost = React.createClass({
   mixins: [ Navigation ],
@@ -196,13 +198,13 @@ PublicPost = React.createClass({
         var actionButtons = 
         <CardActions>
           <IconButton onClick={this.starPost} tooltip="Unfollow this post" tooltipPosition="top-right" iconStyle={{color: "#FFFF00"}}><FontIcon className="material-icons">star</FontIcon></IconButton>
-          <IconButton onClick={this.redirectToPost} tooltip="See Detail" tooltipPosition="top-right" touch={true}><FontIcon className="material-icons">forward</FontIcon></IconButton>
+          <Button onClick={this.redirectToPost} bsStyle="info"><Glyphicon glyph="info-sign"/> Info</Button>
         </CardActions>
       } else {
         var actionButtons = 
         <CardActions>
           <IconButton onClick={this.starPost} tooltipPosition="top-right" tooltip="Follow this post"><FontIcon className="material-icons">star</FontIcon></IconButton>
-          <IconButton onClick={this.redirectToPost} tooltip="See Detail" tooltipPosition="top-right" touch={true}><FontIcon className="material-icons">forward</FontIcon></IconButton>
+          <Button onClick={this.redirectToPost} bsStyle="info"><Glyphicon glyph="info-sign"/> Info</Button>
         </CardActions>
       }
       var seller = post.seller.first_name + ' ' + post.seller.last_name
@@ -211,7 +213,8 @@ PublicPost = React.createClass({
       var mutual = ":P"
       var actionButtons = 
       <CardActions>
-        <IconButton onClick={this.redirectToPost} tooltip="See Detail" tooltipPosition="top-right" touch={true}><FontIcon className="material-icons">forward</FontIcon></IconButton>
+        <Button onClick={this.redirectToPost} bsStyle="info"><Glyphicon glyph="info-sign"/> Info</Button>
+
       </CardActions>
     } 
     if (post.description) {
