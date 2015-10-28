@@ -15,6 +15,7 @@ var Panel = require('react-bootstrap').Panel;
 var Button = require('react-bootstrap').Button;
 var ButtonToolbar = require('react-bootstrap').ButtonToolbar;
 var Glyphicon = require('react-bootstrap').Glyphicon;
+var Label = require('react-bootstrap').Label;
 
 var Comments = require('./Comments.jsx');
 
@@ -241,33 +242,45 @@ Post = React.createClass({
 			if (post.seller_id == this.props.currentUser.id) {
 				var deleteButton = 
 				  <Button onClick={this.deletePost} bsStyle="danger"><Glyphicon glyph="trash"/></Button>
-				if (this.state.sold) {
-					var soldButton = 
-					<Button onClick={this.markSold} bsStyle="success">Mark as Available</Button>
-				} else {
+				if (!this.state.sold) {
 					var soldButton = 
 					<Button onClick={this.markSold} bsStyle="success">Mark as Sold</Button>
 				}
 			} else {
 				if (this.state.star) {
 					var starButton = 
-					<IconButton onClick={this.starPost} tooltip="Unfollow this post" iconStyle={{color: "#FFFF00"}}><FontIcon className="material-icons">star</FontIcon></IconButton>
+					<Button onClick={this.starPost} bsStyle="success" bsSize="small"><Glyphicon glyph="star"/> Unfollow</Button>
 				} else {
 					var starButton = 
-					<IconButton onClick={this.starPost} tooltip="Follow this post"><FontIcon className="material-icons">star</FontIcon></IconButton>
+					<Button onClick={this.starPost} bsStyle="warning" bsSize="small"><Glyphicon glyph="star-empty"/> Follow</Button>
 				}
 			}
 			var comments = <Comments origin={this.props.origin} post_id={post.id} seller_id={post.seller.id}/>;
+			switch (post.condition) {
+			  case "New":
+			    var condition = <Label bsSize="medium" bsStyle="success">New</Label>
+			    break;
+			  case "Like New":
+			    var condition = <Label bsSize="medium" bsStyle="medium">Like New</Label>
+			    break;
+			  case "Good":
+			    var condition = <Label bsSize="medium" bsStyle="primary">Good</Label>
+			    break;
+			  case "Fair":
+			    var condition = <Label bsSize="medium" bsStyle="warning">Fair</Label>
+			    break;
+			}
 			var post = 
 				<div>
 				<h3>{post.title}</h3>
-				<p>${post.price}</p>
+				<h4>{condition}</h4><p>${post.price}</p>
 				<p><Avatar src={post.seller.pic} style={{marginRight: "3px"}}/>{post.seller.first_name + ' ' + post.seller.last_name + ' | ' + moment(post.created_at).fromNow()}</p>
 				<div className="imgBox">
 				<img src={post.picture_url} />
 				</div>
 				</div>
 			var subscribers = <h5>{star_count} user has subscribed to this post</h5>
+
 		} else if (this.state.not_found) {
 			var message = "Post Not Found"
 		} else {

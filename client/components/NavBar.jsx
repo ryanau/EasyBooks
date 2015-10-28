@@ -46,12 +46,13 @@ module.exports = React.createClass({
           <Nav right eventKey={0}>
             <NavItemLink to="/">Buy</NavItemLink>
             <NavItemLink to="/sell">Sell</NavItemLink>
+            <NavItemLink to="/starred">Follows</NavItemLink>
             <NavDropdown eventKey={3} title="Profile" id="collapsible-navbar-dropdown">
               <MenuItem>{yourPosts}</MenuItem>
               <MenuItem>{subscriptions}</MenuItem>
               <MenuItem>{schedule}</MenuItem>
             </NavDropdown>
-            <NavItemLink to="/logout"><Glyphicon glyph="log-out"/></NavItemLink>
+            <NavItemLink to="/logout">Log Out</NavItemLink>
           </Nav>
         </Navbar>
     } else {

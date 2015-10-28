@@ -19,15 +19,18 @@ Rails.application.routes.draw do
     get '/starred_posts', :to => 'posts#starred_posts'
     get '/archived_posts', :to => 'posts#archived_posts'
     get '/mutual_friends', :to => 'posts#mutual_friends'
+    post '/image_upload', :to => 'posts#image_upload'
+    get '/sell_status', :to => 'posts#sell_status'
 
     put '/subscriptions', :to => 'subscriptions#update'
-    post '/image_upload', :to => 'posts#image_upload'
     post '/parse_calendar', :to => 'subscriptions#parse_calendar'
+
     # get '/login', :to => 'users#login'
     get '/current_user', :to => 'users#current'
     post '/register', :to => 'users#register'
 
     post '/sms_inbound', :to => 'sms#approve'
+
     get '/environment', :to => 'sessions#environment'
   end
   get '/auth/facebook/callback', :to => 'sessions#create'

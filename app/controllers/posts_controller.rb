@@ -1,6 +1,6 @@
 class PostsController < ApplicationController
   require 'openssl'
-  before_action :authentication, only: [:index, :create, :show, :image_upload, :active_posts, :destroy, :starred_posts, :mark_sold, :archived_posts, :mutual_friends]
+  before_action :authentication, only: [:index, :create, :show, :image_upload, :active_posts, :destroy, :starred_posts, :mark_sold, :archived_posts, :mutual_friends, :sell_status]
 
   def index
     start_point = params[:start_point].to_i
@@ -35,6 +35,10 @@ class PostsController < ApplicationController
     end
   end
 
+  def sell_status
+    render json: {status: current_user.selling_posts.where(sold: false, public: true)[0] ? true : false}
+  end
+
   def mutual_friends
     result = find_mutual_friends(params[:post_id])
     render json: {mutual_friends_count: result[:count], mutual_friends: result[:friends]}
@@ -62,17 +66,17 @@ class PostsController < ApplicationController
 
   def active_posts
     posts = current_user.selling_posts.where(sold: false, public: true).order(created_at: :DESC)
-    render :json => posts.as_json(include: {stars: {only: :star_id}, course: {only: [:department, :course_number]}, seller: {only: [:pic, :first_name]}})  
+    render :json => posts.as_json(include: {stars: {only: :star_id}, course: {only: [:department, :course_number]}, seller: {only: [:pic, :first_name, :last_name]}})  
   end
 
   def starred_posts
     posts = current_user.posts.order(created_at: :DESC)
-    render :json => posts.as_json(include: {stars: {only: :star_id}, course: {only: [:department, :course_number]}, seller: {only: [:pic, :first_name]}})  
+    render :json => posts.as_json(include: {stars: {only: :star_id}, course: {only: [:department, :course_number]}, seller: {only: [:pic, :first_name, :last_name]}})  
   end
 
   def archived_posts
     posts = current_user.selling_posts.where(sold: true, public: false).order(created_at: :DESC)
-    render :json => posts.as_json(include: {stars: {only: :star_id}, course: {only: [:department, :course_number]}, seller: {only: [:pic, :first_name]}})  
+    render :json => posts.as_json(include: {stars: {only: :star_id}, course: {only: [:department, :course_number]}, seller: {only: [:pic, :first_name, :last_name]}})  
   end
 
   def image_upload

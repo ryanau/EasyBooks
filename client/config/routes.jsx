@@ -10,6 +10,7 @@ var Login = require('../components/LogIn.jsx');
 var SignUp = require('../components/SignUp.jsx');
 var LogOut = require('../components/LogOut.jsx');
 var PostDashboard = require('../components/PostDashboard.jsx');
+var StarredPosts = require('../components/StarredPosts.jsx');
 
 var DefaultRoute = Router.DefaultRoute;
 var Route = Router.Route;
@@ -26,5 +27,6 @@ module.exports = (
 	  <Route name="posts/:id" path="posts/:id" handler={Post} />
 	  <Route name="scheduleuploader" path="schedule" handler={ScheduleUploader} />
 	  <Route name="subscriptions" path="subscriptions" handler={Subscriptions} />
+	  <Route name="starred" path="starred" handler={StarredPosts} />
   </Route>
 );

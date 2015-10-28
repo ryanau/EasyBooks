@@ -22,6 +22,7 @@ var Avatar = mui.Avatar;
 var Label = require('react-bootstrap').Label;
 var Button = require('react-bootstrap').Button;
 var Glyphicon = require('react-bootstrap').Glyphicon;
+var Badge = require('react-bootstrap').Badge;
 
 PublicPost = React.createClass({
   mixins: [ Navigation ],
@@ -186,25 +187,27 @@ PublicPost = React.createClass({
         }.bind(this))
         var mutual = this.state.mutual_friends_count + " Mutual Friends"
       } else if (this.state.mutual_friends != null && this.state.mutual_friends.length > 10) {
-        var avatars = this.state.mutual_friends.slice(0,10).map(function (friend, index) {
+        var avatars = this.state.mutual_friends.slice(0,9).map(function (friend, index) {
           return (
             <Avatar key={index} src={friend[1]} style={{marginRight: "3px"}}/>
           )
         }.bind(this))
         var mutual = this.state.mutual_friends_count + " Mutual Friends"
-        var lastCount = this.state.mutual_friends_count - 10 + ' +'
+        var lastCount = <Badge>{this.state.mutual_friends_count - 9 + ' +'}</Badge>
+      } else {
+        var mutual = "Loading mutual friends..."
       }
       if (this.state.star) {
         var actionButtons = 
         <CardActions>
-          <IconButton onClick={this.starPost} tooltip="Unfollow this post" tooltipPosition="top-right" iconStyle={{color: "#FFFF00"}}><FontIcon className="material-icons">star</FontIcon></IconButton>
-          <Button onClick={this.redirectToPost} bsStyle="info"><Glyphicon glyph="info-sign"/> Info</Button>
+          <Button onClick={this.starPost} bsStyle="success" bsSize="small"><Glyphicon glyph="star"/> Unfollow</Button>
+          <Button onClick={this.redirectToPost} bsStyle="info" bsSize="small"><Glyphicon glyph="info-sign"/> Info</Button>
         </CardActions>
       } else {
         var actionButtons = 
         <CardActions>
-          <IconButton onClick={this.starPost} tooltipPosition="top-right" tooltip="Follow this post"><FontIcon className="material-icons">star</FontIcon></IconButton>
-          <Button onClick={this.redirectToPost} bsStyle="info"><Glyphicon glyph="info-sign"/> Info</Button>
+          <Button onClick={this.starPost} bsStyle="warning" bsSize="small"><Glyphicon glyph="star-empty"/> Follow</Button>
+          <Button onClick={this.redirectToPost} bsStyle="info" bsSize="small"><Glyphicon glyph="info-sign"/> Info</Button>
         </CardActions>
       }
       var seller = post.seller.first_name + ' ' + post.seller.last_name
@@ -213,8 +216,7 @@ PublicPost = React.createClass({
       var mutual = ":P"
       var actionButtons = 
       <CardActions>
-        <Button onClick={this.redirectToPost} bsStyle="info"><Glyphicon glyph="info-sign"/> Info</Button>
-
+        <Button onClick={this.redirectToPost} bsStyle="info" bsSize="small"><Glyphicon glyph="info-sign"/> Info</Button>
       </CardActions>
     } 
     if (post.description) {
@@ -250,7 +252,7 @@ PublicPost = React.createClass({
   			<Card key={post.id}>
           <CardHeader avatar={condition} title={course.department + ' ' + course.course_number + ': ' + post.title} subtitle={"$" + post.price + " | " + this.state.star_count + " Subscribers | " + moment(post.created_at).fromNow()} actAsExpander={true}
             showExpandableButton={true}/>
-          <CardHeader expandable={true}
+          <CardHeader
             title={"By " + seller}
             subtitle={mutual}
             avatar={post.seller.pic}>
