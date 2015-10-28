@@ -21,6 +21,7 @@ Rails.application.routes.draw do
     get '/mutual_friends', :to => 'posts#mutual_friends'
     post '/image_upload', :to => 'posts#image_upload'
     get '/sell_status', :to => 'posts#sell_status'
+    get '/follow_count', :to => 'posts#follow_count'
 
     put '/subscriptions', :to => 'subscriptions#update'
     post '/parse_calendar', :to => 'subscriptions#parse_calendar'

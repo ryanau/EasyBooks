@@ -23,6 +23,8 @@ var Label = require('react-bootstrap').Label;
 var Button = require('react-bootstrap').Button;
 var Glyphicon = require('react-bootstrap').Glyphicon;
 var Badge = require('react-bootstrap').Badge;
+var OverlayTrigger = require('react-bootstrap').OverlayTrigger;
+var Tooltip = require('react-bootstrap').Tooltip;
 
 PublicPost = React.createClass({
   mixins: [ Navigation ],

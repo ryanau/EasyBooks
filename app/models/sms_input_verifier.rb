@@ -23,7 +23,7 @@ class SmsInputVerifier
           SmsNotification.send_from_private_phone(@phone.number, @recipient.phone, @body)
         end
       else
-        @message = "EasyBooks: You are not currently engaged in any transaction."
+        @message = "EasyBooks: You are not currently engaged in a transaction with this private channel."
         SmsNotification.send_from_private_phone(@phone.number, @from, @message)
       end
     else
@@ -81,7 +81,7 @@ class SmsInputVerifier
     department = @subscription.course.department
     course_number = @subscription.course.course_number
     @subscription.destroy!
-    message = "EasyBooks: Your subscription to #{department} #{course_number} has been cancelled. You will no longer receive text alerts when new posts for that course is available.\n\nTo resubscribe, visit: https://easybooks.herokuapp.com/subscriptions"
+    message = "EasyBooks: Your subscription to #{department} #{course_number} has been cancelled. You will no longer receive text alerts when new posts for this course is available.\n\nTo resubscribe, visit: https://easybooks.herokuapp.com/subscriptions"
     SmsNotification.send_from_main_phone(@from, message)
   end
 

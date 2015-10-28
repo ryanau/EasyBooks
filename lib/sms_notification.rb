@@ -15,7 +15,7 @@ module SmsNotification
     seller = post.seller
     accepted = post.stars.find_by(sent: true)
     if !accepted
-      star = post.stars.where(sent: false).where.not(user_id: seller.id).first
+      star = find_subscribed_idle_user(post, seller)
       if star && new_post_alert_command(star.id) && send_post_alert(star.user.phone, post, @command.random_num)
         star.update_attributes(sent: true)
       end
@@ -34,6 +34,17 @@ module SmsNotification
   end
 
   private
+
+  def self.find_subscribed_idle_user(post, seller)
+    subscribers = post.stars.pluck(:user_id)
+    occupied = []
+    subscribers.each do |subscriber|
+      if subscriber.stars.find_by(accepted: true)
+        occupied << subscriber
+      end
+    end
+    post.stars.where(sent: false).where.not(user_id: seller.id).where.not(user_id: occupied).first
+  end
 
   def self.new_post_alert_command(star_id)
     random = Faker::Number.number(6)

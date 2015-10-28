@@ -1,6 +1,6 @@
 class PostsController < ApplicationController
   require 'openssl'
-  before_action :authentication, only: [:index, :create, :show, :image_upload, :active_posts, :destroy, :starred_posts, :mark_sold, :archived_posts, :mutual_friends, :sell_status]
+  before_action :authentication, only: [:index, :create, :show, :image_upload, :active_posts, :destroy, :starred_posts, :mark_sold, :archived_posts, :mutual_friends, :sell_status, :follow_count]
 
   def index
     start_point = params[:start_point].to_i
@@ -39,7 +39,12 @@ class PostsController < ApplicationController
     render json: {status: current_user.selling_posts.where(sold: false, public: true)[0] ? true : false}
   end
 
-def mutual_friends
+  def follow_count
+    count = current_user.stars.count
+    render json: {count: count}
+  end
+
+  def mutual_friends
     result = find_mutual_friends(params[:post_id])
     render json: {mutual_friends_count: result[:count], mutual_friends: result[:friends]}
   end
