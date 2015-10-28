@@ -36,11 +36,11 @@ module SmsNotification
   private
 
   def self.find_subscribed_idle_user(post, seller)
-    subscribers = post.stars.pluck(:user_id)
+    subscribers_id = post.stars.pluck(:user_id)
     occupied = []
-    subscribers.each do |subscriber|
-      if subscriber.stars.find_by(accepted: true)
-        occupied << subscriber
+    subscribers_id.each do |subscriber_id|
+      if User.find(subscriber_id).stars.find_by(accepted: true)
+        occupied << subscriber_id
       end
     end
     post.stars.where(sent: false).where.not(user_id: seller.id).where.not(user_id: occupied).first
