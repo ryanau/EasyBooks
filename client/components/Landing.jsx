@@ -42,7 +42,7 @@ Landing = React.createClass({
           <div className="container">
             <div className="row">
               <div className="one-half column mL5p">
-                <h4 className="hero-heading">Buying and Selling Books is Never this Easy!</h4>
+                <h4 className="hero-heading">Buying and selling textbooks has never been this easy!</h4>
                 <Button href={link} bsStyle="primary">Log In via Facebook</Button>
               </div>
               <div className="one-half column phones">
@@ -57,8 +57,8 @@ Landing = React.createClass({
               <div className="row">
                 <div className="one-third column value">
                   <h2 className="value-multiplier">Trust</h2>
-                  <h5 className="value-heading">Buy from your Classmate</h5>
-                  <p className="value-description">EasyBooks is your campus book marketplace.</p>
+                  <h5 className="value-heading">Get text alerts when what you look for is available</h5>
+                  <p className="value-description">Never miss a post by simply uploading your calendar and subscribe to courses you need books for.</p>
                 </div>
               </div>
             </div>

@@ -18,7 +18,14 @@ module SmsNotification
       star = find_subscribed_idle_user(post, seller)
       if star && new_post_alert_command(star.id) && send_post_alert(star.user.phone, post, @command.random_num)
         star.update_attributes(sent: true)
+        CourseAlertDestroyer.perform_in(2.minutes, star.id)
       end
+    end
+  end
+
+  def self.destroy_course_alert(star_id)
+    if Star.find(star_id).destroy!
+      PostAlert.perform_async(star.post.id)
     end
   end
 

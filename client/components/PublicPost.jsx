@@ -251,7 +251,7 @@ PublicPost = React.createClass({
           ref="postUnstarred"
           message='Post Unfollowed'
           autoHideDuration={1000}/>
-  			<Card key={post.id}>
+  			<Card key={post.id} className="mB10">
           <CardHeader avatar={condition} title={course.department + ' ' + course.course_number + ': ' + post.title} subtitle={"$" + post.price + " | " + this.state.star_count + " Subscribers | " + moment(post.created_at).fromNow()} actAsExpander={true}
             showExpandableButton={true}/>
           <CardHeader

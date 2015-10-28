@@ -57,7 +57,7 @@ StarredPosts = React.createClass({
 			} else {
 				var posts = this.state.posts.map(function (post, index) {
 					return (
-						<PublicPost key={post.id} origin={this.props.origin} post={post} currentUser={this.props.currentUser}/>
+						<PublicPost key={post.id} origin={this.props.origin} post={post} currentUser={this.props.currentUser} />
 					);
 				}.bind(this));
 				var postCourse = "Following " + this.state.posts.length + " posts"
