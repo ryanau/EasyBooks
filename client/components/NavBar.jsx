@@ -1,6 +1,7 @@
 var React = require('react');
 var Router = require('react-router');
 var Link = Router.Link;
+var Navigation = Router.Navigation;
 
 var mui = require('material-ui');
 var ThemeManager = new mui.Styles.ThemeManager();
@@ -25,6 +26,7 @@ var ReactRouterBootstrap = require('react-router-bootstrap')
   , MenuItemLink = ReactRouterBootstrap.MenuItemLink
 
 module.exports = React.createClass({
+  mixins: [ Navigation ],
   childContextTypes: {
     muiTheme: React.PropTypes.object
   },
@@ -33,9 +35,27 @@ module.exports = React.createClass({
       muiTheme: ThemeManager.getCurrentTheme()
     };
   },
-
+  buyNav: function () {
+    this.transitionTo('/');
+    $('.navbar-toggle')[0].click();
+  },
+  sellNav: function () {
+    this.transitionTo('/sell');
+    $('.navbar-toggle')[0].click();
+  },
+  followsNav: function () {
+    this.transitionTo('/starred');
+    $('.navbar-toggle')[0].click();
+  },
+  logoutNav: function () {
+    this.transitionTo('/logout');
+    $('.navbar-toggle')[0].click();
+  },
+  closeNav: function () {
+    $('.navbar-toggle')[0].click();
+  },
   render: function() {
-    var brand = <Link to='/' className='navbar-brand'>EasyBooks</Link>; 
+    var brand = <Link to='/' className='navbar-brand'>EasyBooks</Link>;  
     var yourPosts = <Link to='/postdashboard'>Your Posts</Link>; 
     var subscriptions = <Link to='/subscriptions'>Subscriptions</Link>; 
     var schedule = <Link to='/schedule'>Schedule Uploader</Link>; 
@@ -44,15 +64,15 @@ module.exports = React.createClass({
         <Navbar inverse toggleNavKey={0} fixedTop={true} className="transparent">
           <NavBrand>{brand}</NavBrand>
           <Nav right eventKey={0}>
-            <NavItemLink to="/">Buy</NavItemLink>
-            <NavItemLink to="/sell">Sell</NavItemLink>
-            <NavItemLink to="/starred">Follows</NavItemLink>
+            <MenuItem onSelect={this.buyNav}>Buy</MenuItem>
+            <MenuItem onSelect={this.sellNav}>Sell</MenuItem>
+            <MenuItem onSelect={this.followsNav}>Follows</MenuItem>
             <NavDropdown eventKey={3} title="Profile" id="collapsible-navbar-dropdown">
-              <MenuItem>{yourPosts}</MenuItem>
-              <MenuItem>{subscriptions}</MenuItem>
-              <MenuItem>{schedule}</MenuItem>
+              <MenuItem onSelect={this.closeNav}>{yourPosts}</MenuItem>
+              <MenuItem onSelect={this.closeNav}>{subscriptions}</MenuItem>
+              <MenuItem onSelect={this.closeNav}>{schedule}</MenuItem>
             </NavDropdown>
-            <NavItemLink to="/logout">Log Out</NavItemLink>
+            <MenuItem onSelect={this.logoutNav}>Log Out</MenuItem>
           </Nav>
         </Navbar>
     } else {

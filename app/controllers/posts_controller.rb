@@ -39,7 +39,7 @@ class PostsController < ApplicationController
     render json: {status: current_user.selling_posts.where(sold: false, public: true)[0] ? true : false}
   end
 
-  def mutual_friends
+def mutual_friends
     result = find_mutual_friends(params[:post_id])
     render json: {mutual_friends_count: result[:count], mutual_friends: result[:friends]}
   end
