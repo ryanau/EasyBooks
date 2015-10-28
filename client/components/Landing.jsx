@@ -41,7 +41,7 @@ Landing = React.createClass({
         <img id="landing" src="/berkeley.jpg"/>
 				  <div id="parent">
   			    <form id="form_login">
-  			    <h3>Buying and Selling Books is Never this Easy!</h3>
+  			    <h3>Buying and selling books has never been this easy!</h3>
   					<Button href={link} bsStyle="primary">Log In via Facebook</Button>
   			    </form>
           </div>

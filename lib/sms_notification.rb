@@ -5,7 +5,8 @@ module SmsNotification
     seller = User.find(seller_id)
 
     Subscription.where(course_id: course_id).each do |subscription|
-        send_course_alert(subscription.user.phone, course, seller, post)
+        @command = new_post_alert_stop_command(subscription.id)
+        send_course_alert(subscription.user.phone, course, seller, post, @command.random_num)
     end
   end
 
@@ -44,13 +45,23 @@ module SmsNotification
     end
   end
 
-  def self.send_course_alert(to, course, seller, post)
+  def self.new_post_alert_stop_command(subscription_id)
+    random = Faker::Number.number(6)
+    @command = Command.new(subscription_id: subscription_id, random_num: random, action: 'stop_post_alert')
+    if @command.save
+      @command
+    else
+      new_post_alert_stop_command(subscription_id)
+    end
+  end
+
+  def self.send_course_alert(to, course, seller, post, random_num)
     from = ENV['TWILIO_PHONE']
     to = '+1' + to.to_s
     course_name = course.department + " " + course.course_number
     post_id = post.id.to_s
     root = "https://easybooks.herokuapp.com/posts/#{post_id}"
-    body = "EasyBooks: New post for #{course_name}! #{post.title} (#{post.condition}): $#{post.price} by #{seller.first_name}!\n\nClick here to star the post: #{root}"
+    body = "EasyBooks: New post for #{course_name}! #{post.title} (#{post.condition}): $#{post.price} by #{seller.first_name}!\n\nClick here to star the post: #{root}\n\nTo stop getting alert from #{post.title}, reply with '#{random_num}'."
     twilio_sms(from, to, body)
   end
 
