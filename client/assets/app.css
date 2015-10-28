@@ -55,6 +55,14 @@ img {
   margin-top: 100px;
 }
 
+.mL-10{
+  margin-left: -20px;
+}
+
+.mR-10{
+  margin-right: -20px;
+}
+
 /*#landing {
 	background: url(/berkeley.jpg) no-repeat center center fixed; 
 	-webkit-background-size: cover;

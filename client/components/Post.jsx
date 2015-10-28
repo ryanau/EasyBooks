@@ -3,6 +3,7 @@ var $ = require('jquery');
 var Router = require('react-router');
 var Navigation = Router.Navigation;
 var moment = require('moment');
+var TimerMixin = require('react-timer-mixin');
 
 var mui = require('material-ui');
 var ThemeManager = new mui.Styles.ThemeManager();
@@ -20,7 +21,7 @@ var Label = require('react-bootstrap').Label;
 var Comments = require('./Comments.jsx');
 
 Post = React.createClass({
-	mixins: [ Navigation ],
+	mixins: [ Navigation, TimerMixin ],
 	childContextTypes: {
 	  muiTheme: React.PropTypes.object
 	},

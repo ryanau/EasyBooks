@@ -75,7 +75,7 @@ CommentBox = React.createClass({
 				  ref="commentAdded"
 				  message='Comment Added'
 				  autoHideDuration={2000}/>
-				<Col xs={8} md={9}>
+				<Col xs={10} md={9}>
 	  			<Input
 		        type="text"
 		        placeholder="Add Comment"
@@ -87,7 +87,7 @@ CommentBox = React.createClass({
 		        labelClassName="label-class"
 		        onChange={this.handleComment} />
 	      </Col>
-	      <Col xs={4} md={3}>
+	      <Col xs={2} md={3}>
 			  <Button onClick={this.addComment} bsStyle="primary"><Glyphicon glyph="comment"/></Button>
 			  </Col>
 			</div>

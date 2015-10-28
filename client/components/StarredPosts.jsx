@@ -49,10 +49,10 @@ StarredPosts = React.createClass({
 		if (this.state.posts != null) {
 			if (this.state.posts.length == 0) {
 	  		var followReminder =
-				<Alert bsStyle="info">
-				<h4>Star a Post!</h4>
-			  	<p>You are not following any post... Star a post to follow so you will instantly get connected to the seller if you are the first subscriber in line!</p>
-			  </Alert>
+	  			<Alert bsStyle="info">
+	  				<h4>Follow a Post and Get in Line!</h4>
+	  		  	<p>You are not following any post... Follow a Post so you will instantly get connected to the seller if it is your turn!</p>
+	  		  </Alert>
 			  var postCourse = "No Post Followed"
 			} else {
 				var posts = this.state.posts.map(function (post, index) {

@@ -37,22 +37,32 @@ module.exports = React.createClass({
   },
   buyNav: function () {
     this.transitionTo('/');
-    $('.navbar-toggle')[0].click();
+    if ($(window).width() < 768) {
+      $('.navbar-toggle')[0].click();
+    }
   },
   sellNav: function () {
     this.transitionTo('/sell');
-    $('.navbar-toggle')[0].click();
+    if ($(window).width() < 768) {
+      $('.navbar-toggle')[0].click();
+    }
   },
   followsNav: function () {
     this.transitionTo('/starred');
-    $('.navbar-toggle')[0].click();
+    if ($(window).width() < 768) {
+      $('.navbar-toggle')[0].click();
+    }
   },
   logoutNav: function () {
     this.transitionTo('/logout');
-    $('.navbar-toggle')[0].click();
+    if ($(window).width() < 768) {
+      $('.navbar-toggle')[0].click();
+    }
   },
   closeNav: function () {
-    $('.navbar-toggle')[0].click();
+    if ($(window).width() < 768) {
+      $('.navbar-toggle')[0].click();
+    }
   },
   render: function() {
     var brand = <Link to='/' className='navbar-brand'>EasyBooks</Link>;  
