@@ -17,6 +17,10 @@ var MenuItem = require('react-bootstrap').MenuItem;
 var Dropdown = require('react-bootstrap').Dropdown;
 var Button = require('react-bootstrap').Button;
 var Panel = require('react-bootstrap').Panel;
+var Alert = require('react-bootstrap').Alert;
+
+var ReactRouterBootstrap = require('react-router-bootstrap')
+  , ButtonLink = ReactRouterBootstrap.ButtonLink
 
 Sell = React.createClass({
 	mixins: [ Navigation ],
@@ -30,6 +34,7 @@ Sell = React.createClass({
 	},
 	getInitialState: function () {
 		return {
+			sell_status: null,
 			title: '',
 			price: '',
 			pickup: '',
@@ -45,7 +50,25 @@ Sell = React.createClass({
 		}
 	},
 	componentDidMount: function () {
+		this.loadSellEligible();
 		this.loadCourses();
+	},
+	loadSellEligible: function () {
+		$.ajax({
+			url: this.props.origin + '/sell_status',
+			type: 'GET',
+			dataType: 'json',
+			crossDomain: true,
+			headers: {'Authorization': localStorage.getItem('jwt-easybooks')},
+			success: function (response) {
+				this.setState({
+					sell_status: response.status,
+				});
+			}.bind(this),
+			error: function (error) {
+				window.location = "/"
+			}.bind(this),
+		});
 	},
 	loadCourses: function () {
 		$.ajax({
@@ -112,9 +135,9 @@ Sell = React.createClass({
 			description: this.state.description,
 			condition: this.state.condition,
 		};
-		if (data.title == '' || data.price == '' || data.condition == '') {
+		if (data.title == '' || data.price == '' || data.condition == '' || data.course_selected == null) {
 			this.setState({
-				warning: "Please fill out all required fields."
+				warning: "Please fill out all required fields. Did you select the Course?"
 			});
 		} else if (this.validateTitle() == 'success' && this.validatePrice() == 'success'){
 			this.setState({
@@ -171,102 +194,123 @@ Sell = React.createClass({
 		})
 	},
   render: function () {
-  	var courseList = this.state.courses;
-  	var warning = this.state.warning;
-  	if (this.state.pic_file != null) {
-  		var picPreview = <img src={this.state.pic_file[0].preview} />
-  	}
-  	if (this.state.uploading == true) {
-  		var uploadingProgress = <LinearProgress mode="indeterminate" />
-  	} else if (this.state.uploading == null) {
-  		var uploadingProgress = 
-				<Dropzone onDrop={this.onDrop} className="dropzone" activeClassName="dropzone_active" multiple={false}>
-	        <div><h5>Drag or click here to upload your picture for the book (ONE only)</h5></div>
-	      </Dropzone>
-  	}
+  	if (this.state.sell_status == null) {
+ 			var warning = "Loading..."
+  	} else if (this.state.sell_status) {
+  		var warning =
+			<Alert bsStyle="danger">
+				<h4>Error!</h4>
+		  	<p>You can only have one active sell post. Please mark your post as "SOLD" or delete it by click the following button.</p>
+		  	<p><ButtonLink bsStyle="primary" to="/postdashboard">Managet your Active Posts</ButtonLink></p>
+		  </Alert>
+	  } else {
+	  	var courseList = this.state.courses;
+	  	if (this.state.warning != null) {
+	  		var warning =
+				<Alert bsStyle="danger">
+					<h4>Error!</h4>
+			  	<p>{this.state.warning}</p>
+			  </Alert>
+	  	}
+	  	if (this.state.pic_file != null) {
+	  		var picPreview = <img src={this.state.pic_file[0].preview} />
+	  	}
+	  	if (this.state.uploading == true) {
+	  		var uploadingProgress = <LinearProgress mode="indeterminate" />
+	  	} else if (this.state.uploading == null) {
+	  		var uploadingProgress = 
+					<Dropzone onDrop={this.onDrop} className="dropzone" activeClassName="dropzone_active" multiple={false}>
+		        <div><h5>Drag or click here to upload your picture for the book (ONE only)</h5></div>
+		      </Dropzone>
+	  	}
+	  	var body = 
+	  	<div>
+				<Input
+	        type="text"
+	        value={this.state.title}
+	        placeholder="e.g. Statistics by Freedman, Pisani, and Purves (4th edition)"
+	        label="Book Name"
+	        help="Required"
+	        bsStyle={this.validateTitle()}
+	        hasFeedback
+	        ref="title"
+	        groupClassName="group-class"
+	        labelClassName="label-class"
+	        onChange={this.handleChange} />
+				<Input
+	        type="text"
+	        value={this.state.price}
+	        placeholder="e.g. 36"
+	        addonBefore="$" 
+	        addonAfter=".00"
+	        label="Price"
+	        help="Required"
+	        bsStyle={this.validatePrice()}
+	        hasFeedback
+	        ref="price"
+	        groupClassName="group-class"
+	        labelClassName="label-class"
+	        onChange={this.handleChange} />
+				<Input
+	        type="text"
+	        value={this.state.description}
+	        placeholder="e.g. slightly highlighted, international edition"
+	        label="Description"
+	        help="Optional"
+	        hasFeedback
+	        ref="description"
+	        groupClassName="group-class"
+	        labelClassName="label-class"
+	        onChange={this.handleChange} />
+				<Input
+	        type="text"
+	        value={this.state.pickup}
+	        placeholder="e.g. Unit 1"
+	        label="Pick Up Location"
+	        help="Optional"
+	        hasFeedback
+	        ref="pickup"
+	        groupClassName="group-class"
+	        labelClassName="label-class"
+	        onChange={this.handleChange} />
+	      <h5><strong>Select Condition</strong></h5>
+				<Dropdown id="condition">
+					<Dropdown.Toggle>
+				  	{this.state.condition}
+				  </Dropdown.Toggle>
+		      <Dropdown.Menu>
+		        <MenuItem eventKey="1" onSelect={this.changeCondition}>New</MenuItem>
+		        <MenuItem eventKey="2" onSelect={this.changeCondition}>Like New</MenuItem>
+		        <MenuItem eventKey="3" onSelect={this.changeCondition}>Good</MenuItem>
+		        <MenuItem eventKey="4" onSelect={this.changeCondition}>Fair</MenuItem>
+		      </Dropdown.Menu>
+		    </Dropdown>
+				<h5><strong>Select Course Name</strong></h5>
+				<Select
+				  name="form-field-name"
+				  value="Type the course name or click the dropdown button on the right"
+				  options={courseList}
+				  onChange={this.searchChange}
+				  searchable={true}/>
+				<div>
+					{uploadingProgress}
+				</div>
+				<div>{picPreview}</div>
+				<div>
+				<Button
+	        bsStyle="primary"
+	        disabled={this.state.isLoading}
+	        onClick={!this.state.isLoading ? this.handleSubmit : null}>
+	        {this.state.isLoading ? 'Putting it on the rack...' : 'Sell Book'}
+	      </Button>
+				</div>
+			</div>
+	  }
   	return (
   		<div className="container col-md-8 col-md-offset-2">
 	  			<form className="form-horizontal">
-		  			<Input
-			        type="text"
-			        value={this.state.title}
-			        placeholder="e.g. Stats20 Textbook"
-			        label="Book Name"
-			        help="Required"
-			        bsStyle={this.validateTitle()}
-			        hasFeedback
-			        ref="title"
-			        groupClassName="group-class"
-			        labelClassName="label-class"
-			        onChange={this.handleChange} />
-		  			<Input
-			        type="text"
-			        value={this.state.price}
-			        placeholder="e.g. 36"
-			        addonBefore="$" 
-			        addonAfter=".00"
-			        label="Price"
-			        help="Required"
-			        bsStyle={this.validatePrice()}
-			        hasFeedback
-			        ref="price"
-			        groupClassName="group-class"
-			        labelClassName="label-class"
-			        onChange={this.handleChange} />
-		  			<Input
-			        type="text"
-			        value={this.state.description}
-			        placeholder="e.g. slightly highlighted, international edition"
-			        label="Description"
-			        help="Optional"
-			        hasFeedback
-			        ref="description"
-			        groupClassName="group-class"
-			        labelClassName="label-class"
-			        onChange={this.handleChange} />
-						<Input
-			        type="text"
-			        value={this.state.pickup}
-			        placeholder="e.g. Unit 1"
-			        label="Pick Up Location"
-			        help="Optional"
-			        hasFeedback
-			        ref="pickup"
-			        groupClassName="group-class"
-			        labelClassName="label-class"
-			        onChange={this.handleChange} />
-			      <h5><strong>Select Condition</strong></h5>
-		  			<Dropdown id="condition">
-		  				<Dropdown.Toggle>
-		  			  	{this.state.condition}
-		  			  </Dropdown.Toggle>
-				      <Dropdown.Menu>
-				        <MenuItem eventKey="1" onSelect={this.changeCondition}>New</MenuItem>
-				        <MenuItem eventKey="2" onSelect={this.changeCondition}>Like New</MenuItem>
-				        <MenuItem eventKey="3" onSelect={this.changeCondition}>Good</MenuItem>
-				        <MenuItem eventKey="4" onSelect={this.changeCondition}>Fair</MenuItem>
-				      </Dropdown.Menu>
-				    </Dropdown>
-		  			<h5><strong>Select Course Name</strong></h5>
-		  			<Select
-		  			  name="form-field-name"
-		  			  value="Type the course name or click the dropdown button on the right"
-		  			  options={courseList}
-		  			  onChange={this.searchChange}
-		  			  searchable={true}/>
-		  			<div>
-							{uploadingProgress}
-		  			</div>
-		  			<div>{picPreview}</div>
-		  			<div>
-		  			<Button
-			        bsStyle="primary"
-			        disabled={this.state.isLoading}
-			        onClick={!this.state.isLoading ? this.handleSubmit : null}>
-			        {this.state.isLoading ? 'Putting it on the rack...' : 'Sell Book'}
-			      </Button>
-		  			</div>
-		  			{warning}
+	  				{warning}
+	  				{body}
 	  			</form>
   		</div>
   	)

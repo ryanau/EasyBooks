@@ -23,7 +23,7 @@ class SmsInputVerifier
           SmsNotification.send_from_private_phone(@phone.number, @recipient.phone, @body)
         end
       else
-        @message = "EasyBooks: You are not currently engaged in any transaction."
+        @message = "EasyBooks: You are not currently engaged in a transaction with this private channel."
         SmsNotification.send_from_private_phone(@phone.number, @from, @message)
       end
     else
@@ -66,12 +66,23 @@ class SmsInputVerifier
   end
 
   def check_input
-    @star = Star.find(@command.star_id)
-    @post = Post.find(@star.post_id)
     if @command.action == 'approve_post_alert'
+      @star = Star.find(@command.star_id)
+      @post = Post.find(@star.post_id)
       approve_post
       release_private_channel
+    elsif @command.action == 'stop_post_alert'
+      @subscription = Subscription.find(@command.subscription_id)
+      stop_post_alert
     end
+  end
+
+  def stop_post_alert
+    department = @subscription.course.department
+    course_number = @subscription.course.course_number
+    @subscription.destroy!
+    message = "EasyBooks: Your subscription to #{department} #{course_number} has been cancelled. You will no longer receive text alerts when new posts for this course is available.\n\nTo resubscribe, visit: https://easybooks.herokuapp.com/subscriptions"
+    SmsNotification.send_from_main_phone(@from, message)
   end
 
   def find_private_channel(user)

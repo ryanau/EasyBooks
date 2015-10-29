@@ -8,6 +8,7 @@ var DropDownMenu = mui.DropDownMenu;
 var Input = require('react-bootstrap').Input;
 var Button = require('react-bootstrap').Button;
 var ButtonToolbar = require('react-bootstrap').ButtonToolbar;
+var Alert = require('react-bootstrap').Alert;
 
 Register = React.createClass({
 	childContextTypes: {
@@ -24,7 +25,7 @@ Register = React.createClass({
 			phone: "",
 			university: "1",
 			universities: [{payload: "1", text: "Loading"}],
-			warning: "",
+			warning: null,
 		}
 	},
 	componentDidMount: function () {
@@ -71,7 +72,6 @@ Register = React.createClass({
 				dataType: 'json',
 				success: function (response) {
 					window.location = "/"
-					console.log('completed registration');
 				}.bind(this),
 				error: function (error) {
 					window.location = "/"
@@ -117,12 +117,27 @@ Register = React.createClass({
 				<DropDownMenu menuItems={universityList} autoScrollBodyContent={true} onChange={this.handleDropDownMenu}/>
 			</div>
 		}
+  	if (this.state.warning != null) {
+  		var warning =
+			<Alert bsStyle="danger">
+				<h4>Error!</h4>
+		  	<p>{this.state.warning}</p>
+		  </Alert>
+  	}
+  	var infoBox = 
+  		<Alert bsStyle="info">
+  			<h4>Why phone number and school email?</h4>
+  	  	<p>A valid phone number is needed for a fast textbook buying/selling experience brought to you by EasyBooks!</p>
+  	  	<p>A school (.edu) email is needed for verification purposes so we can create a safe community marketplace for everyone!</p>
+  	  </Alert>
 		return (
 			<div className="container col-md-8 col-md-offset-2">
+				{warning}
+				{infoBox}
   			<Input
 	        type="text"
 	        value={this.state.phone}
-	        placeholder="e.g. 1238963300"
+	        placeholder="e.g. 5108963300"
 	        label="Phone Number"
 	        help="Required"
 	        bsStyle={this.validatePhone()}
@@ -147,7 +162,6 @@ Register = React.createClass({
 	      <ButtonToolbar>
 		      <Button onClick={this.handleSubmit} bsStyle="success">Complete Registration</Button>
 	      </ButtonToolbar>
-				{warning}
 			</div>
 		);
 	},

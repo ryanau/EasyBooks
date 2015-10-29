@@ -1,5 +1,5 @@
 class StarsController < ApplicationController
-  before_action :authentication, only: [:index, :create, :destroy, :count]
+  before_action :authentication, only: [:index, :create, :destroy, :count, :starred]
 
   def index
     post_id = params[:post_id]
@@ -21,7 +21,7 @@ class StarsController < ApplicationController
   def create
     action = StarCreator.new(params, current_user)
     if action.ok?
-      # PostAlert.perform_async(action.star.post.id)
+      PostAlert.perform_async(action.star.post.id)
       render json: {message: "Starred"}
     else
       render json: 'failed to star', status: 400
@@ -33,5 +33,14 @@ class StarsController < ApplicationController
     post = Post.find(post_id)
     star_count = Star.where(post_id: post.id).where.not(user_id: post.seller.id).count
     render json: {star_count: star_count}
+  end
+
+  def starred
+    if current_user.stars.count > 0
+      response = true
+    else
+      response = false
+    end
+    render json: {starred: response}
   end
 end

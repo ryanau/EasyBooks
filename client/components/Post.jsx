@@ -2,22 +2,21 @@ var React = require('react');
 var $ = require('jquery');
 var Router = require('react-router');
 var Navigation = Router.Navigation;
+var moment = require('moment');
 var TimerMixin = require('react-timer-mixin');
-
-var Uri = require('jsuri');
-var Link = Router.Link;
 
 var mui = require('material-ui');
 var ThemeManager = new mui.Styles.ThemeManager();
-var RaisedButton = mui.RaisedButton;
 var FontIcon = mui.FontIcon;
 var IconButton = mui.IconButton;
 var Snackbar = mui.Snackbar;
-var Colors = mui.Colors;
+var Avatar = mui.Avatar;
 
 var Panel = require('react-bootstrap').Panel;
 var Button = require('react-bootstrap').Button;
 var ButtonToolbar = require('react-bootstrap').ButtonToolbar;
+var Glyphicon = require('react-bootstrap').Glyphicon;
+var Label = require('react-bootstrap').Label;
 
 var Comments = require('./Comments.jsx');
 
@@ -243,34 +242,46 @@ Post = React.createClass({
 			var star_count = this.state.star_count;
 			if (post.seller_id == this.props.currentUser.id) {
 				var deleteButton = 
-				  <Button onClick={this.deletePost} bsStyle="danger">Delete Post</Button>
-				if (this.state.sold) {
-					var soldButton = 
-					<Button onClick={this.markSold} bsStyle="success">Mark as Available</Button>
-				} else {
+				  <Button onClick={this.deletePost} bsStyle="danger"><Glyphicon glyph="trash"/></Button>
+				if (!this.state.sold) {
 					var soldButton = 
 					<Button onClick={this.markSold} bsStyle="success">Mark as Sold</Button>
 				}
 			} else {
 				if (this.state.star) {
 					var starButton = 
-					<IconButton onClick={this.starPost} tooltip="Unfollow this post" iconStyle={{color: "#FFFF00"}}><FontIcon className="material-icons">star</FontIcon></IconButton>
+					<Button onClick={this.starPost} bsStyle="success" bsSize="small"><Glyphicon glyph="star"/> Unfollow</Button>
 				} else {
 					var starButton = 
-					<IconButton onClick={this.starPost} tooltip="Follow this post"><FontIcon className="material-icons">star</FontIcon></IconButton>
+					<Button onClick={this.starPost} bsStyle="warning" bsSize="small"><Glyphicon glyph="star-empty"/> Follow</Button>
 				}
 			}
-			var comments = <Comments origin={this.props.origin} post_id={post.id}/>;
+			var comments = <Comments origin={this.props.origin} post_id={post.id} seller_id={post.seller.id}/>;
+			switch (post.condition) {
+			  case "New":
+			    var condition = <Label bsSize="medium" bsStyle="success">New</Label>
+			    break;
+			  case "Like New":
+			    var condition = <Label bsSize="medium" bsStyle="medium">Like New</Label>
+			    break;
+			  case "Good":
+			    var condition = <Label bsSize="medium" bsStyle="primary">Good</Label>
+			    break;
+			  case "Fair":
+			    var condition = <Label bsSize="medium" bsStyle="warning">Fair</Label>
+			    break;
+			}
 			var post = 
 				<div>
-				<p>{post.title}</p>
-				<p>{post.price}</p>
-				<p>{post.seller.first_name}</p>
+				<h3>{post.title}</h3>
+				<h4>{condition}</h4><p>${post.price}</p>
+				<p><Avatar src={post.seller.pic} style={{marginRight: "3px"}}/>{post.seller.first_name + ' ' + post.seller.last_name + ' | ' + moment(post.created_at).fromNow()}</p>
 				<div className="imgBox">
 				<img src={post.picture_url} />
 				</div>
 				</div>
 			var subscribers = <h5>{star_count} user has subscribed to this post</h5>
+
 		} else if (this.state.not_found) {
 			var message = "Post Not Found"
 		} else {
@@ -303,11 +314,11 @@ Post = React.createClass({
 				  {post}
 				  {starButton}
 				  {subscribers}
-				  {comments}
 				  <ButtonToolbar>
 					  {deleteButton}
 					  {soldButton}
 				  </ButtonToolbar>
+				  {comments}
 				</Panel>
 			</div>
 		)

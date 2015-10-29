@@ -11,7 +11,6 @@ gem 'puma'
 gem 'pg'
 gem 'jwt'
 gem 'bcrypt', '~> 3.1.7'
-gem 'omniauth-venmo'
 gem 'twilio-ruby', '~> 4.2.1'
 gem 'httparty'
 gem 'dotenv-rails'
@@ -20,7 +19,6 @@ gem 'cloudinary'
 gem 'sidekiq', '3.5.0'
 gem 'faker', '1.5.0'
 gem 'omniauth-facebook'
-gem "koala", "~> 2.2"
 
 group :development, :test do
   # gem 'pry-rails'

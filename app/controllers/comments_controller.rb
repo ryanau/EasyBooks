@@ -3,7 +3,7 @@ class CommentsController < ApplicationController
 
   def index
     comments = Post.find(params[:post_id]).comments
-    render :json => comments, :include => {:user => {:only => :first_name}}
+    render :json => comments.as_json(include: {user: {only: [:id, :first_name, :last_name, :pic]}})
   end
 
   def create

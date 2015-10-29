@@ -1,5 +1,5 @@
 class Conversation < ActiveRecord::Base
-  belongs_to :star
+  # belongs_to :star
 
   belongs_to :seller_phone, :class_name => "Phone", :foreign_key => :seller_phone_id
   belongs_to :buyer_phone, :class_name => "Phone", :foreign_key => :buyer_phone_id

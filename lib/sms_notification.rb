@@ -5,7 +5,8 @@ module SmsNotification
     seller = User.find(seller_id)
 
     Subscription.where(course_id: course_id).each do |subscription|
-        send_course_alert(subscription.user.phone, course, seller, post)
+        @command = new_post_alert_stop_command(subscription.id)
+        send_course_alert(subscription.user.phone, course, seller, post, @command.random_num)
     end
   end
 
@@ -14,10 +15,18 @@ module SmsNotification
     seller = post.seller
     accepted = post.stars.find_by(sent: true)
     if !accepted
-      star = post.stars.where(sent: false).where.not(user_id: seller.id).first
+      star = find_subscribed_idle_user(post, seller)
       if star && new_post_alert_command(star.id) && send_post_alert(star.user.phone, post, @command.random_num)
         star.update_attributes(sent: true)
+        PostAlertDestroyer.perform_in(1.minutes, star.id)
       end
+    end
+  end
+
+  def self.destroy_post_alert(star_id)
+    star = Star.find(star_id)
+    if star.destroy!
+      PostAlert.perform_async(star.post.id)
     end
   end
 
@@ -34,6 +43,17 @@ module SmsNotification
 
   private
 
+  def self.find_subscribed_idle_user(post, seller)
+    subscribers_id = post.stars.pluck(:user_id)
+    occupied = []
+    subscribers_id.each do |subscriber_id|
+      if User.find(subscriber_id).stars.find_by(accepted: true)
+        occupied << subscriber_id
+      end
+    end
+    post.stars.where(sent: false).where.not(user_id: seller.id).where.not(user_id: occupied).first
+  end
+
   def self.new_post_alert_command(star_id)
     random = Faker::Number.number(6)
     @command = Command.new(star_id: star_id, random_num: random, action: 'approve_post_alert')
@@ -44,13 +64,23 @@ module SmsNotification
     end
   end
 
-  def self.send_course_alert(to, course, seller, post)
+  def self.new_post_alert_stop_command(subscription_id)
+    random = Faker::Number.number(6)
+    @command = Command.new(subscription_id: subscription_id, random_num: random, action: 'stop_post_alert')
+    if @command.save
+      @command
+    else
+      new_post_alert_stop_command(subscription_id)
+    end
+  end
+
+  def self.send_course_alert(to, course, seller, post, random_num)
     from = ENV['TWILIO_PHONE']
     to = '+1' + to.to_s
     course_name = course.department + " " + course.course_number
     post_id = post.id.to_s
     root = "https://easybooks.herokuapp.com/posts/#{post_id}"
-    body = "EasyBooks: New post for #{course_name}! #{post.title} (#{post.condition}): $#{post.price} by #{seller.first_name}!\n\nClick here to star the post: #{root}"
+    body = "EasyBooks: New post for #{course_name}! #{post.title} (#{post.condition}): $#{post.price} by #{seller.first_name}!\n\nClick here to star the post: #{root}\n\nTo stop getting alert from #{post.title}, reply with '#{random_num}'."
     twilio_sms(from, to, body)
   end
 

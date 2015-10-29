@@ -16,7 +16,7 @@ class PostCreator
 
   def allowed_params(params, current_user)
     if params[:pic_url] == ""
-      pic_url = "https://www.petfinder.com/wp-content/uploads/2012/11/140272627-grooming-needs-senior-cat-632x475.jpg"
+      pic_url = "https://img.memecdn.com/expensive-college-text-books_o_1040947.jpg"
     else
       pic_url = params[:pic_url]
     end

@@ -36,7 +36,6 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
-    addressable (2.3.8)
     arel (6.0.3)
     aws_cf_signer (0.1.3)
     bcrypt (3.1.10)
@@ -86,10 +85,6 @@ GEM
     icalendar (2.3.0)
     json (1.8.3)
     jwt (1.5.1)
-    koala (2.2.0)
-      addressable
-      faraday
-      multi_json
     loofah (2.0.3)
       nokogiri (>= 1.5.9)
     mail (2.6.3)
@@ -117,9 +112,6 @@ GEM
     omniauth-oauth2 (1.3.1)
       oauth2 (~> 1.0)
       omniauth (~> 1.2)
-    omniauth-venmo (1.1.1)
-      omniauth (~> 1.2)
-      omniauth-oauth2 (~> 1.1)
     pg (0.18.3)
     puma (2.14.0)
     rack (1.6.4)
@@ -203,9 +195,7 @@ DEPENDENCIES
   httparty
   icalendar (= 2.3.0)
   jwt
-  koala (~> 2.2)
   omniauth-facebook
-  omniauth-venmo
   pg
   puma
   rails (= 4.2.3)

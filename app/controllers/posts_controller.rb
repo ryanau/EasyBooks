@@ -1,6 +1,6 @@
 class PostsController < ApplicationController
   require 'openssl'
-  before_action :authentication, only: [:index, :create, :show, :image_upload, :active_posts, :destroy, :starred_posts, :mark_sold, :archived_posts, :mutual_friends]
+  before_action :authentication, only: [:index, :create, :show, :image_upload, :active_posts, :destroy, :starred_posts, :mark_sold, :archived_posts, :mutual_friends, :sell_status, :follow_count]
 
   def index
     start_point = params[:start_point].to_i
@@ -8,7 +8,7 @@ class PostsController < ApplicationController
     course_selected = params[:course_selected]
     if course_selected != nil && course_selected != ""
       result = find_course(course_selected)
-      posts = Post.where(public: true, course_id: result[:course_id])[start_point..end_point]
+      posts = Post.where(public: true, course_id: result[:course_id]).order(created_at: :DESC)[start_point..end_point]
     else
       posts = Post.where(public: true).order(created_at: :DESC)[start_point..end_point]
     end
@@ -19,7 +19,7 @@ class PostsController < ApplicationController
     action = PostCreator.new(params, current_user)
     if action.ok?
       post = action.post
-      # CourseAlert.perform_async(post.course_id, post.id, current_user.id)
+      CourseAlert.perform_async(post.course_id, post.id, current_user.id)
       render json: {post_id: action.post.id}
     else
       render json: {error_message: action.post}
@@ -31,8 +31,17 @@ class PostsController < ApplicationController
     if post.sold && post.seller_id != current_user.id
       render json: {error_message: "Post not found"}
     else
-      render :json => post.as_json(include: {seller: {only: [:id, :first_name]}})
+      render :json => post.as_json(include: {seller: {only: [:id, :first_name, :last_name, :pic]}})
     end
+  end
+
+  def sell_status
+    render json: {status: current_user.selling_posts.where(sold: false, public: true)[0] ? true : false}
+  end
+
+  def follow_count
+    count = current_user.stars.count
+    render json: {count: count}
   end
 
   def mutual_friends
@@ -62,17 +71,17 @@ class PostsController < ApplicationController
 
   def active_posts
     posts = current_user.selling_posts.where(sold: false, public: true).order(created_at: :DESC)
-    render :json => posts.as_json(include: {stars: {only: :star_id}, course: {only: [:department, :course_number]}, seller: {only: [:pic, :first_name]}})  
+    render :json => posts.as_json(include: {stars: {only: :star_id}, course: {only: [:department, :course_number]}, seller: {only: [:pic, :first_name, :last_name]}})  
   end
 
   def starred_posts
     posts = current_user.posts.order(created_at: :DESC)
-    render :json => posts.as_json(include: {stars: {only: :star_id}, course: {only: [:department, :course_number]}, seller: {only: [:pic, :first_name]}})  
+    render :json => posts.as_json(include: {stars: {only: :star_id}, course: {only: [:department, :course_number]}, seller: {only: [:pic, :first_name, :last_name]}})  
   end
 
   def archived_posts
     posts = current_user.selling_posts.where(sold: true, public: false).order(created_at: :DESC)
-    render :json => posts.as_json(include: {stars: {only: :star_id}, course: {only: [:department, :course_number]}, seller: {only: [:pic, :first_name]}})  
+    render :json => posts.as_json(include: {stars: {only: :star_id}, course: {only: [:department, :course_number]}, seller: {only: [:pic, :first_name, :last_name]}})  
   end
 
   def image_upload

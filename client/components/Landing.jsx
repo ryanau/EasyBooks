@@ -36,17 +36,60 @@ Landing = React.createClass({
   			</div>
   		)
   	} else {
-  		var display = (
-        <div className="container col-md-8 col-md-offset-2">
-        <img id="landing" src="/berkeley.jpg"/>
-				  <div id="parent">
-  			    <form id="form_login">
-  			    <h3>Buying and Selling Books is Never this Easy!</h3>
-  					<Button href={link} bsStyle="primary">Log In via Facebook</Button>
-  			    </form>
+      var display = (
+        <div>
+        <div className="section hero">
+          <div className="container">
+            <div className="row">
+              <div className="one-half column mL5p">
+                <h4 className="hero-heading">Buying and selling textbooks has never been this easy!</h4>
+                <Button href={link} bsStyle="primary">Log In via Facebook</Button>
+              </div>
+              <div className="one-half column phones">
+                <img className="phone" src="/berkeley.jpg"/>
+                <img className="phone" src="/berkeley.jpg"/>
+              </div>
+            </div>
           </div>
-				</div>
-  		);
+        </div>
+          <div className="section values">
+            <div className="container">
+              <div className="row">
+                <div className="one-third column value">
+                  <h2 className="value-multiplier">Trust</h2>
+                  <h5 className="value-heading">Get text alerts when what you look for is available</h5>
+                  <p className="value-description">Never miss a post by simply uploading your calendar and subscribe to courses you need books for.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="section get-help">
+            <div className="container">
+              <div className="row">
+                <div className="one-third column value">
+                  <h2 className="value-multiplier">Convenience</h2>
+                  <h5 className="value-heading">Text the seller/buyer directly</h5>
+                  <p className="value-description">Through a private phone number, you can text the seller/buyer directly.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="section categories">
+            <div className="container">
+              <h3 className="section-heading">Responsive Images</h3>
+              <p className="section-description">Skeleton images sit easily in grid with .u-max-full-width className. I suggest exploring solution to serving different images based on device size.</p>
+              <div className="row">
+                <div className="one-half column category">
+                  <img className="u-max-full-width" src="/berkeley.jpg"/>
+                </div>
+                <div className="one-half column category">
+                  <img className="u-max-full-width" src="/berkeley.jpg"/>
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
+      );
   	}
   	return (
   		<div>

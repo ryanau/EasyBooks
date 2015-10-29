@@ -8,8 +8,11 @@ var mui = require('material-ui');
 var ThemeManager = new mui.Styles.ThemeManager();
 
 var Panel = require('react-bootstrap').Panel;
+var Glyphicon = require('react-bootstrap').Glyphicon;
+var Col = require('react-bootstrap').Col;
+
 var ReactRouterBootstrap = require('react-router-bootstrap')
-  , ButtonLink = ReactRouterBootstrap.ButtonLink;
+  , ButtonLink = ReactRouterBootstrap.ButtonLink
 
 var PublicPost = require('./PublicPost.jsx');
 
@@ -123,19 +126,21 @@ PublicPosts = React.createClass({
   	} else if (this.state.posts.length > 0) {
   		var posts = this.state.posts.map(function (post, index) {
   			return (
-  				<PublicPost key={post.id} origin={this.props.origin} post={post} currentUser={this.props.currentUser}/>
+  				<Col lg={4} md={6} s={6} xs={12} key={post.id} className="mT10">
+	  				<PublicPost key={post.id} origin={this.props.origin} post={post} currentUser={this.props.currentUser}/>
+  				</Col>
   			)
   		}.bind(this));
   	} else {
   		var posts = 
   		<div>
-  		<h5>No post available... Click below to get notified when posts for {this.state.course_selected.courses[0]} become availabe!</h5>
-  		<ButtonLink onClick={this.showSubscription} bsStyle="primary" to="/subscriptions">Add Subscription</ButtonLink>
+  		<h5>No post available... Add this course to your subscribed list to get instant text notifications when posts for {this.state.course_selected.courses[0]} become available!</h5>
+  		<ButtonLink onClick={this.showSubscription} bsStyle="primary" to="/subscriptions"><Glyphicon glyph="plus"/> Add Subscription</ButtonLink>
   		</div>
   	};
   	return (
-  		<div>
-  			<Panel header={header} bsStyle="info">
+  		<div className="mT10">
+  			<Panel header={header} bsStyle="info" className="p0">
 	  			{posts}
 	  		</Panel>
   		</div>

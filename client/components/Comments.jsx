@@ -6,10 +6,12 @@ var Link = Router.Link;
 
 var mui = require('material-ui');
 var ThemeManager = new mui.Styles.ThemeManager();
-var RaisedButton = mui.RaisedButton;
 
 var Comment = require('./Comment.jsx');
 var CommentBox = require('./CommentBox.jsx');
+
+var ListGroup = require('react-bootstrap').ListGroup;
+var ListGroupItem = require('react-bootstrap').ListGroupItem;
 
 Comments = React.createClass({
 	childContextTypes: {
@@ -75,7 +77,9 @@ Comments = React.createClass({
 			if (this.state.comments.length != 0) {
 				var comments = this.state.comments.map(function (comment, index) {
 					return (
-						<Comment key={index} comment={comment} post_id={this.props.post_id} />
+							<ListGroupItem>
+								<Comment key={index} comment={comment} post_id={this.props.post_id} seller_id={this.props.seller_id}/>
+							</ListGroupItem>
 					)
 				}.bind(this));
 			}
@@ -86,7 +90,9 @@ Comments = React.createClass({
 		return (
 			<div>
 				<h4>Comments</h4>
-				{comments}
+				<ListGroup>
+					{comments}
+				</ListGroup>
 				{commentBox}
 			</div>
 		)
