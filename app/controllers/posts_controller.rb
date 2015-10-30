@@ -1,6 +1,6 @@
 class PostsController < ApplicationController
   require 'openssl'
-  before_action :authentication, only: [:index, :create, :show, :image_upload, :active_posts, :destroy, :starred_posts, :mark_sold, :archived_posts, :mutual_friends, :sell_status, :follow_count]
+  before_action :authentication, only: [:index, :create, :show, :image_upload, :active_posts, :destroy, :starred_posts, :mark_sold, :archived_posts, :mutual_friends, :sell_status, :follow_count, :starred_posts_count]
 
   def index
     start_point = params[:start_point].to_i
@@ -77,6 +77,11 @@ class PostsController < ApplicationController
   def starred_posts
     posts = current_user.posts.order(created_at: :DESC)
     render :json => posts.as_json(include: {stars: {only: :star_id}, course: {only: [:department, :course_number]}, seller: {only: [:pic, :first_name, :last_name]}})  
+  end
+
+  def starred_posts_count
+    count = current_user.posts.order(created_at: :DESC).count
+    render json: {starred_posts_count: count} 
   end
 
   def archived_posts

@@ -53,14 +53,14 @@ StarredPosts = React.createClass({
 	  				<h4>Follow a Post and Get in Line!</h4>
 	  		  	<p>You are not following any post... Follow a Post so you will instantly get connected to the seller if it is your turn!</p>
 	  		  </Alert>
-			  var postCourse = "No Post Followed"
+			  var postCourse = "Not watching any post..."
 			} else {
 				var posts = this.state.posts.map(function (post, index) {
 					return (
 						<PublicPost key={post.id} origin={this.props.origin} post={post} currentUser={this.props.currentUser} />
 					);
 				}.bind(this));
-				var postCourse = "Following " + this.state.posts.length + " posts"
+				var postCourse = "Watching " + this.state.posts.length + " posts"
 			}
   	} else {
 			var posts = "Loading..."

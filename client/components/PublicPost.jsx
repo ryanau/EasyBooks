@@ -202,13 +202,13 @@ PublicPost = React.createClass({
       if (this.state.star) {
         var actionButtons = 
         <CardActions>
-          <Button onClick={this.starPost} bsStyle="success" bsSize="small"><Glyphicon glyph="star"/> Unfollow</Button>
+          <Button onClick={this.starPost} bsStyle="success" bsSize="small"><Glyphicon glyph="eye-open"/> Watching</Button>
           <Button onClick={this.redirectToPost} bsStyle="info" bsSize="small"><Glyphicon glyph="info-sign"/> Info</Button>
         </CardActions>
       } else {
         var actionButtons = 
         <CardActions>
-          <Button onClick={this.starPost} bsStyle="warning" bsSize="small"><Glyphicon glyph="star-empty"/> Follow</Button>
+          <Button onClick={this.starPost} bsStyle="default" bsSize="small"><Glyphicon glyph="eye-close"/> Watch</Button>
           <Button onClick={this.redirectToPost} bsStyle="info" bsSize="small"><Glyphicon glyph="info-sign"/> Info</Button>
         </CardActions>
       }
@@ -245,21 +245,22 @@ PublicPost = React.createClass({
       <div>
         <Snackbar
           ref="postStarred"
-          message='Post Followed'
+          message='Watching Post'
           autoHideDuration={1000}/>
         <Snackbar
           ref="postUnstarred"
-          message='Post Unfollowed'
+          message='Unwatching Post'
           autoHideDuration={1000}/>
   			<Card key={post.id} className="mB10">
-          <CardTitle title={post.title} subtitle={course.department + ' ' + course.course_number} actAsExpander={true}
-            showExpandableButton={true}/>
+          <CardTitle title={post.title} subtitle={course.department + ' ' + course.course_number} />
           <CardHeader avatar={condition} title={"$" + post.price + " | " + moment(post.created_at).fromNow()} subtitle={this.state.star_count + " Subscribers"} />
           {actionButtons}
           <CardHeader
             title={"By " + seller}
             subtitle={mutual}
-            avatar={post.seller.pic}>
+            avatar={post.seller.pic}
+            actAsExpander={true}
+            showExpandableButton={true}>
           </CardHeader>
           <CardText expandable={true}>
             {postDescription}

@@ -17,6 +17,7 @@ Rails.application.routes.draw do
     put '/posts/mark_sold', :to => 'posts#mark_sold'
     get '/active_posts', :to => 'posts#active_posts'
     get '/starred_posts', :to => 'posts#starred_posts'
+    get '/starred_posts_count', :to => 'posts#starred_posts_count'
     get '/archived_posts', :to => 'posts#archived_posts'
     get '/mutual_friends', :to => 'posts#mutual_friends'
     post '/image_upload', :to => 'posts#image_upload'

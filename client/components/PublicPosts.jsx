@@ -127,7 +127,7 @@ PublicPosts = React.createClass({
   		var posts = this.state.posts.map(function (post, index) {
   			return (
   				<Col lg={4} md={6} s={6} xs={12} key={post.id} className="mT10">
-	  				<PublicPost key={post.id} origin={this.props.origin} post={post} currentUser={this.props.currentUser}/>
+	  				<PublicPost key={post.id} origin={this.props.origin} post={post} currentUser={this.props.currentUser} AppControl={this.props.AppControl}/>
   				</Col>
   			)
   		}.bind(this));

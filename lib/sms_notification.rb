@@ -25,7 +25,8 @@ module SmsNotification
 
   def self.destroy_post_alert(star_id)
     star = Star.find(star_id)
-    if star.destroy!
+    if star
+      star.destroy!
       PostAlert.perform_async(star.post.id)
     end
   end
@@ -88,7 +89,7 @@ module SmsNotification
     from = ENV['TWILIO_PHONE']
     to = '+1' + to.to_s
     seller = post.seller.first_name
-    body = "EasyBooks: #{seller} would like to know if you're interested in #{post.title} (#{post.condition}) for $#{post.price}.\n\nTo proceed, reply with '#{random_num}'.\n\nThis offer expires in 30mins."
+    body = "EasyBooks: #{seller} would like to know if you're interested in #{post.title} (#{post.condition}) for $#{post.price}.\n\nTo proceed, reply with '#{random_num}'.\n\nThis offer expires in 5mins."
     twilio_sms(from, to, body)
   end
 

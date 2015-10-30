@@ -250,10 +250,10 @@ Post = React.createClass({
 			} else {
 				if (this.state.star) {
 					var starButton = 
-					<Button onClick={this.starPost} bsStyle="success" bsSize="small"><Glyphicon glyph="star"/> Unfollow</Button>
+					<Button onClick={this.starPost} bsStyle="success" bsSize="small"><Glyphicon glyph="star"/> Unwatch</Button>
 				} else {
 					var starButton = 
-					<Button onClick={this.starPost} bsStyle="warning" bsSize="small"><Glyphicon glyph="star-empty"/> Follow</Button>
+					<Button onClick={this.starPost} bsStyle="warning" bsSize="small"><Glyphicon glyph="star-empty"/> Watch</Button>
 				}
 			}
 			var comments = <Comments origin={this.props.origin} post_id={post.id} seller_id={post.seller.id}/>;
@@ -295,11 +295,11 @@ Post = React.createClass({
 				  autoHideDuration={1000}/>
 				<Snackbar
 				  ref="postStarred"
-				  message='Post Followed'
+				  message='Watching Post'
 				  autoHideDuration={1000}/>
 				<Snackbar
 				  ref="postUnstarred"
-				  message='Post Unfollowed'
+				  message='Unwatching Post'
 				  autoHideDuration={1000}/>
 				<Snackbar
 				  ref="markSold"
