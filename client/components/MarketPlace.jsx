@@ -44,6 +44,9 @@ MarketPlace = React.createClass({
     });
   },
   searchChange: function (value) {
+    this.setState({
+      sorting: "Newest to Oldest",
+    })
     this.state.course_selected.empty();
     this.state.course_selected.courseSelect(value);
   },

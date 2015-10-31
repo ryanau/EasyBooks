@@ -253,7 +253,12 @@ PublicPost = React.createClass({
           autoHideDuration={1000}/>
   			<Card key={post.id} className="mB10">
           <CardTitle title={post.title} subtitle={course.department + ' ' + course.course_number} />
-          <CardHeader avatar={condition} title={"$" + post.price + " | " + moment(post.created_at).fromNow()} subtitle={this.state.star_count + " Subscribers"} />
+          <CardHeader avatar={condition} title={"$" + post.price + " | " + moment(post.created_at).fromNow()} subtitle={this.state.star_count + " Subscribers"} actAsExpander={true}
+            showExpandableButton={true}/>
+          <CardText expandable={true}>
+            {postDescription}
+            {postPickUp}
+          </CardText>
           {actionButtons}
           <CardHeader
             title={"By " + seller}
@@ -263,11 +268,7 @@ PublicPost = React.createClass({
             showExpandableButton={true}>
           </CardHeader>
           <CardText expandable={true}>
-            {postDescription}
-            {postPickUp}
-            <div>
             {avatars}{lastCount}
-            </div>
           </CardText>
   			</Card>
   		</div>

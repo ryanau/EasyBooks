@@ -10,17 +10,26 @@ class PostsController < ApplicationController
     if course_selected != nil && course_selected != ""
       result = find_course(course_selected)
       case sorting
-        when "Newest to Oldest"
-          posts = Post.where(public: true, course_id: result[:course_id]).order(created_at: :DESC)[start_point..end_point]
         when "Oldest to Newest"
           posts = Post.where(public: true, course_id: result[:course_id]).order(created_at: :ASC)[start_point..end_point]
         when "$ Low to High"
-          posts = Post.where(public: true, course_id: result[:course_id]).order(price: :DESC)[start_point..end_point]
-        when "$ High to Low"
           posts = Post.where(public: true, course_id: result[:course_id]).order(price: :ASC)[start_point..end_point]
+        when "$ High to Low"
+          posts = Post.where(public: true, course_id: result[:course_id]).order(price: :DESC)[start_point..end_point]
+        else
+          posts = Post.where(public: true, course_id: result[:course_id]).order(created_at: :DESC)[start_point..end_point]
       end
     else
-      posts = Post.where(public: true).order(created_at: :DESC)[start_point..end_point]
+      case sorting
+        when "Oldest to Newest"
+          posts = Post.where(public: true).order(created_at: :ASC)[start_point..end_point]
+        when "$ Low to High"
+          posts = Post.where(public: true).order(price: :ASC)[start_point..end_point]
+        when "$ High to Low"
+          posts = Post.where(public: true).order(price: :DESC)[start_point..end_point]
+        else
+          posts = Post.where(public: true).order(created_at: :DESC)[start_point..end_point]
+      end
     end
     render :json => posts.as_json(include: {stars: {only: :star_id}, course: {except: :updated_at}, seller: {only: [:pic, :first_name, :last_name]}})
   end
