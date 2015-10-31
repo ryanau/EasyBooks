@@ -9,6 +9,8 @@ var Input = require('react-bootstrap').Input;
 var Button = require('react-bootstrap').Button;
 var ButtonToolbar = require('react-bootstrap').ButtonToolbar;
 var Alert = require('react-bootstrap').Alert;
+var Col = require('react-bootstrap').Col;
+var Panel = require('react-bootstrap').Panel;
 
 Register = React.createClass({
 	childContextTypes: {
@@ -26,6 +28,8 @@ Register = React.createClass({
 			university: "1",
 			universities: [{payload: "1", text: "Loading"}],
 			warning: null,
+			promo: "",
+			isLoading: false,
 		}
 	},
 	componentDidMount: function () {
@@ -51,6 +55,7 @@ Register = React.createClass({
 		this.setState({
 		  email: this.refs.email.getValue(),
 		  phone: this.refs.phone.getValue(),
+		  promo: this.refs.promo.getValue().toUpperCase(),
 		});
 	},
 	handleSubmit: function () {
@@ -104,6 +109,30 @@ Register = React.createClass({
 		} else {
 			return 'error';
 		}
+	},
+	validatePromo: function () {
+		var length = this.state.promo.length;
+		if (length > 0) {
+			return 'success';
+		} else {
+			return 'error';
+		}
+	},
+	submitPromo: function () {
+		var data = {
+			promo: this.state.promo,
+		}
+		$.ajax({
+			url: this.props.origin + '/promo',
+			type: 'POST',
+			data: data,
+			dataType: 'json',
+			success: function (response) {
+			}.bind(this),
+			error: function (error) {
+				window.location = "/"
+			}.bind(this),
+		})
 	},
 	render: function () {
 		var universityList = this.state.universities;
@@ -159,7 +188,24 @@ Register = React.createClass({
 	        labelClassName="label-class"
 	        onChange={this.handleChange} />
 	        {dropdown}
-	      <ButtonToolbar>
+        <Panel header="Promo Code" bsStyle="primary">
+        <Col lg={8} md={8} s={8} xs={8}>
+				<Input
+	        type="text"
+	        value={this.state.promo}
+	        placeholder="Optional"
+	        hasFeedback
+	        bsStyle={this.validatePromo()}
+	        ref="promo"
+	        groupClassName="group-class"
+	        labelClassName="label-class"
+	        onChange={this.handleChange} />
+	      </Col>
+	      <Col lg={4} md={4} s={4} xs={4}>
+	      <Button disabled={this.state.isLoading} onClick={!this.state.isLoading ? this.submitPromo : null}>{this.state.isLoading ? 'Applying...' : 'Apply'}</Button>
+	      </Col>
+	      </Panel>
+	      <ButtonToolbar className="mT10">
 		      <Button onClick={this.handleSubmit} bsStyle="success">Complete Registration</Button>
 	      </ButtonToolbar>
 			</div>
