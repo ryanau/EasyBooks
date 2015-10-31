@@ -4,6 +4,12 @@ html * {
   font-family: 'Lato', sans-serif;
 }
 
+body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
 #drop {
 	width: 200px;
 }
@@ -74,11 +80,17 @@ img {
 .flR {
   float: right;
 }
+
 @media (min-width: 550px) {
   .mL5p{
     margin-left: 10%;
   }
 }
+
+footer {
+  flex: 1;
+}
+
 /*#landing {
 	background: url(/berkeley.jpg) no-repeat center center fixed; 
 	-webkit-background-size: cover;

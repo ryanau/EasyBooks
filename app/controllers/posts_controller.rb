@@ -6,9 +6,19 @@ class PostsController < ApplicationController
     start_point = params[:start_point].to_i
     end_point = params[:end_point].to_i
     course_selected = params[:course_selected]
+    sorting = params[:sorting]
     if course_selected != nil && course_selected != ""
       result = find_course(course_selected)
-      posts = Post.where(public: true, course_id: result[:course_id]).order(created_at: :DESC)[start_point..end_point]
+      case sorting
+        when "Newest to Oldest"
+          posts = Post.where(public: true, course_id: result[:course_id]).order(created_at: :DESC)[start_point..end_point]
+        when "Oldest to Newest"
+          posts = Post.where(public: true, course_id: result[:course_id]).order(created_at: :ASC)[start_point..end_point]
+        when "$ Low to High"
+          posts = Post.where(public: true, course_id: result[:course_id]).order(price: :DESC)[start_point..end_point]
+        when "$ High to Low"
+          posts = Post.where(public: true, course_id: result[:course_id]).order(price: :ASC)[start_point..end_point]
+      end
     else
       posts = Post.where(public: true).order(created_at: :DESC)[start_point..end_point]
     end
