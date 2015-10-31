@@ -9,6 +9,7 @@ Rails.application.routes.draw do
     resources :courses, only: [:index]
     resources :comments, only: [:index, :create]
     resources :stars, only: [:index, :create]
+
     
     delete '/stars', :to => 'stars#destroy'
     get '/stars/count', :to => 'stars#count'
@@ -26,6 +27,8 @@ Rails.application.routes.draw do
 
     put '/subscriptions', :to => 'subscriptions#update'
     post '/parse_calendar', :to => 'subscriptions#parse_calendar'
+
+    get '/promo/verify', :to => 'promos#verify'
 
     # get '/login', :to => 'users#login'
     get '/current_user', :to => 'users#current'

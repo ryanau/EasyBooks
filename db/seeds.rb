@@ -24,6 +24,9 @@ end
 # seed phone
 Phone.create(number: "+15102963497")
 
+# seed promo
+Promo.create(code: "XYZXYZ")
+
 # seed users
 # 10.times do
 #   User.create(first_name: Faker::Name.first_name, last_name: Faker::Name.last_name, email: Faker::Internet.email, phone: Faker::Number.number(10), password: "1234", university_id: 1)

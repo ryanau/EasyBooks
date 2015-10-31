@@ -3,6 +3,7 @@ class User < ActiveRecord::Base
   # has_secure_password
 
   belongs_to :university
+  has_many :credits, dependent: :destroy
   has_many :courses, through: :subscriptions
   has_many :subscriptions, dependent: :destroy
   has_many :stars, dependent: :destroy

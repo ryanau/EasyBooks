@@ -30,6 +30,7 @@ Register = React.createClass({
 			warning: null,
 			promo: "",
 			isLoading: false,
+			codeMessage: null,
 		}
 	},
 	componentDidMount: function () {
@@ -110,24 +111,25 @@ Register = React.createClass({
 			return 'error';
 		}
 	},
-	validatePromo: function () {
-		var length = this.state.promo.length;
-		if (length > 0) {
-			return 'success';
-		} else {
-			return 'error';
-		}
-	},
 	submitPromo: function () {
 		var data = {
 			promo: this.state.promo,
 		}
+		this.setState({
+			isLoading: true,
+		})
 		$.ajax({
-			url: this.props.origin + '/promo',
-			type: 'POST',
+			url: this.props.origin + '/promo/verify',
+			type: 'GET',
 			data: data,
 			dataType: 'json',
+			crossDomain: true,
+			headers: {'Authorization': localStorage.getItem('jwt-easybooks')},
 			success: function (response) {
+				this.setState({
+					isLoading: false,
+					codeMessage: response.message,
+				})
 			}.bind(this),
 			error: function (error) {
 				window.location = "/"
@@ -159,6 +161,12 @@ Register = React.createClass({
   	  	<p>A valid phone number is needed for a fast textbook buying/selling experience brought to you by EasyBooks!</p>
   	  	<p>A school (.edu) email is needed for verification purposes so we can create a safe community marketplace for everyone!</p>
   	  </Alert>
+  	if (this.state.codeMessage != null) {
+  		var codeStatus = 
+  			<Alert bsStyle="info">
+  				<h5>{this.state.codeMessage}</h5>
+  			</Alert>
+		}
 		return (
 			<div className="container col-md-8 col-md-offset-2">
 				{warning}
@@ -195,14 +203,18 @@ Register = React.createClass({
 	        value={this.state.promo}
 	        placeholder="Optional"
 	        hasFeedback
-	        bsStyle={this.validatePromo()}
 	        ref="promo"
 	        groupClassName="group-class"
 	        labelClassName="label-class"
 	        onChange={this.handleChange} />
 	      </Col>
 	      <Col lg={4} md={4} s={4} xs={4}>
-	      <Button disabled={this.state.isLoading} onClick={!this.state.isLoading ? this.submitPromo : null}>{this.state.isLoading ? 'Applying...' : 'Apply'}</Button>
+	      <Button 
+	      	disabled={this.state.isLoading}
+	      	onClick={!this.state.isLoading ? this.submitPromo : null}>{this.state.isLoading ? 'Applying...' : 'Apply'}</Button>
+	      </Col>
+	      <Col lg={12} md={12} s={12} xs={12}>
+	      {codeStatus}
 	      </Col>
 	      </Panel>
 	      <ButtonToolbar className="mT10">

@@ -3,6 +3,7 @@ class CreatePromos < ActiveRecord::Migration
     create_table :promos do |t|
       t.string :code, null: false
       t.date :expiry
+      t.integer :credit
       t.timestamps null: false
     end
   end
