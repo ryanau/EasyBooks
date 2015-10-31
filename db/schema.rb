@@ -68,19 +68,20 @@ ActiveRecord::Schema.define(version: 20151031181120) do
   end
 
   create_table "posts", force: :cascade do |t|
-    t.float    "price",                       null: false
+    t.float    "price",                         null: false
     t.string   "picture_url"
-    t.string   "title",                       null: false
+    t.string   "title",                         null: false
     t.string   "description"
-    t.boolean  "sold",        default: false
-    t.boolean  "public",      default: true
+    t.boolean  "sold",          default: false
+    t.boolean  "public",        default: true
     t.string   "pickup"
-    t.string   "condition",                   null: false
-    t.integer  "course_id",                   null: false
-    t.integer  "seller_id",                   null: false
+    t.string   "condition",                     null: false
+    t.integer  "university_id",                 null: false
+    t.integer  "course_id",                     null: false
+    t.integer  "seller_id",                     null: false
     t.integer  "buyer_id"
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
   end
 
   create_table "promos", force: :cascade do |t|

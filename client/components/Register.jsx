@@ -52,9 +52,9 @@ Register = React.createClass({
 			}.bind(this),
 		});
 	},
-	handleChange: function (e) {
+	handleChange: function () {
 		this.setState({
-		  email: this.refs.email.getValue(),
+			email: this.refs.email.getValue(),
 		  phone: this.refs.phone.getValue(),
 		  promo: this.refs.promo.getValue().toUpperCase(),
 		});
@@ -111,6 +111,32 @@ Register = React.createClass({
 			return 'error';
 		}
 	},
+	// findSchool: function (email) {
+	// 	if (this.state.email.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.+-]+\.edu$/)) {
+	// 		var data = {
+	// 			university: email,
+	// 		}
+	// 		$.ajax({
+	// 			url: this.props.origin + '/universities/find_school',
+	// 			type: 'GET',
+	// 			data: data,
+	// 			dataType: 'json',
+	// 			crossDomain: true,
+	// 			headers: {'Authorization': localStorage.getItem('jwt-easybooks')},
+	// 			success: function (response) {
+	// 				if (response.id != 0) {
+	// 					this.setState({
+	// 						university: response.id,
+	// 						checked: true
+	// 					})
+	// 				}
+	// 			}.bind(this),
+	// 			error: function (error) {
+	// 				window.location = "/"
+	// 			}.bind(this),
+	// 		})
+	// 	}
+	// },
 	submitPromo: function () {
 		var data = {
 			promo: this.state.promo,
@@ -141,12 +167,9 @@ Register = React.createClass({
 		if (this.state.warning != "") {
 			var warning = this.state.warning;
 		}
-		if (this.state.phone.length > 0) {
-			var dropdown = 
-			<div>
-				<h5><strong>Select University</strong></h5>
-				<DropDownMenu menuItems={universityList} autoScrollBodyContent={true} onChange={this.handleDropDownMenu}/>
-			</div>
+		if (this.state.university == 1) {
+			var university = 
+			<h4>University of California, Berkeley</h4>
 		}
   	if (this.state.warning != null) {
   		var warning =
@@ -155,11 +178,18 @@ Register = React.createClass({
 		  	<p>{this.state.warning}</p>
 		  </Alert>
   	}
+  	if (this.state.phone.length > 0) {
+  		var dropdown = 
+  		<div>
+  			<h5><strong>Select University</strong></h5>
+  			<DropDownMenu menuItems={universityList} autoScrollBodyContent={true} onChange={this.handleDropDownMenu}/>
+  		</div>
+  	}
   	var infoBox = 
   		<Alert bsStyle="info">
-  			<h4>Why phone number and school email?</h4>
+  			<h4>Why school email and phone number?</h4>
+  			<p>A school (.edu) email is needed for verification purposes so we can create a safe community marketplace for everyone!</p>
   	  	<p>A valid phone number is needed for a fast textbook buying/selling experience brought to you by EasyBooks!</p>
-  	  	<p>A school (.edu) email is needed for verification purposes so we can create a safe community marketplace for everyone!</p>
   	  </Alert>
   	if (this.state.codeMessage != null) {
   		var codeStatus = 

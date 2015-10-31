@@ -10,6 +10,7 @@ Rails.application.routes.draw do
     resources :comments, only: [:index, :create]
     resources :stars, only: [:index, :create]
 
+    get '/universities/find_school', :to => 'universities#find_school'
     
     delete '/stars', :to => 'stars#destroy'
     get '/stars/count', :to => 'stars#count'
