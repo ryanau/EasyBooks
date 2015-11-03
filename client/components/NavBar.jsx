@@ -59,13 +59,14 @@ module.exports = React.createClass({
   },
   loadNavRedirect: function () {
     $(window).load(function() {
-      $('#buyNav').on('click', function() {
+      console.log('loading')
+      $('#buyBar').on('click', function() {
         this.transitionTo('/');
       }.bind(this));
-      $('#sellNav').on('click', function() {
+      $('#sellBar').on('click', function() {
         this.transitionTo('/sell');
       }.bind(this));
-      $('#watchNav').on('click', function() {
+      $('#watchBar').on('click', function() {
         this.transitionTo('/starred');
       }.bind(this));
     }.bind(this));
@@ -132,19 +133,19 @@ module.exports = React.createClass({
           </Nav>
         </Navbar>
         <nav className="paradeiser mT53">
-          <a id="buyNav">
+          <a id="buyBar">
               <icon className="paradeiser_icon_canvas">
                 <img src="/buy.svg" alt="Buy a Book"/>
               </icon>
               <span>Buy</span>
           </a>
-          <a id="sellNav">
+          <a id="sellBar">
               <icon className="paradeiser_icon_canvas">
                 <img src="/sell.svg" alt="Sell your Book"/>
               </icon>
               <span>Sell</span>
           </a>
-          <a id="watchNav">
+          <a id="watchBar">
               <icon className="paradeiser_icon_canvas">
               <img src="http://danielwinter.at/apple-touch-icon_76x76.png" alt="Posts Watching" className="paradeiser_logo"/>
               </icon>
