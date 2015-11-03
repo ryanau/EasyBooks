@@ -1,9 +1,7 @@
 class PostCreator
   attr_reader :post
   def initialize(params, current_user)
-    if !current_user.selling_posts
-      @post = Post.new(allowed_params(params, current_user))
-    end
+    @post = Post.new(allowed_params(params, current_user))
   end
 
   def ok?
