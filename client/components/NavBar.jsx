@@ -132,7 +132,7 @@ module.exports = React.createClass({
             <MenuItem onSelect={this.logoutNav}>Log Out</MenuItem>
           </Nav>
         </Navbar>
-        <nav className="paradeiser mT53">
+        <nav className="paradeiser mT50">
           <a id="buyBar">
               <icon className="paradeiser_icon_canvas">
                 <img src="/buy.svg" alt="Buy a Book"/>

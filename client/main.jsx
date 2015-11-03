@@ -1,6 +1,7 @@
 require('./assets/app.css');
 require('./assets/reactselect.css');
 require('./assets/paradeiser.min.css');
+require('./assets/skeleton.css');
 
 
 var React = require('react');
