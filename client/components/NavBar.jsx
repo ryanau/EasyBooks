@@ -35,7 +35,7 @@ module.exports = React.createClass({
     }
     this.loadNavRedirect();
     // don't know why it's not working, works in Dev Tool
-    // $('#collapsible-navbar-dropdown').hover(function () {$('#collapsible-navbar-dropdown')[0].click()})
+
 
   },
   componentWillUnmount: function () {
@@ -62,13 +62,9 @@ module.exports = React.createClass({
       $('#buyNav').on('click', function() {
         this.transitionTo('/');
       }.bind(this));
-    }.bind(this));
-    $(window).load(function() {
       $('#sellNav').on('click', function() {
         this.transitionTo('/sell');
       }.bind(this));
-    }.bind(this));
-    $(window).load(function() {
       $('#watchNav').on('click', function() {
         this.transitionTo('/starred');
       }.bind(this));

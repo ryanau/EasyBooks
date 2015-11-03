@@ -44,6 +44,7 @@ Landing = React.createClass({
               <div className="one-half column mL5p">
                 <h4 className="hero-heading">Buying and selling textbooks has never been this easy!</h4>
                 <Button href={link} bsStyle="primary">Log In via Facebook</Button>
+                <p>We only need your basic info and friends list (to see mutual friends connections) to get started!</p>
               </div>
               <div className="one-half column phones">
                 <img className="phone" src="/berkeley.jpg"/>
@@ -70,6 +71,17 @@ Landing = React.createClass({
                   <h2 className="value-multiplier">Convenience</h2>
                   <h5 className="value-heading">Text the seller/buyer directly</h5>
                   <p className="value-description">Through a private phone number, you can text the seller/buyer directly.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="section values">
+            <div className="container">
+              <div className="row">
+                <div className="one-third column value">
+                  <h2 className="value-multiplier">Be Prepared</h2>
+                  <h5 className="value-heading">Get your textbooks you need before the semester starts</h5>
+                  <p className="value-description">Save money by paying the "real" price</p>
                 </div>
               </div>
             </div>
