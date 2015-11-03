@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  validates :phone, uniqueness: true
+  # validates :phone, uniqueness: true
   # has_secure_password
 
   belongs_to :university
