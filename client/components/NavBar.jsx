@@ -30,10 +30,10 @@ module.exports = React.createClass({
     }
   },
   componentDidMount: function () {
-    console.log(this.props.signedIn)
     if (this.props.signedIn) {
       this.loadStarredPostCount();
     }
+    this.loadNavRedirect();
     // don't know why it's not working, works in Dev Tool
     // $('#collapsible-navbar-dropdown').hover(function () {$('#collapsible-navbar-dropdown')[0].click()})
 
@@ -56,6 +56,23 @@ module.exports = React.createClass({
         window.location = "/"
       }.bind(this),
     });
+  },
+  loadNavRedirect: function () {
+    $(window).load(function() {
+      $('#buyNav').on('click', function() {
+        this.transitionTo('/');
+      }.bind(this));
+    }.bind(this));
+    $(window).load(function() {
+      $('#sellNav').on('click', function() {
+        this.transitionTo('/sell');
+      }.bind(this));
+    }.bind(this));
+    $(window).load(function() {
+      $('#watchNav').on('click', function() {
+        this.transitionTo('/starred');
+      }.bind(this));
+    }.bind(this));
   },
   buyNav: function () {
     this.transitionTo('/');
@@ -91,11 +108,8 @@ module.exports = React.createClass({
   },
   closeNav: function () {
     if ($(window).width() < 768) {
-      $('.navbar-toggle')[0].click();
+      $('.navbar-toggle')[0].onclick();
     }
-  },
-  buyBar: function () {
-    this.transitionTo('/');
   },
   render: function() {
     var brand = <Link to='/' className='navbar-brand'>EasyBooks</Link>;  
@@ -122,19 +136,19 @@ module.exports = React.createClass({
           </Nav>
         </Navbar>
         <nav className="paradeiser mT53">
-          <a href="/">
+          <a id="buyNav">
               <icon className="paradeiser_icon_canvas">
                 <img src="/buy.svg" alt="Buy a Book"/>
               </icon>
               <span>Buy</span>
           </a>
-          <a href="/sell">
+          <a id="sellNav">
               <icon className="paradeiser_icon_canvas">
                 <img src="/sell.svg" alt="Sell your Book"/>
               </icon>
               <span>Sell</span>
           </a>
-          <a href="/starred">
+          <a id="watchNav">
               <icon className="paradeiser_icon_canvas">
               <img src="http://danielwinter.at/apple-touch-icon_76x76.png" alt="Posts Watching" className="paradeiser_logo"/>
               </icon>
