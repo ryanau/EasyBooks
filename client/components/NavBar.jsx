@@ -14,6 +14,7 @@ var ListGroup = require('react-bootstrap').ListGroup;
 var DropdownButton = require('react-bootstrap').DropdownButton;
 var Glyphicon = require('react-bootstrap').Glyphicon;
 var Badge = require('react-bootstrap').Badge;
+var Button = require('react-bootstrap').Button;
 
 var ReactRouterBootstrap = require('react-router-bootstrap')
   , NavItemLink = ReactRouterBootstrap.NavItemLink
@@ -84,18 +85,26 @@ module.exports = React.createClass({
     this.transitionTo('/schedule');
     this.closeNav();
   },
+  profileNav: function () {
+    this.transitionTo('/profile');
+    this.closeNav();
+  },
   closeNav: function () {
     if ($(window).width() < 768) {
       $('.navbar-toggle')[0].click();
     }
   },
+  buyBar: function () {
+    this.transitionTo('/');
+  },
   render: function() {
     var brand = <Link to='/' className='navbar-brand'>EasyBooks</Link>;  
-    if (this.props.signedIn && this.props.currentUser.completed) {
+    if (this.props.signedIn && this.props.currentUser.completed && $(window).width() < 768) {
       if (this.state.starred_post_count != null) {
         var starPostCount = this.state.starred_post_count
       }
-      var control = 
+      var control = (
+        <div>
         <Navbar inverse toggleNavKey={0} fixedTop={true} className="transparent">
           <NavBrand>{brand}</NavBrand>
           <Nav right eventKey={0}>
@@ -107,11 +116,55 @@ module.exports = React.createClass({
               <MenuItem onSelect={this.subscriptionNav}>Subscriptions</MenuItem>
               <MenuItem onSelect={this.scheduleNav}>Schedule Uploader</MenuItem>
               <MenuItem divider />
-              <MenuItem>Settings</MenuItem>
+              <MenuItem onSelect={this.profileNav}>Profile Settings</MenuItem>
             </NavDropdown>
             <MenuItem onSelect={this.logoutNav}>Log Out</MenuItem>
           </Nav>
         </Navbar>
+        <nav className="paradeiser mT53">
+          <a href="/">
+              <icon className="paradeiser_icon_canvas">
+                <img src="/buy.svg" alt="Buy a Book"/>
+              </icon>
+              <span>Buy</span>
+          </a>
+          <a href="/sell">
+              <icon className="paradeiser_icon_canvas">
+                <img src="/sell.svg" alt="Sell your Book"/>
+              </icon>
+              <span>Sell</span>
+          </a>
+          <a href="/starred">
+              <icon className="paradeiser_icon_canvas">
+              <img src="http://danielwinter.at/apple-touch-icon_76x76.png" alt="Posts Watching" className="paradeiser_logo"/>
+              </icon>
+              <span>Watching</span>
+          </a>
+        </nav>
+        </div>
+      )
+    } else if (this.props.signedIn && this.props.currentUser.completed) {
+      if (this.state.starred_post_count != null) {
+        var starPostCount = this.state.starred_post_count
+      }
+      var control = (
+        <Navbar inverse toggleNavKey={0} fixedTop={true} className="transparent">
+          <NavBrand>{brand}</NavBrand>
+          <Nav right eventKey={0}>
+            <MenuItem onSelect={this.buyNav}>Buy</MenuItem>
+            <MenuItem onSelect={this.sellNav}>Sell</MenuItem>
+            <MenuItem onSelect={this.followsNav}><Glyphicon glyph="eye-open"/> Watching <Badge>{starPostCount}</Badge></MenuItem>
+            <NavDropdown eventKey={3} title="Dashboard" id="collapsible-navbar-dropdown">
+              <MenuItem onSelect={this.postdashboardNav}>Your Posts</MenuItem>
+              <MenuItem onSelect={this.subscriptionNav}>Subscriptions</MenuItem>
+              <MenuItem onSelect={this.scheduleNav}>Schedule Uploader</MenuItem>
+              <MenuItem divider />
+              <MenuItem onSelect={this.profileNav}>Profile Settings</MenuItem>
+            </NavDropdown>
+            <MenuItem onSelect={this.logoutNav}>Log Out</MenuItem>
+          </Nav>
+        </Navbar>
+      )
     } else {
       var control = 
       <Navbar inverse toggleNavKey={0} fixedTop={true} className="transparent">

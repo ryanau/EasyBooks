@@ -4,6 +4,7 @@ class CreatePromos < ActiveRecord::Migration
       t.string :code, null: false
       t.date :expiry
       t.integer :credit
+      t.string :info
       t.timestamps null: false
     end
   end

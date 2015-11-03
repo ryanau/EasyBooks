@@ -88,6 +88,7 @@ ActiveRecord::Schema.define(version: 20151031181120) do
     t.string   "code",       null: false
     t.date     "expiry"
     t.integer  "credit"
+    t.string   "info"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

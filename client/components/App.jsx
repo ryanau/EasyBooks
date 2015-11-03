@@ -77,10 +77,15 @@ App = React.createClass({
     });
   },
 	render: function () {
+    if ($(window).width() < 768) {
+      var margin = "mT100"
+    } else {
+      var margin = "mT50"
+    }
 		return (
 			<div>
         <NavBar signedIn={this.state.signedIn} currentUser={this.state.currentUser} origin={this.props.origin}/>
-        <div className="mT100">
+        <div className={margin}>
           <RouteHandler origin={this.props.origin} currentUser={this.state.currentUser} signedIn={this.state.signedIn} mode={this.state.mode}/>
         </div>
 			</div>

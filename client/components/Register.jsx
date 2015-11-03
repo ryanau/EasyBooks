@@ -12,6 +12,8 @@ var Alert = require('react-bootstrap').Alert;
 var Col = require('react-bootstrap').Col;
 var Panel = require('react-bootstrap').Panel;
 
+var Promocode = require('./Promocode.jsx');
+
 Register = React.createClass({
 	childContextTypes: {
 	  muiTheme: React.PropTypes.object
@@ -56,7 +58,6 @@ Register = React.createClass({
 		this.setState({
 			email: this.refs.email.getValue(),
 		  phone: this.refs.phone.getValue(),
-		  promo: this.refs.promo.getValue().toUpperCase(),
 		});
 	},
 	handleSubmit: function () {
@@ -222,31 +223,12 @@ Register = React.createClass({
 	        bsStyle={this.validateEmail()}
 	        hasFeedback
 	        ref="email"
+	        addonBefore="@"
 	        groupClassName="group-class"
 	        labelClassName="label-class"
 	        onChange={this.handleChange} />
 	        {dropdown}
-        <Panel header="Promo Code" bsStyle="primary">
-        <Col lg={8} md={8} s={8} xs={8}>
-				<Input
-	        type="text"
-	        value={this.state.promo}
-	        placeholder="Optional"
-	        hasFeedback
-	        ref="promo"
-	        groupClassName="group-class"
-	        labelClassName="label-class"
-	        onChange={this.handleChange} />
-	      </Col>
-	      <Col lg={4} md={4} s={4} xs={4}>
-	      <Button 
-	      	disabled={this.state.isLoading}
-	      	onClick={!this.state.isLoading ? this.submitPromo : null}>{this.state.isLoading ? 'Applying...' : 'Apply'}</Button>
-	      </Col>
-	      <Col lg={12} md={12} s={12} xs={12}>
-	      {codeStatus}
-	      </Col>
-	      </Panel>
+	      <Promocode origin={this.props.origin}/>
 	      <ButtonToolbar className="mT10">
 		      <Button onClick={this.handleSubmit} bsStyle="success">Complete Registration</Button>
 	      </ButtonToolbar>

@@ -1,5 +1,7 @@
 require('./assets/app.css');
 require('./assets/reactselect.css');
+require('./assets/paradeiser.min.css');
+
 
 var React = require('react');
 var App = require('./components/App.jsx');

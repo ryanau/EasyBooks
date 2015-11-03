@@ -7,8 +7,9 @@ class PromosController < ApplicationController
       if current_user.promouses.find_by(promo_id: promo.id)
         render json: {message: 'Code Previously Used'}
       else
-        current_user.promouses.create(promo_id: promo.id)
-        render json: {message: 'Code Applied'}
+        promouse = current_user.promouses.create(promo_id: promo.id)
+        current_user.credits.create(promouse_id: promouse.id, method: "Promo Code")
+        render json: {message: "Code Applied: #{promo.info}"}
       end
     else
       render json: {message: 'Invalid Promo Code'}
