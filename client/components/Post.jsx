@@ -280,7 +280,7 @@ Post = React.createClass({
 				<img src={post.picture_url} />
 				</div>
 				</div>
-			var subscribers = <h5>{star_count} user has subscribed to this post</h5>
+			var subscribers = <h5>{star_count} users watching</h5>
 
 		} else if (this.state.not_found) {
 			var message = "Post Not Found"

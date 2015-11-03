@@ -59,7 +59,6 @@ module.exports = React.createClass({
   },
   loadNavRedirect: function () {
     $(window).load(function() {
-      console.log('loading')
       $('#buyBar').on('click', function() {
         this.transitionTo('/');
       }.bind(this));
