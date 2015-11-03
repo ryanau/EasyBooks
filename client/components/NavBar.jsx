@@ -30,15 +30,16 @@ module.exports = React.createClass({
     }
   },
   componentDidMount: function () {
+    this.loadNavRedirect();
     if (this.props.signedIn) {
       this.loadStarredPostCount();
     }
-    this.loadNavRedirect();
     // don't know why it's not working, works in Dev Tool
     // $('#collapsible-navbar-dropdown').hover(function () {$('#collapsible-navbar-dropdown')[0].click()})
 
   },
-  componentWillUnmount: function () {
+  componentDidUpdate: function () {
+    this.loadNavRedirect();
   },
   loadStarredPostCount: function () {
     $.ajax({
@@ -58,7 +59,7 @@ module.exports = React.createClass({
     });
   },
   loadNavRedirect: function () {
-    $(window).load(function() {
+    $(document).ready(function() {
       $('#buyBar').on('click', function() {
         this.transitionTo('/');
       }.bind(this));
@@ -104,7 +105,7 @@ module.exports = React.createClass({
   },
   closeNav: function () {
     if ($(window).width() < 768) {
-      $('.navbar-toggle')[0].onclick();
+      $('.navbar-toggle')[0].click();
     }
   },
   render: function() {
