@@ -1,16 +1,36 @@
 class PostsController < ApplicationController
   require 'openssl'
-  before_action :authentication, only: [:index, :create, :show, :image_upload, :active_posts, :destroy, :starred_posts, :mark_sold, :archived_posts, :mutual_friends, :sell_status, :follow_count]
+  before_action :authentication, only: [:index, :create, :show, :image_upload, :active_posts, :destroy, :starred_posts, :mark_sold, :archived_posts, :mutual_friends, :sell_status, :follow_count, :starred_posts_count]
 
   def index
+    university_id = current_user.university_id
     start_point = params[:start_point].to_i
     end_point = params[:end_point].to_i
     course_selected = params[:course_selected]
+    sorting = params[:sorting]
     if course_selected != nil && course_selected != ""
       result = find_course(course_selected)
-      posts = Post.where(public: true, course_id: result[:course_id]).order(created_at: :DESC)[start_point..end_point]
+      case sorting
+        when "Oldest to Newest"
+          posts = Post.where(university_id: university_id, public: true, course_id: result[:course_id]).order(created_at: :ASC)[start_point..end_point]
+        when "$ Low to High"
+          posts = Post.where(university_id: university_id, public: true, course_id: result[:course_id]).order(price: :ASC)[start_point..end_point]
+        when "$ High to Low"
+          posts = Post.where(university_id: university_id, public: true, course_id: result[:course_id]).order(price: :DESC)[start_point..end_point]
+        else
+          posts = Post.where(university_id: university_id, public: true, course_id: result[:course_id]).order(created_at: :DESC)[start_point..end_point]
+      end
     else
-      posts = Post.where(public: true).order(created_at: :DESC)[start_point..end_point]
+      case sorting
+        when "Oldest to Newest"
+          posts = Post.where(university_id: university_id, public: true).order(created_at: :ASC)[start_point..end_point]
+        when "$ Low to High"
+          posts = Post.where(university_id: university_id, public: true).order(price: :ASC)[start_point..end_point]
+        when "$ High to Low"
+          posts = Post.where(university_id: university_id, public: true).order(price: :DESC)[start_point..end_point]
+        else
+          posts = Post.where(university_id: university_id, public: true).order(created_at: :DESC)[start_point..end_point]
+      end
     end
     render :json => posts.as_json(include: {stars: {only: :star_id}, course: {except: :updated_at}, seller: {only: [:pic, :first_name, :last_name]}})
   end
@@ -19,7 +39,7 @@ class PostsController < ApplicationController
     action = PostCreator.new(params, current_user)
     if action.ok?
       post = action.post
-      CourseAlert.perform_async(post.course_id, post.id, current_user.id)
+      # CourseAlert.perform_async(post.course_id, post.id, current_user.id)
       render json: {post_id: action.post.id}
     else
       render json: {error_message: action.post}
@@ -79,6 +99,11 @@ class PostsController < ApplicationController
     render :json => posts.as_json(include: {stars: {only: :star_id}, course: {only: [:department, :course_number]}, seller: {only: [:pic, :first_name, :last_name]}})  
   end
 
+  def starred_posts_count
+    count = current_user.posts.order(created_at: :DESC).count
+    render json: {starred_posts_count: count} 
+  end
+
   def archived_posts
     posts = current_user.selling_posts.where(sold: true, public: false).order(created_at: :DESC)
     render :json => posts.as_json(include: {stars: {only: :star_id}, course: {only: [:department, :course_number]}, seller: {only: [:pic, :first_name, :last_name]}})  
@@ -109,6 +134,7 @@ class PostsController < ApplicationController
     course_id = Course.find_by(department: arr[0], course_number: arr[1]).id
     {course_id: course_id}
   end
+  
   def find_mutual_friends(post_id)
     post_id = params[:post_id]
     post = Post.find(post_id)

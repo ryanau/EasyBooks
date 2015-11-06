@@ -16,7 +16,7 @@ SubscribedCourse = React.createClass({
 	},
 	getInitialState: function () {
 		return {
-			display: "YES",
+			display: true,
 		}
 	},
 	componentDidMount: function () {
@@ -27,15 +27,7 @@ SubscribedCourse = React.createClass({
 		course.push(this.props.course.course.department);
 		course.push(this.props.course.course.course_number);
 		this.props.subscriptionBasket.addToCourses(course);
-		if (this.state.display === "NO") {
-		  this.setState({
-		    display: "YES"
-		  });
-		} else {
-		  this.setState({
-		    display: "NO"
-		  })
-		};
+		this.state.display? this.setState({display: false}) : this.setState({display: true})
 	},
 	render: function () {
 		var course = this.props.course

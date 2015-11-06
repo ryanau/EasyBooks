@@ -98,7 +98,6 @@ SignUp = React.createClass({
 						localStorage.setItem('jwt-easybooks', jwt);
 					};
 					window.location = "/"
-					console.log('signed up');
 				}.bind(this),
 				error: function (error) {
 					window.location = "/"

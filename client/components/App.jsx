@@ -6,7 +6,6 @@ var $ = require('jquery');
 
 var NavBar = require('./NavBar.jsx');
 
-
 App = React.createClass({
 	getDefaultProps: function() {
     return {
@@ -15,7 +14,7 @@ App = React.createClass({
       origin: '/api',
 
       // comment the following line when deploying to heroku
-      // origin: 'http://localhost:3000/api'
+      // origin: 'http://localhost:3000/api',
     }
   },
   getInitialState: function () {
@@ -26,6 +25,11 @@ App = React.createClass({
     }
   },
   componentWillMount: function () {
+    if (localStorage.getItem('jwt-easybooks')) {
+      this.setState({
+        signedIn: true,
+      })
+    }
     var jwt = new Uri(location.search).getQueryParamValue('jwt');
     if (!!jwt) {localStorage.setItem('jwt-easybooks', jwt);}
   },
@@ -73,10 +77,15 @@ App = React.createClass({
     });
   },
 	render: function () {
+    if ($(window).width() < 768) {
+      var margin = "mT100"
+    } else {
+      var margin = "mT50"
+    }
 		return (
 			<div>
-        <NavBar signedIn={this.state.signedIn} currentUser={this.state.currentUser}/>
-        <div className="mT100">
+        <NavBar signedIn={this.state.signedIn} currentUser={this.state.currentUser} origin={this.props.origin}/>
+        <div className={margin}>
           <RouteHandler origin={this.props.origin} currentUser={this.state.currentUser} signedIn={this.state.signedIn} mode={this.state.mode}/>
         </div>
 			</div>

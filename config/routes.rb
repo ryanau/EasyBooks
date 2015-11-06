@@ -9,14 +9,18 @@ Rails.application.routes.draw do
     resources :courses, only: [:index]
     resources :comments, only: [:index, :create]
     resources :stars, only: [:index, :create]
+
+    get '/universities/find_school', :to => 'universities#find_school'
     
     delete '/stars', :to => 'stars#destroy'
     get '/stars/count', :to => 'stars#count'
     get '/stars/starred', :to => 'stars#starred'
+    get '/stars/position', :to => 'stars#position'
 
     put '/posts/mark_sold', :to => 'posts#mark_sold'
     get '/active_posts', :to => 'posts#active_posts'
     get '/starred_posts', :to => 'posts#starred_posts'
+    get '/starred_posts_count', :to => 'posts#starred_posts_count'
     get '/archived_posts', :to => 'posts#archived_posts'
     get '/mutual_friends', :to => 'posts#mutual_friends'
     post '/image_upload', :to => 'posts#image_upload'
@@ -25,6 +29,8 @@ Rails.application.routes.draw do
 
     put '/subscriptions', :to => 'subscriptions#update'
     post '/parse_calendar', :to => 'subscriptions#parse_calendar'
+
+    get '/promo/verify', :to => 'promos#verify'
 
     # get '/login', :to => 'users#login'
     get '/current_user', :to => 'users#current'

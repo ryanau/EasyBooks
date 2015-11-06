@@ -24,24 +24,16 @@ LogIn = React.createClass({
 		}
 	},
 	handleFirstName: function (e) {
-		this.setState({
-			first_name: e.target.value
-		})
+		this.setState({first_name: e.target.value})
 	},
 	handleLastName: function (e) {
-		this.setState({
-			last_name: e.target.value
-		})
+		this.setState({last_name: e.target.value})
 	},
 	handleEmail: function (e) {
-		this.setState({
-			email: e.target.value
-		})
+		this.setState({email: e.target.value})
 	},
 	handlePassword: function (e) {
-		this.setState({
-			password: e.target.value
-		})
+		this.setState({password: e.target.value})
 	},
 	handleSubmit: function () {
 		var data = {

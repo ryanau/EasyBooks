@@ -4,6 +4,12 @@ html * {
   font-family: 'Lato', sans-serif;
 }
 
+body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
 #drop {
 	width: 200px;
 }
@@ -55,6 +61,10 @@ img {
   margin-top: 100px;
 }
 
+.mT50 {
+  margin-top: 50px;
+}
+
 .mL-10 {
   margin-left: -20px;
 }
@@ -74,11 +84,17 @@ img {
 .flR {
   float: right;
 }
+
 @media (min-width: 550px) {
   .mL5p{
     margin-left: 10%;
   }
 }
+
+footer {
+  flex: 1;
+}
+
 /*#landing {
 	background: url(/berkeley.jpg) no-repeat center center fixed; 
 	-webkit-background-size: cover;
@@ -152,22 +168,46 @@ img {
 .values {
   background-image: url('/berkeley.jpg');
   background-size: cover;
-  color: #fff;
+  color: black;
   padding-bottom: 5rem;
 }
+
 .value-multiplier {
   margin-bottom: .5rem;
   color: black;
   font-weight: 400;
-  font-size: 5rem;
+  font-size: 2rem;
 }
 .value-heading {
   margin-bottom: .3rem;
-  color: black;
+  color: #00695C;
 }
 .value-description {
   font-weight: 300;
-  color: black;
+  color: #424242;
+
+}
+
+/* Images */
+.img1 {
+  background-image: url('/berkeley_i_house.jpg');
+  background-size: cover;
+  color: #fff;
+  padding-bottom: 5rem;
+}
+
+.img2 {
+  background-image: url('/woman_book.jpg');
+  background-size: cover;
+  color: #fff;
+  padding-bottom: 5rem;
+}
+
+.img3 {
+  background-image: url('/berkeley.jpg');
+  background-size: cover;
+  color: #fff;
+  padding-bottom: 5rem;
 }
 
 /* Help
@@ -179,7 +219,7 @@ img {
 /* Categories
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 .categories {
-  background-image: url('/berkeley.jpg');
+  background-image: url('/woman_book.jpg');
   background-size: cover;
   color: #fff;
 }

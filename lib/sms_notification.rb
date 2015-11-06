@@ -5,8 +5,11 @@ module SmsNotification
     seller = User.find(seller_id)
 
     Subscription.where(course_id: course_id).each do |subscription|
-        @command = new_post_alert_stop_command(subscription.id)
-        send_course_alert(subscription.user.phone, course, seller, post, @command.random_num)
+      conversation = subscription.user.buying_conversations.first
+      if conversation && conversation.star.post.course != subscription.course
+        command = new_post_alert_stop_command(subscription.id)
+        send_course_alert(subscription.user.phone, course, seller, post, command.random_num)
+      end
     end
   end
 
@@ -16,17 +19,20 @@ module SmsNotification
     accepted = post.stars.find_by(sent: true)
     if !accepted
       star = find_subscribed_idle_user(post, seller)
-      if star && new_post_alert_command(star.id) && send_post_alert(star.user.phone, post, @command.random_num)
+      if star
+        command = new_post_alert_command(star.id)
+        send_post_alert(star.user.phone, post, command.random_num)
         star.update_attributes(sent: true)
-        PostAlertDestroyer.perform_in(1.minutes, star.id)
+        PostAlertDestroyer.perform_in(5.minutes, star.id)
       end
     end
   end
 
   def self.destroy_post_alert(star_id)
     star = Star.find(star_id)
-    if star.destroy!
+    if star && star.sent && star.accepted
       PostAlert.perform_async(star.post.id)
+      star.destroy!
     end
   end
 
@@ -56,9 +62,9 @@ module SmsNotification
 
   def self.new_post_alert_command(star_id)
     random = Faker::Number.number(6)
-    @command = Command.new(star_id: star_id, random_num: random, action: 'approve_post_alert')
-    if @command.save
-      @command
+    command = Command.new(star_id: star_id, random_num: random, action: 'approve_post_alert')
+    if command.save
+      return command
     else
       new_post_alert_command(star_id)
     end
@@ -66,9 +72,9 @@ module SmsNotification
 
   def self.new_post_alert_stop_command(subscription_id)
     random = Faker::Number.number(6)
-    @command = Command.new(subscription_id: subscription_id, random_num: random, action: 'stop_post_alert')
-    if @command.save
-      @command
+    command = Command.new(subscription_id: subscription_id, random_num: random, action: 'stop_post_alert')
+    if command.save
+      command
     else
       new_post_alert_stop_command(subscription_id)
     end
@@ -80,7 +86,7 @@ module SmsNotification
     course_name = course.department + " " + course.course_number
     post_id = post.id.to_s
     root = "https://easybooks.herokuapp.com/posts/#{post_id}"
-    body = "EasyBooks: New post for #{course_name}! #{post.title} (#{post.condition}): $#{post.price} by #{seller.first_name}!\n\nClick here to star the post: #{root}\n\nTo stop getting alert from #{post.title}, reply with '#{random_num}'."
+    body = "EasyBooks: New post for #{course_name}! #{post.title} (#{post.condition}): $#{post.price} by #{seller.first_name}!\n\nClick here to watch the post: #{root}\n\nTo stop getting alert from #{course_name}, reply with '#{random_num}'."
     twilio_sms(from, to, body)
   end
 
@@ -88,7 +94,8 @@ module SmsNotification
     from = ENV['TWILIO_PHONE']
     to = '+1' + to.to_s
     seller = post.seller.first_name
-    body = "EasyBooks: #{seller} would like to know if you're interested in #{post.title} (#{post.condition}) for $#{post.price}.\n\nTo proceed, reply with '#{random_num}'.\n\nThis offer expires in 30mins."
+    course_name = post.course.department + " " + post.course.course_number
+    body = "EasyBooks: #{post.title} for #{course_name} (#{post.condition}) is available for $#{post.price}.\n\nTo talk to the seller, reply with '#{random_num}'.\n\nThis offer expires in 5 mins."
     twilio_sms(from, to, body)
   end
 

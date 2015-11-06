@@ -34,9 +34,7 @@ AddSubscription = React.createClass({
 	  });
 	},
 	updateSubscription: function () {
-		var data = {
-			courses: this.state.subscriptionBasket.courses,
-		};
+		var data = {courses: this.state.subscriptionBasket.courses};
 		$.ajax({
 			url: this.props.origin + '/subscriptions',
 			type: 'PUT',
@@ -58,9 +56,7 @@ AddSubscription = React.createClass({
 		});
 	},
 	searchChange: function (value) {
-		var data = {
-			course_selected: value,
-		};
+		var data = {course_selected: value};
 		$.ajax({
 			url: this.props.origin + '/subscriptions',
 			type: 'POST',

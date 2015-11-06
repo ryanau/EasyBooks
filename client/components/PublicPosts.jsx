@@ -30,19 +30,25 @@ PublicPosts = React.createClass({
 			posts: null,
 			course_selected: this.props.course_selected,
 			start_point: 0,
-			end_point: 9,
+			end_point: 19,
 			isInfiniteLoading: true
 		}
 	},
 	componentDidMount: function () {
 		this.loadPosts();
+		this.state.course_selected.on('sorting_changed', this.loadSelected)
 		this.state.course_selected.on('course_changed', this.loadSelected)
+	},
+	componentWillUnmount: function () {
+		this.state.course_selected.off('sorting_changed')
+		this.state.course_selected.off('course_changed')
 	},
 	loadSelected: function () {
 		var data = {
 			course_selected: this.state.course_selected.courses[0],
 			start_point: this.state.start_point,
 			end_point: this.state.end_point,
+			sorting: this.props.sorting,
 		};
 		$.ajax({
 			url: this.props.origin + '/posts',
@@ -117,9 +123,9 @@ PublicPosts = React.createClass({
   render: function () {
   	var header = "this.state.course_selected"
   	if (this.state.course_selected.courses.length == 0) {
-  		var header = "Post for All Courses"
+  		var header = "Post for All Courses: " + this.props.sorting
   	} else {
-  		var header = "Posts for " + this.state.course_selected.courses[0]
+  		var header = "Posts for " + this.state.course_selected.courses[0] + " : " + this.props.sorting
   	}
   	if (this.state.posts == null) {
   		var posts = "Loading..."
@@ -127,7 +133,7 @@ PublicPosts = React.createClass({
   		var posts = this.state.posts.map(function (post, index) {
   			return (
   				<Col lg={4} md={6} s={6} xs={12} key={post.id} className="mT10">
-	  				<PublicPost key={post.id} origin={this.props.origin} post={post} currentUser={this.props.currentUser}/>
+	  				<PublicPost key={post.id} origin={this.props.origin} post={post} currentUser={this.props.currentUser} AppControl={this.props.AppControl}/>
   				</Col>
   			)
   		}.bind(this));

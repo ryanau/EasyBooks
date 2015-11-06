@@ -36,11 +36,7 @@ CommentBox = React.createClass({
 	},
 	validateComment: function () {
 		var length = this.state.comment.length;
-		if (length > 0) {
-			return 'success';
-		} else {
-			return 'error';
-		}
+		length > 0? 'success' : 'error'
 	},
 	addComment: function () {
 		var data = {

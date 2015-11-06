@@ -17,7 +17,7 @@ Course = React.createClass({
 	},
 	getInitialState: function () {
 		return {
-			display: "YES",
+			display: true,
 		}
 	},
 	componentDidMount: function () {
@@ -28,15 +28,7 @@ Course = React.createClass({
 	},
 	handleToggle: function () {
 		this.props.courseBasket.addToCourses(this.props.course)
-		if (this.state.display === "NO") {
-		  this.setState({
-		    display: "YES"
-		  });
-		} else {
-		  this.setState({
-		    display: "NO"
-		  })
-		};
+		this.state.display? this.setState({display: false}) : this.setState({display: true})
 	},
 	render: function () {
 		course = this.props.course

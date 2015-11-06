@@ -31,9 +31,7 @@ Comments = React.createClass({
 		this.loadComments();
 	},
 	loadComments: function () {
-		var data = {
-			post_id: this.props.post_id,
-		};
+		var data = {post_id: this.props.post_id,};
 		$.ajax({
 			url: this.props.origin + '/comments',
 			type: 'GET',
@@ -52,9 +50,7 @@ Comments = React.createClass({
 		});
 	},
 	updateComments: function () {
-		var data = {
-			post_id: this.props.post_id,
-		};
+		var data = {post_id: this.props.post_id,};
 		$.ajax({
 			url: this.props.origin + '/comments',
 			type: 'GET',

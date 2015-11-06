@@ -46,13 +46,12 @@ Dashboard = React.createClass({
 		});
 	},
 	render: function () {
-  	if (this.state.starred == false) {
-  		var followReminder =
+		var followReminder
+		this.state.starred? null : followReminder =
 			<Alert bsStyle="info">
-				<h4>Follow a Post and Get in Line!</h4>
-		  	<p>You are not following any post... Follow a Post so you will instantly get connected to the seller if it is your turn!</p>
+				<h4>Watch a post!</h4>
+		  	<p>You are not watching a post. Watch a post and get connected if it is your turn!</p>
 		  </Alert>
-  	}
 		return (
 			<div className="container col-md-8 col-md-offset-2">
 				{followReminder}

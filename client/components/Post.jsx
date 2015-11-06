@@ -49,9 +49,7 @@ Post = React.createClass({
 	markSold: function () {
 		var path = location.pathname;
 		var post_id = path.substring(7, path.length);
-		var data = {
-			post_id: post_id,
-		};
+		var data = {post_id: post_id,};
 		$.ajax({
 			url: this.props.origin + '/posts/mark_sold',
 			type: 'PUT',
@@ -80,9 +78,7 @@ Post = React.createClass({
 	loadStar: function () {
 		var path = location.pathname;
 		var post_id = path.substring(7, path.length);
-		var data = {
-			post_id: post_id,
-		};
+		var data = {post_id: post_id,};
 		$.ajax({
 			url: this.props.origin + '/stars',
 			type: 'GET',
@@ -109,9 +105,7 @@ Post = React.createClass({
 	loadPost: function () {
 		var path = location.pathname;
 		var post_id = path.substring(7, path.length);
-		var data = {
-			post_id: post_id,
-		};
+		var data = {post_id: post_id,};
 		$.ajax({
 			url: this.props.origin + '/posts/' + post_id,
 			type: 'GET',
@@ -141,9 +135,7 @@ Post = React.createClass({
 	deletePost: function () {
 		var path = location.pathname;
 		var post_id = path.substring(7, path.length);
-		var data = {
-			post_id: post_id,
-		};
+		var data = {post_id: post_id,};
 		$.ajax({
 			url: this.props.origin + '/posts/' + post_id,
 			type: 'DELETE',
@@ -216,9 +208,7 @@ Post = React.createClass({
 	loadStarCount: function () {
 		var path = location.pathname;
 		var post_id = path.substring(7, path.length);
-		var data = {
-			post_id: post_id,
-		};
+		var data = {post_id: post_id,};
 		$.ajax({
 			url: this.props.origin + '/stars/count',
 			type: 'GET',
@@ -250,10 +240,10 @@ Post = React.createClass({
 			} else {
 				if (this.state.star) {
 					var starButton = 
-					<Button onClick={this.starPost} bsStyle="success" bsSize="small"><Glyphicon glyph="star"/> Unfollow</Button>
+					<Button onClick={this.starPost} bsStyle="success" bsSize="small"><Glyphicon glyph="star"/> Unwatch</Button>
 				} else {
 					var starButton = 
-					<Button onClick={this.starPost} bsStyle="warning" bsSize="small"><Glyphicon glyph="star-empty"/> Follow</Button>
+					<Button onClick={this.starPost} bsStyle="warning" bsSize="small"><Glyphicon glyph="star-empty"/> Watch</Button>
 				}
 			}
 			var comments = <Comments origin={this.props.origin} post_id={post.id} seller_id={post.seller.id}/>;
@@ -262,7 +252,7 @@ Post = React.createClass({
 			    var condition = <Label bsSize="medium" bsStyle="success">New</Label>
 			    break;
 			  case "Like New":
-			    var condition = <Label bsSize="medium" bsStyle="medium">Like New</Label>
+			    var condition = <Label bsSize="medium" bsStyle="default">Like New</Label>
 			    break;
 			  case "Good":
 			    var condition = <Label bsSize="medium" bsStyle="primary">Good</Label>
@@ -280,7 +270,7 @@ Post = React.createClass({
 				<img src={post.picture_url} />
 				</div>
 				</div>
-			var subscribers = <h5>{star_count} user has subscribed to this post</h5>
+			var subscribers = <h5>{star_count} users watching</h5>
 
 		} else if (this.state.not_found) {
 			var message = "Post Not Found"
@@ -295,11 +285,11 @@ Post = React.createClass({
 				  autoHideDuration={1000}/>
 				<Snackbar
 				  ref="postStarred"
-				  message='Post Followed'
+				  message='Watching Post'
 				  autoHideDuration={1000}/>
 				<Snackbar
 				  ref="postUnstarred"
-				  message='Post Unfollowed'
+				  message='Unwatching Post'
 				  autoHideDuration={1000}/>
 				<Snackbar
 				  ref="markSold"

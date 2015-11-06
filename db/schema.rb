@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151028060409) do
+ActiveRecord::Schema.define(version: 20151031181120) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -53,6 +53,14 @@ ActiveRecord::Schema.define(version: 20151028060409) do
     t.datetime "updated_at",    null: false
   end
 
+  create_table "credits", force: :cascade do |t|
+    t.integer  "user_id",     null: false
+    t.string   "method"
+    t.integer  "promouse_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
   create_table "phones", force: :cascade do |t|
     t.string   "number",     null: false
     t.datetime "created_at", null: false
@@ -60,19 +68,36 @@ ActiveRecord::Schema.define(version: 20151028060409) do
   end
 
   create_table "posts", force: :cascade do |t|
-    t.float    "price",                       null: false
+    t.float    "price",                         null: false
     t.string   "picture_url"
-    t.string   "title",                       null: false
+    t.string   "title",                         null: false
     t.string   "description"
-    t.boolean  "sold",        default: false
-    t.boolean  "public",      default: true
+    t.boolean  "sold",          default: false
+    t.boolean  "public",        default: true
     t.string   "pickup"
-    t.string   "condition",                   null: false
-    t.integer  "course_id",                   null: false
-    t.integer  "seller_id",                   null: false
+    t.string   "condition",                     null: false
+    t.integer  "university_id",                 null: false
+    t.integer  "course_id",                     null: false
+    t.integer  "seller_id",                     null: false
     t.integer  "buyer_id"
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+  end
+
+  create_table "promos", force: :cascade do |t|
+    t.string   "code",       null: false
+    t.date     "expiry"
+    t.integer  "credit"
+    t.string   "info"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "promouses", force: :cascade do |t|
+    t.integer  "user_id",    null: false
+    t.integer  "promo_id",   null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "stars", force: :cascade do |t|
