@@ -134,6 +134,7 @@ class PostsController < ApplicationController
     course_id = Course.find_by(department: arr[0], course_number: arr[1]).id
     {course_id: course_id}
   end
+  
   def find_mutual_friends(post_id)
     post_id = params[:post_id]
     post = Post.find(post_id)

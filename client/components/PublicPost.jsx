@@ -204,12 +204,14 @@ PublicPost = React.createClass({
         <CardActions>
           <Button onClick={this.starPost} bsStyle="success" bsSize="small"><Glyphicon glyph="eye-open"/> Watching</Button>
           <Button onClick={this.redirectToPost} bsStyle="info" bsSize="small"><Glyphicon glyph="info-sign"/> Info</Button>
+          <Button bsStyle="info" bsSize="small">Make Offer</Button>
         </CardActions>
       } else {
         var actionButtons = 
         <CardActions>
           <Button onClick={this.starPost} bsStyle="default" bsSize="small"><Glyphicon glyph="eye-close"/> Watch</Button>
           <Button onClick={this.redirectToPost} bsStyle="info" bsSize="small"><Glyphicon glyph="info-sign"/> Info</Button>
+          <Button bsStyle="info" bsSize="small">Make Offer</Button>
         </CardActions>
       }
       var seller = post.seller.first_name + ' ' + post.seller.last_name

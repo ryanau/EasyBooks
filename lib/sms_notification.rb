@@ -5,7 +5,8 @@ module SmsNotification
     seller = User.find(seller_id)
 
     Subscription.where(course_id: course_id).each do |subscription|
-      if subscription.user.buying_conversations.first.star.post.course != subscription.course
+      conversation = subscription.user.buying_conversations.first
+      if conversation && conversation.star.post.course != subscription.course
         command = new_post_alert_stop_command(subscription.id)
         send_course_alert(subscription.user.phone, course, seller, post, command.random_num)
       end
@@ -29,7 +30,7 @@ module SmsNotification
 
   def self.destroy_post_alert(star_id)
     star = Star.find(star_id)
-    if star
+    if star && star.sent && star.accepted
       PostAlert.perform_async(star.post.id)
       star.destroy!
     end
@@ -94,7 +95,7 @@ module SmsNotification
     to = '+1' + to.to_s
     seller = post.seller.first_name
     course_name = post.course.department + " " + post.course.course_number
-    body = "EasyBooks: #{seller} would like to know if you're interested in #{post.title} for #{course_name} (#{post.condition}) for $#{post.price}.\n\nTo proceed, reply with '#{random_num}'.\n\nThis offer expires in 5mins."
+    body = "EasyBooks: #{post.title} for #{course_name} (#{post.condition}) is available for $#{post.price}.\n\nTo talk to the seller, reply with '#{random_num}'.\n\nThis offer expires in 5 mins."
     twilio_sms(from, to, body)
   end
 
