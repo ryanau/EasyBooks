@@ -213,7 +213,7 @@ PublicPost = React.createClass({
     var post = this.props.post
   	var course = post.course
     var postLink = '/posts/' + post.id
-    var author = <span className="colorGrey fs16"><i> by {post.author}</i></span>
+    var author = <span className="colorGrey fs16"><i> {post.author}</i></span>
     var watchNotClickedTooltip = <Tooltip id="1">Click to add yourself to the list of watchers. When you become first on the list, expect a text message from the seller!</Tooltip>
     var watchClickedTooltip = <Tooltip id="1">Your position is {this.state.star_position} out of {this.state.star_count} watchers</Tooltip>
     var watchClicked = (
