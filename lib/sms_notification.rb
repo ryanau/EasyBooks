@@ -6,7 +6,7 @@ module SmsNotification
 
     Subscription.where(course_id: course_id).each do |subscription|
       conversation = subscription.user.buying_conversations.first
-      if conversation && conversation.star.post.course != subscription.course
+      if !conversation && conversation.star.post.course != subscription.course
         command = new_post_alert_stop_command(subscription.id)
         send_course_alert(subscription.user.phone, course, seller, post, command.random_num)
       end
