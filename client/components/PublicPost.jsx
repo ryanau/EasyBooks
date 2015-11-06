@@ -60,7 +60,6 @@ PublicPost = React.createClass({
   },
   componentDidUpdate: function () {
     this.loadStarPosition();
-    this.activateCourseLabelClick();
   },
   redirectToPost: function () {
     this.transitionTo('/posts/' + this.props.post.id);
