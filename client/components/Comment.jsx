@@ -22,11 +22,8 @@ Comment = React.createClass({
 	},
 	render: function () {
 		var comment = this.props.comment;
-		if (comment.user.id == this.props.seller_id) {
-			var user = 'Seller'
-		} else {
-			var user = comment.user.first_name + ' ' + comment.user.last_name
-		}
+		var user;
+		comment.user.id == this.props.seller_id? user = 'Seller' : user = comment.user.first_name + ' ' + comment.user.last_name
 		return (
 			<div>
 				<p><Avatar src={comment.user.pic} style={{marginRight: "3px"}}/><strong>{user}</strong> ({moment(comment.created_at).fromNow()}): {comment.content}</p>

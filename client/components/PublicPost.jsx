@@ -25,6 +25,10 @@ var Glyphicon = require('react-bootstrap').Glyphicon;
 var Badge = require('react-bootstrap').Badge;
 var OverlayTrigger = require('react-bootstrap').OverlayTrigger;
 var Tooltip = require('react-bootstrap').Tooltip;
+var OverlayTrigger = require('react-bootstrap').OverlayTrigger;
+var Popover = require('react-bootstrap').Popover;
+var Input = require('react-bootstrap').Input;
+var Col = require('react-bootstrap').Col;
 
 PublicPost = React.createClass({
   mixins: [ Navigation ],
@@ -42,14 +46,43 @@ PublicPost = React.createClass({
       star_count: this.props.post.stars.length,
       mutual_friends_count: null,
       mutual_friends: null,
+      offer: null,
+      star_position: null,
     }
   },
   componentDidMount: function () {
     this.loadStar();
+    this.loadStarPosition();
     this.loadMutualFriends();
+  },
+  componentDidUpdate: function () {
+    this.loadStarPosition();
   },
   redirectToPost: function () {
     this.transitionTo('/posts/' + this.props.post.id);
+  },
+  loadStarPosition: function () {
+    var post = this.props.post
+    var post_id = this.props.post.id;
+    if (this.state.star && this.state.star_position == null) {
+      var data = {
+        post_id: post_id,
+      };
+      $.ajax({
+        url: this.props.origin + '/stars/position',
+        type: 'GET',
+        data: data,
+        dataType: 'json',
+        crossDomain: true,
+        headers: {'Authorization': localStorage.getItem('jwt-easybooks')},
+        success: function (response) {
+          this.setState({star_position: response.star_position})
+        }.bind(this),
+        error: function (error) {
+          window.location = "/"
+        }.bind(this),
+      });
+    }
   },
   loadMutualFriends: function () {
     var post = this.props.post
@@ -81,9 +114,7 @@ PublicPost = React.createClass({
   },
   loadStar: function () {
     var post_id = this.props.post.id;
-    var data = {
-      post_id: post_id,
-    };
+    var data = {post_id: post_id};
     $.ajax({
       url: this.props.origin + '/stars',
       type: 'GET',
@@ -92,15 +123,7 @@ PublicPost = React.createClass({
       crossDomain: true,
       headers: {'Authorization': localStorage.getItem('jwt-easybooks')},
       success: function (response) {
-        if (response.starred) {
-          this.setState({
-            star: true,
-          });
-        } else {
-          this.setState({
-            star: false,
-          });
-        }
+        response.starred? this.setState({star: true}) : this.setState({star: false})
       }.bind(this),
       error: function (error) {
         window.location = "/"
@@ -177,9 +200,38 @@ PublicPost = React.createClass({
       }.bind(this),
     });
   },
+  handleChange: function () {
+    this.setState({
+      offer: this.refs.offer.getValue(),
+    });
+  },
   render: function () {
     var post = this.props.post
   	var course = post.course
+    var postLink = '/posts/' + post.id
+    var watchClicked =<Button onClick={this.starPost} bsStyle="success" bsSize="small"><Glyphicon glyph="eye-open"/> Watching ({this.state.star_position})</Button>
+    var watchNotClicked = <Button onClick={this.starPost} bsStyle="default" bsSize="small"><Glyphicon glyph="eye-close"/> Watch</Button>
+    var infoButton = <Button onClick={this.redirectToPost} bsStyle="info" bsSize="small"><Glyphicon glyph="info-sign"/> Info</Button>
+    var sendOfferButton = (
+      <OverlayTrigger rootClose trigger="click" placement="bottom" overlay={<Popover title="Your Offer">
+      <Col lg={6} md={6} s={6} xs={6}>
+      <Input
+        type="text"
+        value={this.state.offer}
+        placeholder={post.price}
+        hasFeedback
+        ref="offer"
+        groupClassName="group-class"
+        labelClassName="label-class"
+        onChange={this.handleChange} />
+      </Col>
+      <Col lg={6} md={6} s={6} xs={6}>
+      <Button onClick={this.sendOffer} bsStyle="success" bsSize="small"><Glyphicon glyph="send"/> Send</Button>
+      </Col>
+      </Popover>}>
+      <Button bsStyle="info" bsSize="small"><Glyphicon glyph="send"/> Make Offer</Button>
+      </OverlayTrigger>
+    )
     if (post.seller_id != this.props.currentUser.id) {
       if (this.state.mutual_friends != null && this.state.mutual_friends.length < 10) {
         var avatars = this.state.mutual_friends.map(function (friend, index) {
@@ -199,28 +251,18 @@ PublicPost = React.createClass({
       } else {
         var mutual = "Loading mutual friends..."
       }
-      if (this.state.star) {
-        var actionButtons = 
-        <CardActions>
-          <Button onClick={this.starPost} bsStyle="success" bsSize="small"><Glyphicon glyph="eye-open"/> Watching</Button>
-          <Button onClick={this.redirectToPost} bsStyle="info" bsSize="small"><Glyphicon glyph="info-sign"/> Info</Button>
-          <Button bsStyle="info" bsSize="small">Make Offer</Button>
-        </CardActions>
-      } else {
-        var actionButtons = 
-        <CardActions>
-          <Button onClick={this.starPost} bsStyle="default" bsSize="small"><Glyphicon glyph="eye-close"/> Watch</Button>
-          <Button onClick={this.redirectToPost} bsStyle="info" bsSize="small"><Glyphicon glyph="info-sign"/> Info</Button>
-          <Button bsStyle="info" bsSize="small">Make Offer</Button>
-        </CardActions>
-      }
+      var actionButtons = 
+      <CardActions>
+        {this.state.star? watchClicked : watchNotClicked}
+        {infoButton}
+      </CardActions>
       var seller = post.seller.first_name + ' ' + post.seller.last_name
     } else {
       var seller = "you"
       var mutual = ":P"
       var actionButtons = 
       <CardActions>
-        <Button onClick={this.redirectToPost} bsStyle="info" bsSize="small"><Glyphicon glyph="info-sign"/> Info</Button>
+        {infoButton}
       </CardActions>
     } 
     if (post.description) {
@@ -254,7 +296,7 @@ PublicPost = React.createClass({
           message='Unwatching Post'
           autoHideDuration={1000}/>
   			<Card key={post.id} className="mB10">
-          <CardTitle title={post.title} subtitle={course.department + ' ' + course.course_number} />
+          <CardTitle title={<Link to={postLink}>{post.title}</Link>} subtitle={course.department + ' ' + course.course_number} />
           <CardHeader avatar={condition} title={"$" + post.price + " | " + moment(post.created_at).fromNow()} subtitle={this.state.star_count + " Watchers"} actAsExpander={true}
             showExpandableButton={true}/>
           <CardText expandable={true}>

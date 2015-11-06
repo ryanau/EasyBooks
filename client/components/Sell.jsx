@@ -5,12 +5,14 @@ var Navigation = Router.Navigation;
 var Link = Router.Link;
 var Dropzone = require('react-dropzone');
 var Select = require('react-select');
+var TimerMixin = require('react-timer-mixin');
 
 var mui = require('material-ui');
 var ThemeManager = new mui.Styles.ThemeManager();
 var DropDownMenu = mui.DropDownMenu;
 var Paper = mui.Paper;
 var LinearProgress = mui.LinearProgress;
+var Snackbar = mui.Snackbar;
 
 var Input = require('react-bootstrap').Input;
 var MenuItem = require('react-bootstrap').MenuItem;
@@ -23,7 +25,7 @@ var ReactRouterBootstrap = require('react-router-bootstrap')
   , ButtonLink = ReactRouterBootstrap.ButtonLink
 
 Sell = React.createClass({
-	mixins: [ Navigation ],
+	mixins: [ Navigation, TimerMixin ],
 	childContextTypes: {
 	  muiTheme: React.PropTypes.object
 	},
@@ -151,7 +153,10 @@ Sell = React.createClass({
 				crossDomain: true,
 				headers: {'Authorization': localStorage.getItem('jwt-easybooks')},
 				success: function (response) {
-					this.transitionTo('/posts/' + response.post_id, {postId: response.post_id});
+					this.refs.postCreated.show();
+					this.setTimeout(function () {
+						this.transitionTo('/posts/' + response.post_id, {postId: response.post_id});
+					}, 1000)
 				}.bind(this),
 				error: function (error) {
 					window.location = "/"
@@ -308,6 +313,10 @@ Sell = React.createClass({
 	  }
   	return (
   		<div className="container col-md-8 col-md-offset-2">
+	  		<Snackbar
+	  		  ref="postCreated"
+	  		  message='Post Created! Redirecting...'
+	  		  autoHideDuration={1000}/>
 	  			<form className="form-horizontal">
 	  				{warning}
 	  				{body}

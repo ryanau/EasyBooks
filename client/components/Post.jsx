@@ -49,9 +49,7 @@ Post = React.createClass({
 	markSold: function () {
 		var path = location.pathname;
 		var post_id = path.substring(7, path.length);
-		var data = {
-			post_id: post_id,
-		};
+		var data = {post_id: post_id,};
 		$.ajax({
 			url: this.props.origin + '/posts/mark_sold',
 			type: 'PUT',
@@ -80,9 +78,7 @@ Post = React.createClass({
 	loadStar: function () {
 		var path = location.pathname;
 		var post_id = path.substring(7, path.length);
-		var data = {
-			post_id: post_id,
-		};
+		var data = {post_id: post_id,};
 		$.ajax({
 			url: this.props.origin + '/stars',
 			type: 'GET',
@@ -109,9 +105,7 @@ Post = React.createClass({
 	loadPost: function () {
 		var path = location.pathname;
 		var post_id = path.substring(7, path.length);
-		var data = {
-			post_id: post_id,
-		};
+		var data = {post_id: post_id,};
 		$.ajax({
 			url: this.props.origin + '/posts/' + post_id,
 			type: 'GET',
@@ -141,9 +135,7 @@ Post = React.createClass({
 	deletePost: function () {
 		var path = location.pathname;
 		var post_id = path.substring(7, path.length);
-		var data = {
-			post_id: post_id,
-		};
+		var data = {post_id: post_id,};
 		$.ajax({
 			url: this.props.origin + '/posts/' + post_id,
 			type: 'DELETE',
@@ -216,9 +208,7 @@ Post = React.createClass({
 	loadStarCount: function () {
 		var path = location.pathname;
 		var post_id = path.substring(7, path.length);
-		var data = {
-			post_id: post_id,
-		};
+		var data = {post_id: post_id,};
 		$.ajax({
 			url: this.props.origin + '/stars/count',
 			type: 'GET',
@@ -262,7 +252,7 @@ Post = React.createClass({
 			    var condition = <Label bsSize="medium" bsStyle="success">New</Label>
 			    break;
 			  case "Like New":
-			    var condition = <Label bsSize="medium" bsStyle="medium">Like New</Label>
+			    var condition = <Label bsSize="medium" bsStyle="default">Like New</Label>
 			    break;
 			  case "Good":
 			    var condition = <Label bsSize="medium" bsStyle="primary">Good</Label>

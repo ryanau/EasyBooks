@@ -21,12 +21,8 @@ Promocode = React.createClass({
 		});
 	},
 	submitPromo: function () {
-		var data = {
-			promo: this.state.promo,
-		}
-		this.setState({
-			isLoading: true,
-		})
+		var data = {promo: this.state.promo,}
+		this.setState({isLoading: true,})
 		$.ajax({
 			url: this.props.origin + '/promo/verify',
 			type: 'GET',
