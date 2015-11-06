@@ -95,6 +95,22 @@ footer {
   flex: 1;
 }
 
+.p5 {
+  padding: 5px;
+}
+
+.mB0 {
+  margin-bottom: 0px;
+}
+
+.colorGrey {
+  color: grey;
+}
+
+.fs16 {
+  font-size: 16px;
+}
+
 /*#landing {
 	background: url(/berkeley.jpg) no-repeat center center fixed; 
 	-webkit-background-size: cover;

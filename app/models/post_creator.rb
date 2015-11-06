@@ -26,6 +26,6 @@ class PostCreator
     total = course_selected.length - course_selected[course_selected.reverse.index(/\s{1}/, 1) * -1.. -1].length - 2
     arr.unshift(course_selected[0..total])
     course_id = Course.find_by(department: arr[0], course_number: arr[1]).id
-    {price: params[:price], title: params[:title].capitalize, pickup: params[:pickup].capitalize, course_id: course_id, seller_id: current_user.id, picture_url: pic_url, description: params[:description].capitalize, condition: params[:condition], university_id: current_user.university_id}
+    {price: params[:price], title: params[:title].capitalize, pickup: params[:pickup].capitalize, course_id: course_id, seller_id: current_user.id, picture_url: pic_url, description: params[:description].capitalize, condition: params[:condition], university_id: current_user.university_id, author: params[:author]}
   end
 end

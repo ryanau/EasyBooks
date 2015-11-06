@@ -29,6 +29,9 @@ var OverlayTrigger = require('react-bootstrap').OverlayTrigger;
 var Popover = require('react-bootstrap').Popover;
 var Input = require('react-bootstrap').Input;
 var Col = require('react-bootstrap').Col;
+var Well = require('react-bootstrap').Well;
+var Panel = require('react-bootstrap').Panel;
+var ButtonToolbar = require('react-bootstrap').ButtonToolbar;
 
 PublicPost = React.createClass({
   mixins: [ Navigation ],
@@ -57,6 +60,7 @@ PublicPost = React.createClass({
   },
   componentDidUpdate: function () {
     this.loadStarPosition();
+    this.activateCourseLabelClick();
   },
   redirectToPost: function () {
     this.transitionTo('/posts/' + this.props.post.id);
@@ -209,11 +213,22 @@ PublicPost = React.createClass({
     var post = this.props.post
   	var course = post.course
     var postLink = '/posts/' + post.id
-    var watchClicked =<Button onClick={this.starPost} bsStyle="success" bsSize="small"><Glyphicon glyph="eye-open"/> Watching ({this.state.star_position})</Button>
-    var watchNotClicked = <Button onClick={this.starPost} bsStyle="default" bsSize="small"><Glyphicon glyph="eye-close"/> Watch</Button>
+    var author = <span className="colorGrey fs16"><i> by {post.author}</i></span>
+    var watchNotClickedTooltip = <Tooltip id="1">Click to add yourself to the list of watchers. When you become first on the list, expect a text message from the seller!</Tooltip>
+    var watchClickedTooltip = <Tooltip id="1">Your position is {this.state.star_position} out of {this.state.star_count} watchers</Tooltip>
+    var watchClicked = (
+      <OverlayTrigger placement="top" overlay={watchClickedTooltip}>
+        <Button onClick={this.starPost} bsStyle="success" bsSize="small"><Glyphicon glyph="eye-open"/> Watching ({this.state.star_position})</Button>
+      </OverlayTrigger>
+    )
+    var watchNotClicked = (
+      <OverlayTrigger placement="top" overlay={watchNotClickedTooltip}>
+        <Button onClick={this.starPost} bsStyle="default" bsSize="small"><Glyphicon glyph="eye-close"/> Watch</Button>
+      </OverlayTrigger>
+    )
     var infoButton = <Button onClick={this.redirectToPost} bsStyle="info" bsSize="small"><Glyphicon glyph="info-sign"/> Info</Button>
     var sendOfferButton = (
-      <OverlayTrigger rootClose trigger="click" placement="bottom" overlay={<Popover title="Your Offer">
+      <OverlayTrigger rootClose trigger="click" placement="bottom" overlay={<Popover id="1" title="Your Offer">
       <Col lg={6} md={6} s={6} xs={6}>
       <Input
         type="text"
@@ -232,6 +247,8 @@ PublicPost = React.createClass({
       <Button bsStyle="info" bsSize="small"><Glyphicon glyph="send"/> Make Offer</Button>
       </OverlayTrigger>
     )
+    var description = <Col lg={12} md={12} s={12} xs={12}><p>{post.description}</p></Col>
+    var pickUp = <Col lg={12} md={12} s={12} xs={12}><p>Pick Up: {post.pickup}</p></Col>
     if (post.seller_id != this.props.currentUser.id) {
       if (this.state.mutual_friends != null && this.state.mutual_friends.length < 10) {
         var avatars = this.state.mutual_friends.map(function (friend, index) {
@@ -256,6 +273,12 @@ PublicPost = React.createClass({
         {this.state.star? watchClicked : watchNotClicked}
         {infoButton}
       </CardActions>
+      var buttonGroup = (
+        <ButtonToolbar>
+        {this.state.star? watchClicked : watchNotClicked}
+        {infoButton}
+        </ButtonToolbar>
+      )
       var seller = post.seller.first_name + ' ' + post.seller.last_name
     } else {
       var seller = "you"
@@ -264,6 +287,11 @@ PublicPost = React.createClass({
       <CardActions>
         {infoButton}
       </CardActions>
+      var buttonGroup = (
+        <ButtonToolbar>
+        {infoButton}
+        </ButtonToolbar>
+      )
     } 
     if (post.description) {
       var postDescription = <p>Extra info: {post.description}</p>
@@ -295,26 +323,32 @@ PublicPost = React.createClass({
           ref="postUnstarred"
           message='Unwatching Post'
           autoHideDuration={1000}/>
-  			<Card key={post.id} className="mB10">
-          <CardTitle title={<Link to={postLink}>{post.title}</Link>} subtitle={course.department + ' ' + course.course_number} />
-          <CardHeader avatar={condition} title={"$" + post.price + " | " + moment(post.created_at).fromNow()} subtitle={this.state.star_count + " Watchers"} actAsExpander={true}
-            showExpandableButton={true}/>
-          <CardText expandable={true}>
-            {postDescription}
-            {postPickUp}
-          </CardText>
-          {actionButtons}
-          <CardHeader
-            title={"By " + seller}
-            subtitle={mutual}
-            avatar={post.seller.pic}
-            actAsExpander={true}
-            showExpandableButton={true}>
-          </CardHeader>
-          <CardText expandable={true}>
+        <Panel className="mB0">
+          <Col lg={12} md={12} s={12}>
+            <h3><Label bsSize="large">{course.department + ' ' + course.course_number}</Label> <Link to={postLink}>{post.title}</Link>{author}</h3>
+          </Col>
+          {this.props.post.description? description : null}
+          {this.props.post.pickup? pickUp : null}
+          <Col lg={1} xs={1}>
+            {condition} 
+          </Col>
+          <Col lg={4} xs={3}>
+            ${post.price} | {moment(post.created_at).fromNow()}
+          </Col>
+          <Col lg={3} xs={3}>
+            <Badge>{this.state.star_count}</Badge> Watchers
+          </Col>          
+          <Col lg={4} xs={5}>
+            {buttonGroup}
+          </Col>
+          <Col lg={12} xs={12}>
+            <Avatar src={post.seller.pic} style={{marginRight: "3px"}}/>By {seller} | {mutual}
+          </Col>
+          <Col lg={12} xs={12}>
             {avatars}{lastCount}
-          </CardText>
-  			</Card>
+          </Col>
+        </Panel>
+  			
   		</div>
   	)
   }

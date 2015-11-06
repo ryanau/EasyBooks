@@ -132,8 +132,8 @@ PublicPosts = React.createClass({
   	} else if (this.state.posts.length > 0) {
   		var posts = this.state.posts.map(function (post, index) {
   			return (
-  				<Col lg={4} md={6} s={6} xs={12} key={post.id} className="mT10">
-	  				<PublicPost key={post.id} origin={this.props.origin} post={post} currentUser={this.props.currentUser} AppControl={this.props.AppControl}/>
+  				<Col lg={12} md={12} s={12} xs={12} key={post.id}>
+	  				<PublicPost key={post.id} origin={this.props.origin} post={post} currentUser={this.props.currentUser} AppControl={this.props.AppControl} course_selected={this.props.course_selected}/>
   				</Col>
   			)
   		}.bind(this));
@@ -145,8 +145,8 @@ PublicPosts = React.createClass({
   		</div>
   	};
   	return (
-  		<div className="mT10">
-  			<Panel header={header} bsStyle="info" className="p0">
+  		<div>
+  			<Panel header={header} bsStyle="info" className="p0 mT10">
 	  			{posts}
 	  		</Panel>
   		</div>

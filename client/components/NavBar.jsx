@@ -122,7 +122,7 @@ module.exports = React.createClass({
             <MenuItem onSelect={this.buyNav}>Buy</MenuItem>
             <MenuItem onSelect={this.sellNav}>Sell</MenuItem>
             <MenuItem onSelect={this.followsNav}><Glyphicon glyph="eye-open"/> Watching <Badge>{starPostCount}</Badge></MenuItem>
-            <NavDropdown eventKey={3} title="Dashboard" id="collapsible-navbar-dropdown">
+            <NavDropdown eventKey={3} title={this.props.currentUser.first_name + "'s Dashboard"} id="collapsible-navbar-dropdown">
               <MenuItem onSelect={this.postdashboardNav}>Your Posts</MenuItem>
               <MenuItem onSelect={this.subscriptionNav}>Subscriptions</MenuItem>
               <MenuItem onSelect={this.scheduleNav}>Schedule Uploader</MenuItem>
@@ -165,7 +165,7 @@ module.exports = React.createClass({
             <MenuItem onSelect={this.buyNav}>Buy</MenuItem>
             <MenuItem onSelect={this.sellNav}>Sell</MenuItem>
             <MenuItem onSelect={this.followsNav}><Glyphicon glyph="eye-open"/> Watching <Badge>{starPostCount}</Badge></MenuItem>
-            <NavDropdown eventKey={3} title="Dashboard" id="collapsible-navbar-dropdown">
+            <NavDropdown eventKey={3} title={this.props.currentUser.first_name + "'s Dashboard"} id="collapsible-navbar-dropdown">
               <MenuItem onSelect={this.postdashboardNav}>Your Posts</MenuItem>
               <MenuItem onSelect={this.subscriptionNav}>Subscriptions</MenuItem>
               <MenuItem onSelect={this.scheduleNav}>Schedule Uploader</MenuItem>
