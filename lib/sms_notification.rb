@@ -12,6 +12,7 @@ module SmsNotification
           send_course_alert(subscription.user.phone, course, seller, post, command.random_num)
         end
       else
+        command = new_post_alert_stop_command(subscription.id)
         send_course_alert(subscription.user.phone, course, seller, post, command.random_num)
       end
     end
