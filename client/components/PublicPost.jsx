@@ -271,11 +271,13 @@ PublicPost = React.createClass({
       <CardActions>
         {this.state.star? watchClicked : watchNotClicked}
         {infoButton}
+        {sendOfferButton}
       </CardActions>
       var buttonGroup = (
         <ButtonToolbar>
         {this.state.star? watchClicked : watchNotClicked}
         {infoButton}
+        {sendOfferButton}
         </ButtonToolbar>
       )
       var seller = post.seller.first_name + ' ' + post.seller.last_name
