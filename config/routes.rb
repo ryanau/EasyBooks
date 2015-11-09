@@ -12,6 +12,8 @@ Rails.application.routes.draw do
 
     get '/universities/find_school', :to => 'universities#find_school'
     
+    get '/credits/count', :to => 'credits#count'
+
     delete '/stars', :to => 'stars#destroy'
     get '/stars/count', :to => 'stars#count'
     get '/stars/starred', :to => 'stars#starred'

@@ -30,7 +30,6 @@ Register = React.createClass({
 			university: "1",
 			universities: [{payload: "1", text: "Loading"}],
 			warning: null,
-			promo: "",
 			isLoading: false,
 			codeMessage: null,
 		}
@@ -138,31 +137,6 @@ Register = React.createClass({
 	// 		})
 	// 	}
 	// },
-	submitPromo: function () {
-		var data = {
-			promo: this.state.promo,
-		}
-		this.setState({
-			isLoading: true,
-		})
-		$.ajax({
-			url: this.props.origin + '/promo/verify',
-			type: 'GET',
-			data: data,
-			dataType: 'json',
-			crossDomain: true,
-			headers: {'Authorization': localStorage.getItem('jwt-easybooks')},
-			success: function (response) {
-				this.setState({
-					isLoading: false,
-					codeMessage: response.message,
-				})
-			}.bind(this),
-			error: function (error) {
-				window.location = "/"
-			}.bind(this),
-		})
-	},
 	render: function () {
 		var universityList = this.state.universities;
 		if (this.state.warning != "") {

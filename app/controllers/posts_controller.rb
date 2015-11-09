@@ -39,7 +39,7 @@ class PostsController < ApplicationController
     action = PostCreator.new(params, current_user)
     if action.ok?
       post = action.post
-      CourseAlert.perform_async(post.course_id, post.id, current_user.id)
+      # CourseAlert.perform_async(post.course_id, post.id, current_user.id)
       render json: {post_id: action.post.id}
     else
       render json: {error_message: action.post}
@@ -56,7 +56,17 @@ class PostsController < ApplicationController
   end
 
   def sell_status
-    render json: {status: current_user.selling_posts.where(sold: false, public: true, active: true)[0] ? true : false}
+    if current_user.credits.count == 0
+      status = true
+      error_message = "Insufficient credit."
+    elsif current_user.selling_posts.where(sold: false, public: true).count > 0
+      status = true
+      error_message = "You have reached your selling limit. Please mark your post as 'SOLD' or delete it by click the following button."
+    else
+      status = false
+      error_message = "Success"
+    end
+    render json: {status: status, error_message: error_message}
   end
 
   def follow_count

@@ -56,12 +56,13 @@ ActiveRecord::Schema.define(version: 20151106215924) do
   end
 
   create_table "credits", force: :cascade do |t|
-    t.integer  "user_id",                    null: false
+    t.integer  "user_id",                     null: false
     t.string   "method"
     t.integer  "promouse_id"
+    t.boolean  "used",        default: false
     t.boolean  "active",      default: true
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
   end
 
   create_table "phones", force: :cascade do |t|

@@ -5,6 +5,7 @@ class Post < ActiveRecord::Base
 
   # has_many :stars, dependent: :destroy
   has_many :stars,  -> { where(stars: {active: true}) }
-  has_many :inactive_stars,  -> { where(stars: {active: false}) }, :class_name => "Star", :foreign_key => :star_id
+  has_many :inactive_stars,  -> { where(stars: {active: false}) }, :class_name => "Star", :foreign_key => :post_id
+  
   has_many :comments, dependent: :destroy
 end

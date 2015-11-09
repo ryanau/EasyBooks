@@ -3,11 +3,11 @@ class User < ActiveRecord::Base
   # has_secure_password
 
   belongs_to :university
-  has_many :credits, -> { where(credits: {active: true}) }
-  has_many :inactive_credits, -> { where(credits: {active: false}) }, :class_name => "Credit", :foreign_key => :credit_id
+  has_many :credits, -> { where(credits: {active: true, used: false}) }
+  has_many :used_credits, -> { where(credits: {active: true, used: true}) }, :class_name => "Credit", :foreign_key => :user_id
+  has_many :inactive_credits, -> { where(credits: {active: false}) }, :class_name => "Credit", :foreign_key => :user_id
 
   has_many :courses, -> { where(courses: {active: true}) }, through: :subscriptions
-  has_many :inactive_courses, -> { where(courses: {active: false}) }, through: :subscriptions, :class_name => "Course", :foreign_key => :course_id
 
   has_many :subscriptions, -> { where(subscriptions: {active: true}) }
   has_many :inactive_subscriptions, -> { where(subscriptions: {active: false})}, :class_name => "Subscription", :foreign_key => :user_id

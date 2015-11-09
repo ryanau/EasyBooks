@@ -54,7 +54,9 @@ Landing = React.createClass({
             <div className="row">
               <div className="twelve column value">
                 <h5 className="value-heading">Trying to buy or sell your textbook? Don’t want to be ripped off??</h5>
+                <p className="value-description">Students take note! Feel like you are wasting time and money finding used textbooks, try EasyBooks! You can buy directly from your fellow schoolmates, often at a lower price!</p>
                 <p className="value-description">Unlike competitors, we provide a comfortable environment that enables you to sell/buy your textbooks quickly and reliably from other students.</p>
+                <h3>Get started for free!</h3>
                 <p className="value-description">Email us at caleazybooks@gmail.com</p>
               </div>
             </div>

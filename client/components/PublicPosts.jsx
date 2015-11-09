@@ -146,9 +146,9 @@ PublicPosts = React.createClass({
   	};
   	return (
   		<div>
-
+	  		<Panel header={header} bsStyle="info" className="p0">
 	  			{posts}
-
+	  		</Panel>
   		</div>
   	)
   }
