@@ -5,6 +5,9 @@ class CreatePromos < ActiveRecord::Migration
       t.date :expiry
       t.integer :credit
       t.string :info
+
+      t.boolean :active, default: true
+
       t.timestamps null: false
     end
   end

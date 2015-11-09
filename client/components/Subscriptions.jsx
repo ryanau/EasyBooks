@@ -14,6 +14,7 @@ var Panel = require('react-bootstrap').Panel;
 var Button = require('react-bootstrap').Button;
 var ButtonToolbar = require('react-bootstrap').ButtonToolbar;
 var Glyphicon = require('react-bootstrap').Glyphicon;
+var Col = require('react-bootstrap').Col;
 
 var SubscribedCourse = require('./SubscribedCourse.jsx');
 var AddSubscription = require('./AddSubscription.jsx');
@@ -116,16 +117,12 @@ Subscriptions = React.createClass({
 				  message='Subscriptions Updated. Redirecting...'
 				  autoHideDuration={1000}/>
 				<Panel header="Manage Subscriptions">
-					<div>
 					{subscriptions}
 					{subscription_component}
-					</div>
-					<div>
 					<ButtonToolbar className="mT10">
 						{showAddSubscription}
 						{updateSubscriptionButton}
 					</ButtonToolbar>
-					</div>
 				</Panel>
 			</div>
 		)

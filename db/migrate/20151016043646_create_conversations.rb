@@ -7,6 +7,8 @@ class CreateConversations < ActiveRecord::Migration
       t.integer :seller_phone_id, null: false
       t.integer :buyer_phone_id, null: false
 
+      t.boolean :active, default: true
+      
       t.timestamps null: false
     end
   end

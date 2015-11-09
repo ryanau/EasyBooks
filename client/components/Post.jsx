@@ -230,6 +230,8 @@ Post = React.createClass({
 		if (this.state.post != null && !this.state.not_found) {
 			var post = this.state.post;
 			var star_count = this.state.star_count;
+			console.log(post.seller_id)
+			console.log(this.props.currentUser.id)
 			if (post.seller_id == this.props.currentUser.id) {
 				var deleteButton = 
 				  <Button onClick={this.deletePost} bsStyle="danger"><Glyphicon glyph="trash"/></Button>

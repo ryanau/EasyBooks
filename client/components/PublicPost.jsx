@@ -46,7 +46,7 @@ PublicPost = React.createClass({
   getInitialState: function () {
     return {
       star: null,
-      star_count: this.props.post.stars.length,
+      star_count: null,
       mutual_friends_count: null,
       mutual_friends: null,
       offer: null,
@@ -57,6 +57,7 @@ PublicPost = React.createClass({
     this.loadStar();
     this.loadStarPosition();
     this.loadMutualFriends();
+    this.loadStarCount();
   },
   componentDidUpdate: function () {
     this.loadStarPosition();

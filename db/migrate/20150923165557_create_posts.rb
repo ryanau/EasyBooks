@@ -15,6 +15,8 @@ class CreatePosts < ActiveRecord::Migration
       t.integer :seller_id, null: false
       t.integer :buyer_id
 
+      t.boolean :active, default: true
+
       t.timestamps null: false
     end
   end

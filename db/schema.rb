@@ -34,31 +34,34 @@ ActiveRecord::Schema.define(version: 20151106215924) do
   end
 
   create_table "conversations", force: :cascade do |t|
-    t.integer  "star_id",         null: false
-    t.integer  "seller_id",       null: false
-    t.integer  "buyer_id",        null: false
-    t.integer  "seller_phone_id", null: false
-    t.integer  "buyer_phone_id",  null: false
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.integer  "star_id",                        null: false
+    t.integer  "seller_id",                      null: false
+    t.integer  "buyer_id",                       null: false
+    t.integer  "seller_phone_id",                null: false
+    t.integer  "buyer_phone_id",                 null: false
+    t.boolean  "active",          default: true
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
   end
 
   create_table "courses", force: :cascade do |t|
-    t.string   "department",    null: false
-    t.string   "course_number", null: false
-    t.string   "semester",      null: false
-    t.string   "year",          null: false
-    t.integer  "university_id", null: false
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.string   "department",                   null: false
+    t.string   "course_number",                null: false
+    t.string   "semester",                     null: false
+    t.string   "year",                         null: false
+    t.integer  "university_id",                null: false
+    t.boolean  "active",        default: true
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
   end
 
   create_table "credits", force: :cascade do |t|
-    t.integer  "user_id",     null: false
+    t.integer  "user_id",                    null: false
     t.string   "method"
     t.integer  "promouse_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.boolean  "active",      default: true
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
   end
 
   create_table "phones", force: :cascade do |t|
@@ -80,25 +83,28 @@ ActiveRecord::Schema.define(version: 20151106215924) do
     t.integer  "course_id",                     null: false
     t.integer  "seller_id",                     null: false
     t.integer  "buyer_id"
+    t.boolean  "active",        default: true
     t.datetime "created_at",                    null: false
     t.datetime "updated_at",                    null: false
     t.string   "author"
   end
 
   create_table "promos", force: :cascade do |t|
-    t.string   "code",       null: false
+    t.string   "code",                      null: false
     t.date     "expiry"
     t.integer  "credit"
     t.string   "info"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.boolean  "active",     default: true
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
   end
 
   create_table "promouses", force: :cascade do |t|
-    t.integer  "user_id",    null: false
-    t.integer  "promo_id",   null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.integer  "user_id",                   null: false
+    t.integer  "promo_id",                  null: false
+    t.boolean  "active",     default: true
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
   end
 
   create_table "stars", force: :cascade do |t|
@@ -106,15 +112,17 @@ ActiveRecord::Schema.define(version: 20151106215924) do
     t.integer  "user_id",                    null: false
     t.boolean  "sent",       default: false
     t.boolean  "accepted",   default: false
+    t.boolean  "active",     default: true
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
   end
 
   create_table "subscriptions", force: :cascade do |t|
-    t.integer  "user_id",    null: false
-    t.integer  "course_id",  null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.integer  "user_id",                   null: false
+    t.integer  "course_id",                 null: false
+    t.boolean  "active",     default: true
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
   end
 
   create_table "universities", force: :cascade do |t|

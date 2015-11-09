@@ -12,24 +12,24 @@ class PostsController < ApplicationController
       result = find_course(course_selected)
       case sorting
         when "Oldest to Newest"
-          posts = Post.where(university_id: university_id, public: true, course_id: result[:course_id]).order(created_at: :ASC)[start_point..end_point]
+          posts = Post.where(university_id: university_id, public: true, active: true, course_id: result[:course_id]).order(created_at: :ASC)[start_point..end_point]
         when "$ Low to High"
-          posts = Post.where(university_id: university_id, public: true, course_id: result[:course_id]).order(price: :ASC)[start_point..end_point]
+          posts = Post.where(university_id: university_id, public: true, active: true, course_id: result[:course_id]).order(price: :ASC)[start_point..end_point]
         when "$ High to Low"
-          posts = Post.where(university_id: university_id, public: true, course_id: result[:course_id]).order(price: :DESC)[start_point..end_point]
+          posts = Post.where(university_id: university_id, public: true, active: true, course_id: result[:course_id]).order(price: :DESC)[start_point..end_point]
         else
-          posts = Post.where(university_id: university_id, public: true, course_id: result[:course_id]).order(created_at: :DESC)[start_point..end_point]
+          posts = Post.where(university_id: university_id, public: true, active: true, course_id: result[:course_id]).order(created_at: :DESC)[start_point..end_point]
       end
     else
       case sorting
         when "Oldest to Newest"
-          posts = Post.where(university_id: university_id, public: true).order(created_at: :ASC)[start_point..end_point]
+          posts = Post.where(university_id: university_id, public: true, active: true).order(created_at: :ASC)[start_point..end_point]
         when "$ Low to High"
-          posts = Post.where(university_id: university_id, public: true).order(price: :ASC)[start_point..end_point]
+          posts = Post.where(university_id: university_id, public: true, active: true).order(price: :ASC)[start_point..end_point]
         when "$ High to Low"
-          posts = Post.where(university_id: university_id, public: true).order(price: :DESC)[start_point..end_point]
+          posts = Post.where(university_id: university_id, public: true, active: true).order(price: :DESC)[start_point..end_point]
         else
-          posts = Post.where(university_id: university_id, public: true).order(created_at: :DESC)[start_point..end_point]
+          posts = Post.where(university_id: university_id, public: true, active: true).order(created_at: :DESC)[start_point..end_point]
       end
     end
     render :json => posts.as_json(include: {stars: {only: :star_id}, course: {except: :updated_at}, seller: {only: [:pic, :first_name, :last_name]}})
@@ -47,7 +47,7 @@ class PostsController < ApplicationController
   end
 
   def show
-    post = Post.find(params[:post_id])
+    post = Post.find_by(id: params[:post_id], active: true)
     if post.sold && post.seller_id != current_user.id
       render json: {error_message: "Post not found"}
     else
@@ -56,7 +56,7 @@ class PostsController < ApplicationController
   end
 
   def sell_status
-    render json: {status: current_user.selling_posts.where(sold: false, public: true)[0] ? true : false}
+    render json: {status: current_user.selling_posts.where(sold: false, public: true, active: true)[0] ? true : false}
   end
 
   def follow_count
@@ -71,13 +71,10 @@ class PostsController < ApplicationController
 
   def mark_sold
     post_id = params[:post_id]
-    post = Post.find(post_id)
-    if post.sold && !post.public
-      post.update_attributes(sold: false, public: true)
-      response = false
-    else
+    post = Post.find_by(id: post_id, active: true)
+    if !post.sold && post.public
       post.update_attributes(sold: true, public: false)
-      post.stars.destroy_all
+      post.stars.update_all(active: false)
       response = true
     end
     render json: {sold: response}
@@ -85,27 +82,27 @@ class PostsController < ApplicationController
 
   def destroy
     post_id = params[:post_id]
-    current_user.selling_posts.find(post_id).destroy
+    current_user.selling_posts.find_by(id: post_id, active: true).update_attributes(active: false)
     render json: {message: "Post Deleted"}
   end
 
   def active_posts
-    posts = current_user.selling_posts.where(sold: false, public: true).order(created_at: :DESC)
+    posts = current_user.selling_posts.where(sold: false, public: true, active: true).order(created_at: :DESC)
     render :json => posts.as_json(include: {stars: {only: :star_id}, course: {only: [:department, :course_number]}, seller: {only: [:pic, :first_name, :last_name]}})  
   end
 
   def starred_posts
-    posts = current_user.posts.order(created_at: :DESC)
+    posts = current_user.posts.where(active: true).order(created_at: :DESC)
     render :json => posts.as_json(include: {stars: {only: :star_id}, course: {only: [:department, :course_number]}, seller: {only: [:pic, :first_name, :last_name]}})  
   end
 
   def starred_posts_count
-    count = current_user.posts.order(created_at: :DESC).count
+    count = current_user.posts.where(active: true).order(created_at: :DESC).count
     render json: {starred_posts_count: count} 
   end
 
   def archived_posts
-    posts = current_user.selling_posts.where(sold: true, public: false).order(created_at: :DESC)
+    posts = current_user.selling_posts.where(sold: true, public: false, active: true).order(created_at: :DESC)
     render :json => posts.as_json(include: {stars: {only: :star_id}, course: {only: [:department, :course_number]}, seller: {only: [:pic, :first_name, :last_name]}})  
   end
 

@@ -4,8 +4,8 @@ module CourseAlertControls
     post = Post.find(post_id)
     seller = User.find(seller_id)
 
-    Subscription.where(course_id: course_id).each do |subscription|
-      conversation = subscription.user.buying_conversations.first
+    Subscription.where(course_id: course_id, active: true).each do |subscription|
+      conversation = subscription.user.buying_conversations.where(active: true).first
       if conversation
         if conversation.star.post.course != subscription.course
           command = new_post_alert_stop_command(subscription.id)
@@ -34,7 +34,7 @@ module CourseAlertControls
     course_name = course.department + " " + course.course_number
     post_id = post.id.to_s
     root = "https://easybooks.herokuapp.com/posts/#{post_id}"
-    message = "EasyBooks: New post for #{course_name}! #{post.title} (#{post.condition}): $#{post.price} by #{seller.first_name}!\n\nClick here to watch the post: #{root}\n\nTo stop getting alert from #{course_name}, reply with '#{random_num}'."
+    message = "EasyBooks says: New post for #{course_name}! #{post.title} (#{post.condition}): $#{post.price} by #{seller.first_name}!\n\nClick here to watch the post: #{root}\n\nTo stop getting alert from #{course_name}, reply with '#{random_num}'."
     SmsNotification.send_from_main_phone(to, message)
   end
 end

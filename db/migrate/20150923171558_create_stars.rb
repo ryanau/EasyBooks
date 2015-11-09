@@ -6,6 +6,8 @@ class CreateStars < ActiveRecord::Migration
       t.boolean :sent, default: false
       t.boolean :accepted, default: false
 
+      t.boolean :active, default: true
+      
       t.timestamps null: false
     end
   end
