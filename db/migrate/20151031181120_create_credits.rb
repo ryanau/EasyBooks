@@ -4,6 +4,9 @@ class CreateCredits < ActiveRecord::Migration
       t.integer :user_id, null: false
       t.string :method
       t.integer :promouse_id
+
+      t.boolean :active, default: true
+      
       t.timestamps null: false
     end
   end

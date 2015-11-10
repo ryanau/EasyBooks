@@ -14,14 +14,15 @@ class StarsController < ApplicationController
   def destroy
     post_id = params[:post_id]
     star = Post.find(post_id).stars.find_by(user_id: current_user.id)
-    star.destroy
+    star.conversation.update_attributes(active: false)
+    star.update_attributes(active: false)
     render json: {message: "Unstarred"}
   end
 
   def create
     action = StarCreator.new(params, current_user)
     if action.ok?
-      # PostAlert.perform_async(action.star.post.id)
+      PostAlert.perform_async(action.star.post.id)
       render json: {message: "Starred"}
     else
       render json: 'failed to star', status: 400
@@ -31,12 +32,12 @@ class StarsController < ApplicationController
   def count
     post_id = params[:post_id]
     post = Post.find(post_id)
-    star_count = Star.where(post_id: post.id).where.not(user_id: post.seller.id).count
+    star_count = Star.where(post_id: post.id, active: true).where.not(user_id: post.seller.id).count
     render json: {star_count: star_count}
   end
 
   def starred
-    if current_user.stars.count > 0
+    if current_user.stars.where(active: true).count > 0
       response = true
     else
       response = false

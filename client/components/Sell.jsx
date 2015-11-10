@@ -37,6 +37,7 @@ Sell = React.createClass({
 	getInitialState: function () {
 		return {
 			sell_status: null,
+			author: '',
 			title: '',
 			price: '',
 			pickup: '',
@@ -130,6 +131,7 @@ Sell = React.createClass({
 	handleSubmit: function () {
 		var data = {
 			title: this.state.title,
+			author: this.state.author,
 			price: this.state.price,
 			pickup: this.state.pickup,
 			course_selected: this.state.course_selected,
@@ -137,7 +139,7 @@ Sell = React.createClass({
 			description: this.state.description,
 			condition: this.state.condition,
 		};
-		if (data.title == '' || data.price == '' || data.condition == '' || data.course_selected == null) {
+		if (data.author == '' || data.title == '' || data.price == '' || data.condition == '' || data.course_selected == null) {
 			this.setState({
 				warning: "Please fill out all required fields. Did you select the Course?"
 			});
@@ -171,6 +173,7 @@ Sell = React.createClass({
 	handleChange: function () {
 	  this.setState({
 	    title: this.refs.title.getValue(),
+	    author: this.refs.author.getValue(),
 	    description: this.refs.description.getValue(),
 	    price: this.refs.price.getValue(),
 	    pickup: this.refs.pickup.getValue(),
@@ -178,6 +181,14 @@ Sell = React.createClass({
 	},
 	validateTitle: function () {
 	  var length = this.state.title.length;
+	  if (length > 0) {
+	  	return 'success';
+	  } else {
+	  	return 'error';
+	  }
+	},
+	validateAuthor: function () {
+	  var length = this.state.author.length;
 	  if (length > 0) {
 	  	return 'success';
 	  } else {
@@ -233,12 +244,24 @@ Sell = React.createClass({
 				<Input
 	        type="text"
 	        value={this.state.title}
-	        placeholder="e.g. Statistics by Freedman, Pisani, and Purves (4th edition)"
+	        placeholder="e.g. Introduction to Statistics"
 	        label="Book Name"
 	        help="Required"
 	        bsStyle={this.validateTitle()}
 	        hasFeedback
 	        ref="title"
+	        groupClassName="group-class"
+	        labelClassName="label-class"
+	        onChange={this.handleChange} />
+				<Input
+	        type="text"
+	        value={this.state.author}
+	        placeholder="e.g. Freedman, Pisani, and Purves"
+	        label="Author"
+	        help="Required"
+	        bsStyle={this.validateAuthor()}
+	        hasFeedback
+	        ref="author"
 	        groupClassName="group-class"
 	        labelClassName="label-class"
 	        onChange={this.handleChange} />

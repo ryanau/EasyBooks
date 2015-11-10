@@ -4,7 +4,7 @@ class SubscriptionsController < ApplicationController
   before_action :authentication, only: [:index, :create, :parse_calendar, :update]
 
   def index
-    subscriptions = current_user.subscriptions.all.includes(:course)
+    subscriptions = current_user.subscriptions.where(active: true).includes(:course)
     render json: subscriptions.to_json(include: [:course])
   end
 
@@ -14,8 +14,8 @@ class SubscriptionsController < ApplicationController
       courses.each do |course|
         department = course[1][0]
         course_number = course[1][1]
-        for_deletion = current_user.subscriptions.find_by(course_id: Course.find_by(department: department, course_number: course_number).id)
-        for_deletion.destroy
+        for_deletion = current_user.subscriptions.find_by(active: true, course_id: Course.find_by(department: department, course_number: course_number).id)
+        for_deletion.update_attributes(active: false)
       end
     end
     render json: {message: "success"}
@@ -29,8 +29,8 @@ class SubscriptionsController < ApplicationController
       total = course_selected.length - course_selected[course_selected.reverse.index(/\s{1}/, 1) * -1.. -1].length - 2
       arr.unshift(course_selected[0..total])
       course_id = Course.find_by(department: arr[0], course_number: arr[1]).id
-      if current_user.subscriptions.where(course_id: course_id).count == 0
-        current_user.subscriptions.create(course_id: course_id)        
+      if current_user.subscriptions.where(course_id: course_id, active: true).count == 0
+        Subscription.create(user_id: current_user.id, course_id: course_id, active: true)        
         render json: {message: "success"}
       else
         render json: {message: "this course has already been subscribed to"}

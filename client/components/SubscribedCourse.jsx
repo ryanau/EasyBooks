@@ -5,6 +5,8 @@ var mui = require('material-ui');
 var ThemeManager = new mui.Styles.ThemeManager();
 var Toggle = mui.Toggle;
 
+var Col = require('react-bootstrap').Col;
+
 SubscribedCourse = React.createClass({
 	childContextTypes: {
 	  muiTheme: React.PropTypes.object
@@ -33,13 +35,12 @@ SubscribedCourse = React.createClass({
 		var course = this.props.course
 		return (
 			<div>
-				<p>{course.course.department + ' ' + course.course.course_number}</p>
-
-				<Toggle
-				  ref="toggle"
-				  onToggle={this.handleToggle}
-				  defaultToggled={true}
-				  label={this.state.display}/>
+					<p>{course.course.department + ' ' + course.course.course_number}</p>
+					<Toggle
+					  ref="toggle"
+					  onToggle={this.handleToggle}
+					  defaultToggled={true}
+					  label={this.state.display}/>
 			</div>
 		)
 	}

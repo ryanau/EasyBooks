@@ -8,6 +8,8 @@ class CreateCourses < ActiveRecord::Migration
 
       t.integer :university_id, null: false
 
+      t.boolean :active, default: true
+      
       t.timestamps null: false
     end
   end

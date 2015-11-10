@@ -10,6 +10,7 @@ var Button = require('react-bootstrap').Button;
 var Col = require('react-bootstrap').Col;
 var SplitButton = require('react-bootstrap').SplitButton;
 var MenuItem = require('react-bootstrap').MenuItem;
+var Well = require('react-bootstrap').Well;
 
 var PublicPosts = require('./PublicPosts.jsx');
 var Courses = require('../courses.js');
@@ -62,6 +63,9 @@ MarketPlace = React.createClass({
     var searchOptions = this.state.courses;
   	return (
   		<div>
+        <Col xs={12} md={12} lg={12} s={12}>
+        <h4>Search by Course</h4>
+        </Col>
         <Col xs={12} md={8} lg={9} s={8}>
           <Select
           name="form-field-name"
