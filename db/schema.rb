@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151106215924) do
+ActiveRecord::Schema.define(version: 20151111051315) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -65,6 +65,25 @@ ActiveRecord::Schema.define(version: 20151106215924) do
     t.datetime "updated_at",                  null: false
   end
 
+  create_table "entries", force: :cascade do |t|
+    t.integer  "seller_id",            null: false
+    t.integer  "buyer_id",             null: false
+    t.integer  "post_id",              null: false
+    t.string   "venmo_transaction_id"
+    t.string   "amount",               null: false
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+  end
+
+  create_table "paymentcodes", force: :cascade do |t|
+    t.integer  "conversation_id", null: false
+    t.string   "random_num",      null: false
+    t.integer  "seller_id",       null: false
+    t.integer  "buyer_id",        null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
   create_table "phones", force: :cascade do |t|
     t.string   "number",     null: false
     t.datetime "created_at", null: false
@@ -116,6 +135,7 @@ ActiveRecord::Schema.define(version: 20151106215924) do
     t.boolean  "active",     default: true
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
+    t.boolean  "expired",    default: false
   end
 
   create_table "subscriptions", force: :cascade do |t|

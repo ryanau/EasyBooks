@@ -51,19 +51,40 @@ PublicPost = React.createClass({
       mutual_friends: null,
       offer: null,
       star_position: null,
+      sold: null,
     }
   },
   componentDidMount: function () {
-    this.loadStar();
-    this.loadStarPosition();
     this.loadMutualFriends();
-    this.loadStarCount();
-  },
-  componentDidUpdate: function () {
-    this.loadStarPosition();
+    this.loadSold();
   },
   redirectToPost: function () {
     this.transitionTo('/posts/' + this.props.post.id);
+  },
+  loadSold: function () {
+    var post_id = this.props.post.id;
+    var data = {
+      post_id: post_id,
+    };
+    $.ajax({
+      url: this.props.origin + '/post/' + this.props.post.id + '/sold',
+      type: 'GET',
+      data: data,
+      dataType: 'json',
+      crossDomain: true,
+      headers: {'Authorization': localStorage.getItem('jwt-easybooks')},
+      success: function (response) {
+        $.when(this.setState({sold: response.sold})).done(function (){
+          if (this.state.sold) {
+            this.loadStar();
+            this.loadStarCount();
+          }
+        }.bind(this));
+      }.bind(this),
+      error: function (error) {
+        window.location = "/"
+      }.bind(this),
+    });
   },
   loadStarPosition: function () {
     var post = this.props.post
@@ -127,7 +148,9 @@ PublicPost = React.createClass({
       crossDomain: true,
       headers: {'Authorization': localStorage.getItem('jwt-easybooks')},
       success: function (response) {
-        response.starred? this.setState({star: true}) : this.setState({star: false})
+        $.when(response.starred? this.setState({star: true}) : this.setState({star: false})).done(function () {
+          this.loadStarPosition();
+        }.bind(this));
       }.bind(this),
       error: function (error) {
         window.location = "/"
@@ -149,15 +172,14 @@ PublicPost = React.createClass({
         headers: {'Authorization': localStorage.getItem('jwt-easybooks')},
         success: function (response) {
           this.refs.postUnstarred.show();
+          $.when(this.setState({star: false})).done(function (){
+            this.loadStarCount();
+          }.bind(this));
         }.bind(this),
         error: function (error) {
           window.location = "/"
         }.bind(this),
       });
-      this.setState({
-        star: false
-      });
-      this.loadStarCount();
     } else {
       var data = {
         post_id: post_id,
@@ -171,15 +193,14 @@ PublicPost = React.createClass({
         headers: {'Authorization': localStorage.getItem('jwt-easybooks')},
         success: function (response) {
           this.refs.postStarred.show();
+          $.when(this.setState({star: true})).done(function (){
+            this.loadStarCount();
+          }.bind(this));
         }.bind(this),
         error: function (error) {
           window.location = "/"
         }.bind(this),
       });
-      this.setState({
-        star: true
-      });
-      this.loadStarCount();
     }
   },
   loadStarCount: function () {
@@ -268,25 +289,24 @@ PublicPost = React.createClass({
       } else {
         var mutual = "Loading mutual friends..."
       }
-      var actionButtons = 
-      <CardActions>
-        {this.state.star? watchClicked : watchNotClicked}
-        {infoButton}
-      </CardActions>
-      var buttonGroup = (
-        <ButtonToolbar>
-        {this.state.star? watchClicked : watchNotClicked}
-        {infoButton}
-        </ButtonToolbar>
-      )
+      if (this.state.sold) {
+        var buttonGroup = (
+          <ButtonToolbar>
+          {infoButton}
+          </ButtonToolbar>
+        )
+      } else {
+        var buttonGroup = (
+          <ButtonToolbar>
+          {this.state.star? watchClicked : watchNotClicked}
+          {infoButton}
+          </ButtonToolbar>
+        )  
+      }
       var seller = post.seller.first_name + ' ' + post.seller.last_name
     } else {
       var seller = "you"
       var mutual = ":P"
-      var actionButtons = 
-      <CardActions>
-        {infoButton}
-      </CardActions>
       var buttonGroup = (
         <ButtonToolbar>
         {infoButton}

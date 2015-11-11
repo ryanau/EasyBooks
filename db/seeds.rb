@@ -27,6 +27,7 @@ Phone.create(number: "+15102963497")
 # seed promo
 Promo.create(code: "XYZXYZ", info: "1 Free Selling Credit", credit: 1)
 Promo.create(code: "XYZXYA", info: "5 Free Selling Credit", credit: 5)
+Promo.create(code: "XYZXYB", info: "1 Free Selling Credit", credit: 1)
 
 
 # seed users

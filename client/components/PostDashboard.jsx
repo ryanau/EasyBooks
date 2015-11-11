@@ -12,6 +12,7 @@ var Panel = require('react-bootstrap').Panel;
 
 var ActivePosts = require('./postdashboard/ActivePosts.jsx');
 var ArchivedPosts = require('./postdashboard/ArchivedPosts.jsx');
+var BoughtPosts = require('./postdashboard/BoughtPosts.jsx');
 
 
 PostDashBoard = React.createClass({
@@ -33,6 +34,9 @@ PostDashBoard = React.createClass({
 					  </Tab>
 					  <Tab eventKey={2} title="Sold">
 					    <ArchivedPosts origin={this.props.origin} currentUser={this.props.currentUser}/>
+					  </Tab>
+					  <Tab eventKey={3} title="Bought">
+					    <BoughtPosts origin={this.props.origin} currentUser={this.props.currentUser}/>
 					  </Tab>
 					</Tabs>
 				</Panel>

@@ -1,4 +1,4 @@
-module SmsNotification
+module SmsOutbound
 
   # def self.create_course_alert(course_id, post_id, seller_id)
   #   course = Course.find(course_id)

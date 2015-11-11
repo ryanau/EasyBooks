@@ -1,6 +1,6 @@
 class PostsController < ApplicationController
   require 'openssl'
-  before_action :authentication, only: [:index, :create, :show, :image_upload, :active_posts, :destroy, :starred_posts, :mark_sold, :archived_posts, :mutual_friends, :sell_status, :follow_count, :starred_posts_count]
+  before_action :authentication, only: [:index, :create, :show, :image_upload, :active_posts, :destroy, :starred_posts, :mark_sold, :archived_posts, :mutual_friends, :sell_status, :follow_count, :starred_posts_count, :bought_posts, :post_sold]
 
   def index
     university_id = current_user.university_id
@@ -114,6 +114,17 @@ class PostsController < ApplicationController
   def archived_posts
     posts = current_user.selling_posts.where(sold: true, public: false, active: true).order(created_at: :DESC)
     render :json => posts.as_json(include: {stars: {only: :star_id}, course: {only: [:department, :course_number]}, seller: {only: [:pic, :first_name, :last_name]}})  
+  end
+
+  def bought_posts
+    posts = current_user.buying_posts.order(created_at: :DESC)
+    render :json => posts.as_json(include: {stars: {only: :star_id}, course: {only: [:department, :course_number]}, seller: {only: [:pic, :first_name, :last_name]}})  
+  end
+
+  def post_sold
+    post_id = params[:post_id]
+    sold = Post.find(post_id).sold
+    render json: {sold: sold}
   end
 
   def image_upload

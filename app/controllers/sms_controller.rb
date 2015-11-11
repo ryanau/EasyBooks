@@ -1,6 +1,6 @@
 class SmsController < ApplicationController
   def approve
-    action = SmsInputVerifier.new(params)
+    action = SmsInbound.new(params)
     action.proceed
   end
 end

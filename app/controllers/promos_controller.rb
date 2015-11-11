@@ -9,7 +9,6 @@ class PromosController < ApplicationController
       else
         promouse = current_user.promouses.create(promo_id: promo.id)
         promo.credit.times { current_user.credits.create(promouse_id: promouse.id, method: "Promo Code")}
-        # current_user.credits.create(promouse_id: promouse.id, method: "Promo Code")
         render json: {message: "Code Applied: #{promo.info}"}
       end
     else

@@ -308,7 +308,6 @@ Post = React.createClass({
 				  {subscribers}
 				  <ButtonToolbar>
 					  {deleteButton}
-					  {soldButton}
 				  </ButtonToolbar>
 				  {comments}
 				</Panel>
