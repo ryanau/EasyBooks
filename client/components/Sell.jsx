@@ -37,6 +37,7 @@ Sell = React.createClass({
 	getInitialState: function () {
 		return {
 			sell_status: null,
+			error_message: null,
 			author: '',
 			title: '',
 			price: '',
@@ -66,6 +67,7 @@ Sell = React.createClass({
 			success: function (response) {
 				this.setState({
 					sell_status: response.status,
+					error_message: response.error_message,
 				});
 			}.bind(this),
 			error: function (error) {
@@ -216,7 +218,7 @@ Sell = React.createClass({
   		var warning =
 			<Alert bsStyle="danger">
 				<h4>Error!</h4>
-		  	<p>You can only have one active sell post. Please mark your post as "SOLD" or delete it by click the following button.</p>
+		  	<p>{this.state.error_message}</p>
 		  	<p><ButtonLink bsStyle="primary" to="/postdashboard">Managet your Active Posts</ButtonLink></p>
 		  </Alert>
 	  } else {

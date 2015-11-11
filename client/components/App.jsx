@@ -11,10 +11,10 @@ App = React.createClass({
     return {
 
       // comment the following line when in development
-      // origin: '/api',
+      // origin: '/api/v1',
 
       // comment the following line when deploying to heroku
-      origin: 'http://localhost:3000/api',
+      origin: 'http://localhost:3000/api/v1',
     }
   },
   getInitialState: function () {

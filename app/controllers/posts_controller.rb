@@ -1,6 +1,6 @@
 class PostsController < ApplicationController
   require 'openssl'
-  before_action :authentication, only: [:index, :create, :show, :image_upload, :active_posts, :destroy, :starred_posts, :mark_sold, :archived_posts, :mutual_friends, :sell_status, :follow_count, :starred_posts_count]
+  before_action :authentication, only: [:index, :create, :show, :image_upload, :active_posts, :destroy, :starred_posts, :mark_sold, :archived_posts, :mutual_friends, :sell_status, :follow_count, :starred_posts_count, :bought_posts, :post_sold]
 
   def index
     university_id = current_user.university_id
@@ -39,7 +39,7 @@ class PostsController < ApplicationController
     action = PostCreator.new(params, current_user)
     if action.ok?
       post = action.post
-      CourseAlert.perform_async(post.course_id, post.id, current_user.id)
+      # CourseAlert.perform_async(post.course_id, post.id, current_user.id)
       render json: {post_id: action.post.id}
     else
       render json: {error_message: action.post}
@@ -56,7 +56,17 @@ class PostsController < ApplicationController
   end
 
   def sell_status
-    render json: {status: current_user.selling_posts.where(sold: false, public: true, active: true)[0] ? true : false}
+    if current_user.credits.count == 0
+      status = true
+      error_message = "Insufficient credit."
+    elsif current_user.selling_posts.where(sold: false, public: true).count > 0
+      status = true
+      error_message = "You have reached your selling limit. Please mark your post as 'SOLD' or delete it by click the following button."
+    else
+      status = false
+      error_message = "Success"
+    end
+    render json: {status: status, error_message: error_message}
   end
 
   def follow_count
@@ -104,6 +114,17 @@ class PostsController < ApplicationController
   def archived_posts
     posts = current_user.selling_posts.where(sold: true, public: false, active: true).order(created_at: :DESC)
     render :json => posts.as_json(include: {stars: {only: :star_id}, course: {only: [:department, :course_number]}, seller: {only: [:pic, :first_name, :last_name]}})  
+  end
+
+  def bought_posts
+    posts = current_user.buying_posts.order(created_at: :DESC)
+    render :json => posts.as_json(include: {stars: {only: :star_id}, course: {only: [:department, :course_number]}, seller: {only: [:pic, :first_name, :last_name]}})  
+  end
+
+  def post_sold
+    post_id = params[:post_id]
+    sold = Post.find(post_id).sold
+    render json: {sold: sold}
   end
 
   def image_upload

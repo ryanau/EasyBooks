@@ -20,9 +20,23 @@ gem 'sidekiq', '3.5.0'
 gem 'faker', '1.5.0'
 gem 'omniauth-facebook'
 
+# group :development, :test do
+#   # gem 'pry-rails'
+#   # gem 'pry-byebug'
+#   gem 'rspec-rails', '~> 3.0'
+# end
+
 group :development, :test do
-  # gem 'pry-rails'
-  # gem 'pry-byebug'
+  gem "jasmine"
+  gem "pry"
+  gem 'rspec-rails', '~> 3.0'
+  gem 'awesome_print'
+end
+
+group :test do
+  gem "capybara"
+  gem "factory_girl_rails"
+  gem "poltergeist"
 end
 
 group :production do

@@ -34,10 +34,12 @@ PublicPosts = React.createClass({
 			isInfiniteLoading: true
 		}
 	},
-	componentDidMount: function () {
-		this.loadPosts();
+	componentWillMount: function () {
 		this.state.course_selected.on('sorting_changed', this.loadSelected)
 		this.state.course_selected.on('course_changed', this.loadSelected)
+	},
+	componentDidMount: function () {
+		this.loadPosts();
 	},
 	componentWillUnmount: function () {
 		this.state.course_selected.off('sorting_changed')
@@ -146,9 +148,9 @@ PublicPosts = React.createClass({
   	};
   	return (
   		<div>
-
+	  		<Panel header={header} bsStyle="info" className="p0">
 	  			{posts}
-
+	  		</Panel>
   		</div>
   	)
   }

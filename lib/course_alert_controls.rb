@@ -35,7 +35,7 @@ module CourseAlertControls
     post_id = post.id.to_s
     root = "https://easybooks.herokuapp.com/posts/#{post_id}"
     message = "EasyBooks says: New post for #{course_name}! #{post.title} (#{post.condition}): $#{post.price} by #{seller.first_name}!\n\nClick here to watch the post: #{root}\n\nTo stop getting alert from #{course_name}, reply with '#{random_num}'."
-    SmsNotification.send_from_main_phone(to, message)
+    SmsOutbound.send_from_main_phone(to, message)
   end
 end
 

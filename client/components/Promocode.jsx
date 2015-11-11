@@ -35,6 +35,7 @@ Promocode = React.createClass({
 					isLoading: false,
 					codeMessage: response.message,
 				})
+				this.props.reloadCreditCount();
 			}.bind(this),
 			error: function (error) {
 				window.location = "/"

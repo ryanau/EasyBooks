@@ -1,15 +1,19 @@
 class PostCreator
   attr_reader :post
   def initialize(params, current_user)
-    @post = Post.new(allowed_params(params, current_user))
+    @current_user = current_user
+    @post = Post.new(allowed_params(params, @current_user))
   end
 
   def ok?
-    save_post
+    unless @current_user.selling_posts.where(sold: false, public: true).count > 0
+      save_post
+    end
   end
 
   def save_post
     @post.save
+    @current_user.credits.first.update_attributes(used: true)
   end
 
   private
