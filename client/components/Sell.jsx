@@ -21,6 +21,8 @@ var Button = require('react-bootstrap').Button;
 var Panel = require('react-bootstrap').Panel;
 var Alert = require('react-bootstrap').Alert;
 
+var VenmoAuthorizationSell = require('./VenmoAuthorizationSell.jsx');
+
 var ReactRouterBootstrap = require('react-router-bootstrap')
   , ButtonLink = ReactRouterBootstrap.ButtonLink
 
@@ -51,11 +53,34 @@ Sell = React.createClass({
 			uploading: null,
 			courses: [{value: "1", label: "Loading..."}],
 			isLoading: false,
+			venmoAuthorized: false,
 		}
 	},
 	componentDidMount: function () {
-		this.loadSellEligible();
-		this.loadCourses();
+		if (this.props.currentUser.venmo_linked || sessionStorage.getItem('venmo_link') == "true") {
+			this.loadSellEligible();
+			this.loadCourses();
+		}
+	},
+	loadUserVenmoStatus: function () {
+		$.ajax({
+		  url: this.props.origin + '/venmo_status',
+		  type: 'GET',
+		  dataType: 'json',
+		  crossDomain: true,
+		  headers: {'Authorization': localStorage.getItem('jwt-easybooks')},
+		  success: function (response) {
+		    if (response.status) {
+		    	this.setState({venmoAuthorized: true});
+		    	sessionStorage.setItem('venmo_link', true);
+		    	this.loadSellEligible();
+		    	this.loadCourses();
+		    }
+		  }.bind(this),
+		  error: function (error) {
+		    window.location = "/"
+		  }.bind(this),
+		});
 	},
 	loadSellEligible: function () {
 		$.ajax({
@@ -212,129 +237,133 @@ Sell = React.createClass({
 		})
 	},
   render: function () {
-  	if (this.state.sell_status == null) {
- 			var warning = "Loading..."
-  	} else if (this.state.sell_status) {
-  		var warning =
-			<Alert bsStyle="danger">
-				<h4>Error!</h4>
-		  	<p>{this.state.error_message}</p>
-		  	<p><ButtonLink bsStyle="primary" to="/postdashboard">Managet your Active Posts</ButtonLink></p>
-		  </Alert>
-	  } else {
-	  	var courseList = this.state.courses;
-	  	if (this.state.warning != null) {
-	  		var warning =
-				<Alert bsStyle="danger">
-					<h4>Error!</h4>
-			  	<p>{this.state.warning}</p>
-			  </Alert>
-	  	}
-	  	if (this.state.pic_file != null) {
-	  		var picPreview = <img src={this.state.pic_file[0].preview} />
-	  	}
-	  	if (this.state.uploading == true) {
-	  		var uploadingProgress = <LinearProgress mode="indeterminate" />
-	  	} else if (this.state.uploading == null) {
-	  		var uploadingProgress = 
-					<Dropzone onDrop={this.onDrop} className="dropzone" activeClassName="dropzone_active" multiple={false}>
-		        <div><h5>Drag or click here to upload your picture for the book (ONE only)</h5></div>
-		      </Dropzone>
-	  	}
-	  	var body = 
-	  	<div>
-				<Input
-	        type="text"
-	        value={this.state.title}
-	        placeholder="e.g. Introduction to Statistics"
-	        label="Book Name"
-	        help="Required"
-	        bsStyle={this.validateTitle()}
-	        hasFeedback
-	        ref="title"
-	        groupClassName="group-class"
-	        labelClassName="label-class"
-	        onChange={this.handleChange} />
-				<Input
-	        type="text"
-	        value={this.state.author}
-	        placeholder="e.g. Freedman, Pisani, and Purves"
-	        label="Author"
-	        help="Required"
-	        bsStyle={this.validateAuthor()}
-	        hasFeedback
-	        ref="author"
-	        groupClassName="group-class"
-	        labelClassName="label-class"
-	        onChange={this.handleChange} />
-				<Input
-	        type="text"
-	        value={this.state.price}
-	        placeholder="e.g. 36"
-	        addonBefore="$" 
-	        addonAfter=".00"
-	        label="Price"
-	        help="Required"
-	        bsStyle={this.validatePrice()}
-	        hasFeedback
-	        ref="price"
-	        groupClassName="group-class"
-	        labelClassName="label-class"
-	        onChange={this.handleChange} />
-				<Input
-	        type="text"
-	        value={this.state.description}
-	        placeholder="e.g. slightly highlighted, international edition"
-	        label="Description"
-	        help="Optional"
-	        hasFeedback
-	        ref="description"
-	        groupClassName="group-class"
-	        labelClassName="label-class"
-	        onChange={this.handleChange} />
-				<Input
-	        type="text"
-	        value={this.state.pickup}
-	        placeholder="e.g. Unit 1"
-	        label="Pick Up Location"
-	        help="Optional"
-	        hasFeedback
-	        ref="pickup"
-	        groupClassName="group-class"
-	        labelClassName="label-class"
-	        onChange={this.handleChange} />
-	      <h5><strong>Select Condition</strong></h5>
-				<Dropdown id="condition">
-					<Dropdown.Toggle>
-				  	{this.state.condition}
-				  </Dropdown.Toggle>
-		      <Dropdown.Menu>
-		        <MenuItem eventKey="1" onSelect={this.changeCondition}>New</MenuItem>
-		        <MenuItem eventKey="2" onSelect={this.changeCondition}>Like New</MenuItem>
-		        <MenuItem eventKey="3" onSelect={this.changeCondition}>Good</MenuItem>
-		        <MenuItem eventKey="4" onSelect={this.changeCondition}>Fair</MenuItem>
-		      </Dropdown.Menu>
-		    </Dropdown>
-				<h5><strong>Select Course Name</strong></h5>
-				<Select
-				  name="form-field-name"
-				  value="Type the course name or click the dropdown button on the right"
-				  options={courseList}
-				  onChange={this.searchChange}
-				  searchable={true}/>
-				<div>
-					{uploadingProgress}
-				</div>
-				<div>{picPreview}</div>
-				<div>
-				<Button
-	        bsStyle="primary"
-	        disabled={this.state.isLoading}
-	        onClick={!this.state.isLoading ? this.handleSubmit : null}>
-	        {this.state.isLoading ? 'Putting it on the rack...' : 'Sell Book'}
-	      </Button>
-				</div>
-			</div>
+  	if (this.state.venmoAuthorized || sessionStorage.getItem('venmo_link') == "true" || this.props.currentUser.venmo_linked) {
+	   	if (this.state.sell_status == null) {
+	  			var warning = "Loading..."
+	   	} else if (this.state.sell_status) {
+	   		var warning =
+	 			<Alert bsStyle="danger">
+	 				<h4>Error!</h4>
+	 		  	<p>{this.state.error_message}</p>
+	 		  	<p><ButtonLink bsStyle="primary" to="/postdashboard">Managet your Active Posts</ButtonLink></p>
+	 		  </Alert>
+	 	  } else {
+	 	  	var courseList = this.state.courses;
+	 	  	if (this.state.warning != null) {
+	 	  		var warning =
+	 				<Alert bsStyle="danger">
+	 					<h4>Error!</h4>
+	 			  	<p>{this.state.warning}</p>
+	 			  </Alert>
+	 	  	}
+	 	  	if (this.state.pic_file != null) {
+	 	  		var picPreview = <img src={this.state.pic_file[0].preview} />
+	 	  	}
+	 	  	if (this.state.uploading == true) {
+	 	  		var uploadingProgress = <LinearProgress mode="indeterminate" />
+	 	  	} else if (this.state.uploading == null) {
+	 	  		var uploadingProgress = 
+	 					<Dropzone onDrop={this.onDrop} className="dropzone" activeClassName="dropzone_active" multiple={false}>
+	 		        <div><h5>Drag or click here to upload your picture for the book (ONE only)</h5></div>
+	 		      </Dropzone>
+	 	  	}
+	 	  	var body = 
+	 	  	<div>
+	 				<Input
+	 	        type="text"
+	 	        value={this.state.title}
+	 	        placeholder="e.g. Introduction to Statistics"
+	 	        label="Book Name"
+	 	        help="Required"
+	 	        bsStyle={this.validateTitle()}
+	 	        hasFeedback
+	 	        ref="title"
+	 	        groupClassName="group-class"
+	 	        labelClassName="label-class"
+	 	        onChange={this.handleChange} />
+	 				<Input
+	 	        type="text"
+	 	        value={this.state.author}
+	 	        placeholder="e.g. Freedman, Pisani, and Purves"
+	 	        label="Author"
+	 	        help="Required"
+	 	        bsStyle={this.validateAuthor()}
+	 	        hasFeedback
+	 	        ref="author"
+	 	        groupClassName="group-class"
+	 	        labelClassName="label-class"
+	 	        onChange={this.handleChange} />
+	 				<Input
+	 	        type="text"
+	 	        value={this.state.price}
+	 	        placeholder="e.g. 36"
+	 	        addonBefore="$" 
+	 	        addonAfter=".00"
+	 	        label="Price"
+	 	        help="Required"
+	 	        bsStyle={this.validatePrice()}
+	 	        hasFeedback
+	 	        ref="price"
+	 	        groupClassName="group-class"
+	 	        labelClassName="label-class"
+	 	        onChange={this.handleChange} />
+	 				<Input
+	 	        type="text"
+	 	        value={this.state.description}
+	 	        placeholder="e.g. slightly highlighted, international edition"
+	 	        label="Description"
+	 	        help="Optional"
+	 	        hasFeedback
+	 	        ref="description"
+	 	        groupClassName="group-class"
+	 	        labelClassName="label-class"
+	 	        onChange={this.handleChange} />
+	 				<Input
+	 	        type="text"
+	 	        value={this.state.pickup}
+	 	        placeholder="e.g. Unit 1"
+	 	        label="Pick Up Location"
+	 	        help="Optional"
+	 	        hasFeedback
+	 	        ref="pickup"
+	 	        groupClassName="group-class"
+	 	        labelClassName="label-class"
+	 	        onChange={this.handleChange} />
+	 	      <h5><strong>Select Condition</strong></h5>
+	 				<Dropdown id="condition">
+	 					<Dropdown.Toggle>
+	 				  	{this.state.condition}
+	 				  </Dropdown.Toggle>
+	 		      <Dropdown.Menu>
+	 		        <MenuItem eventKey="1" onSelect={this.changeCondition}>New</MenuItem>
+	 		        <MenuItem eventKey="2" onSelect={this.changeCondition}>Like New</MenuItem>
+	 		        <MenuItem eventKey="3" onSelect={this.changeCondition}>Good</MenuItem>
+	 		        <MenuItem eventKey="4" onSelect={this.changeCondition}>Fair</MenuItem>
+	 		      </Dropdown.Menu>
+	 		    </Dropdown>
+	 				<h5><strong>Select Course Name</strong></h5>
+	 				<Select
+	 				  name="form-field-name"
+	 				  value="Type the course name or click the dropdown button on the right"
+	 				  options={courseList}
+	 				  onChange={this.searchChange}
+	 				  searchable={true}/>
+	 				<div>
+	 					{uploadingProgress}
+	 				</div>
+	 				<div>{picPreview}</div>
+	 				<div>
+	 				<Button
+	 	        bsStyle="primary"
+	 	        disabled={this.state.isLoading}
+	 	        onClick={!this.state.isLoading ? this.handleSubmit : null}>
+	 	        {this.state.isLoading ? 'Putting it on the rack...' : 'Sell Book'}
+	 	      </Button>
+	 				</div>
+	 			</div>
+	 		}
+   	} else {
+  		var body = <VenmoAuthorizationSell loadUserVenmoStatus={this.loadUserVenmoStatus} origin={this.props.origin}/>
 	  }
   	return (
   		<div className="container col-md-8 col-md-offset-2">
@@ -344,6 +373,7 @@ Sell = React.createClass({
 	  		  autoHideDuration={1000}/>
 	  			<form className="form-horizontal">
 	  				{warning}
+
 	  				{body}
 	  			</form>
   		</div>

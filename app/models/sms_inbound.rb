@@ -1,3 +1,4 @@
+require 'httparty'
 class SmsInbound
   def initialize(params)
     @to = params[:To][2, params[:To].length]
@@ -102,18 +103,39 @@ class SmsInbound
   end
 
   def proceed_seller_action_in_private_channel_complete(payment_code)
-    Entry.create(seller_id: @conversation.seller.id, buyer_id: @conversation.buyer.id, post_id: @post.id, amount: @post.price)
     #venmo transaction here
+    token = @conversation.buyer.venmo_account.token
+    note = "EasyBooks: #{@post.title} for $#{@post.price}"
+    seller_venmo_uid = @conversation.seller.venmo_account.venmo_uid
+    amount = @post.price.to_s + "0"
 
-    buyer_message = "EasyBooks: The Payment Code was verified. You should see a transfer of $#{@post.price} from your Venmo account to #{@conversation.seller.first_name}'s account.\n\nThank you for using EasyBooks!"
-    seller_message = "EasyBooks: The Payment Code was verified. You should see a transfer of $#{@post.price} from #{@conversation.seller.first_name}'s account to yours.\n\nThank you for using EasyBooks!"
-    SmsOutbound.send_from_private_phone(@phone.number, @conversation.seller.phone, seller_message)
-    SmsOutbound.send_from_private_phone(@phone.number, @conversation.buyer.phone, buyer_message)
-    # star = Star.find_by(id: @conversation.star_id, active: true)
-    # post = Post.find_by(id: star.post.id, active: true)
-    @post.update_attributes(sold: true, public: false, buyer_id: @conversation.buyer.id)
-    @post.stars.update_all(active: false)
-    @conversation.update_attributes(active: false)
+    response = create_venmo_charge(token, note, seller_venmo_uid, amount)
+    payment_id = response.parsed_response["data"]["payment"]["id"]
+    venmo_amount = response.parsed_response["data"]["payment"]["amount"]
+    entry = Entry.create(seller_id: @conversation.seller.id, buyer_id: @conversation.buyer.id, post_id: @post.id, venmo_transaction_id: payment_id, amount: venmo_amount)
+    
+    if entry
+      buyer_message = "EasyBooks: The Payment Code was verified. You should see a transfer of $#{@post.price} from your Venmo account to #{@conversation.seller.first_name}'s account.\n\nThank you for using EasyBooks!"
+      seller_message = "EasyBooks: The Payment Code was verified. You should see a transfer of $#{@post.price} from #{@conversation.seller.first_name}'s account to yours.\n\nThank you for using EasyBooks!"
+      SmsOutbound.send_from_private_phone(@phone.number, @conversation.seller.phone, seller_message)
+      SmsOutbound.send_from_private_phone(@phone.number, @conversation.buyer.phone, buyer_message)
+      # star = Star.find_by(id: @conversation.star_id, active: true)
+      # post = Post.find_by(id: star.post.id, active: true)
+      @post.update_attributes(sold: true, public: false, buyer_id: @conversation.buyer.id)
+      @post.stars.update_all(active: false)
+      @conversation.update_attributes(active: false)
+      @conversation.paymentcode.destroy
+    end
+  end
+
+  def create_venmo_charge(token, note, user_id, amount)
+    HTTParty.post("https://api.venmo.com/v1/payments",
+      :body => { "amount" => amount, 
+                  "access_token" => token,
+                  "note" => note,
+                  "user_id" => user_id
+                }
+    )
   end
 
   # def proceed_user_action_in_private_channel_done
@@ -192,7 +214,7 @@ class SmsInbound
 
     SmsOutbound.send_from_private_phone(buyer_phone.number, buyer.phone, to_buyer_message)
 
-    to_seller_message = "EasyBooks: You just got matched with #{buyer.first_name} who is interested in #{post.title} for #{course_name}.\n\nTo terminate this conversation and talk to the next buyer interested, reply with 'EXIT'.\n\nAfter you hand over the book to the buyer, dont't forget to ask for the Payment Code. Text the Payment Code to this number to initiate the Venmo transfer and complete the transaction."
+    to_seller_message = "EasyBooks: You just got matched with #{buyer.first_name} who is interested in #{post.title} for #{course_name}.\n\nTo terminate this conversation and talk to the next buyer interested, reply with 'EXIT'.\n\nAfter you hand over the book to the buyer, ASK for the Payment Code. Text the Payment Code to this number to initiate the Venmo transfer and complete the transaction."
     SmsOutbound.send_from_private_phone(seller_phone.number, seller.phone, to_seller_message)
   end
 
