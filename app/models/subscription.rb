@@ -3,4 +3,5 @@ class Subscription < ActiveRecord::Base
   belongs_to :course
 
   # validates_uniqueness_of :user_id, :scope => :course_id, if: Proc.new { |subscription| subscription.active? }
+  validates_uniqueness_of :user_id, :scope => :course_id, conditions: -> { where(active: true) }
 end

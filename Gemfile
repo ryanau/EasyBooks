@@ -19,6 +19,7 @@ gem 'cloudinary'
 gem 'sidekiq', '3.5.0'
 gem 'faker', '1.5.0'
 gem 'omniauth-facebook'
+gem 'omniauth-venmo'
 
 # group :development, :test do
 #   # gem 'pry-rails'

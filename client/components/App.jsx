@@ -3,10 +3,12 @@ var Router = require('react-router');
 var RouteHandler = Router.RouteHandler;
 var Uri = require('jsuri');
 var $ = require('jquery');
+var Navigation = Router.Navigation;
 
 var NavBar = require('./NavBar.jsx');
 
 App = React.createClass({
+  mixins: [ Navigation ],
 	getDefaultProps: function() {
     return {
 
@@ -25,13 +27,18 @@ App = React.createClass({
     }
   },
   componentWillMount: function () {
-    if (localStorage.getItem('jwt-easybooks')) {
-      this.setState({
-        signedIn: true,
-      })
+    var venmo_status = new Uri(location.search).getQueryParamValue('venmo_status');
+    if (venmo_status) {
+      this.transitionTo('/venmo_close_window');
+    } else {
+      if (localStorage.getItem('jwt-easybooks')) {
+        this.setState({
+          signedIn: true,
+        })
+      }
+      var jwt = new Uri(location.search).getQueryParamValue('jwt');
+      if (!!jwt) {localStorage.setItem('jwt-easybooks', jwt);}
     }
-    var jwt = new Uri(location.search).getQueryParamValue('jwt');
-    if (!!jwt) {localStorage.setItem('jwt-easybooks', jwt);}
   },
   componentDidMount: function () {
     if (!!localStorage.getItem('jwt-easybooks')) {this.currentUserFromAPI();}
@@ -66,7 +73,7 @@ App = React.createClass({
       success: function (response) {
         this.setState({
           signedIn: true, 
-          currentUser: {id: response.id, first_name: response.first_name, last_name: response.last_name, pic: response.pic, completed: response.completed},
+          currentUser: {id: response.id, first_name: response.first_name, last_name: response.last_name, pic: response.pic, completed: response.completed, venmo_linked: response.venmo_linked},
           mode: response.mode
         });
       }.bind(this),

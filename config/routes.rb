@@ -44,9 +44,11 @@ Rails.application.routes.draw do
       post '/sms_inbound', :to => 'sms#approve'
 
       get '/environment', :to => 'sessions#environment'
+      get '/venmo_status', :to => 'sessions#venmo_status'
     end
   end
   get '/auth/facebook/callback', :to => 'sessions#create'
+  get '/auth/venmo/callback', :to => 'sessions#venmo_create'
 
   match '*all', to: 'client_app#index', via: [:get]
 end

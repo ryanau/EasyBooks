@@ -3,6 +3,9 @@ class User < ActiveRecord::Base
   # has_secure_password
 
   belongs_to :university
+
+  has_one :venmo_account
+
   has_many :credits, -> { where(credits: {active: true, used: false}) }
   has_many :used_credits, -> { where(credits: {active: true, used: true}) }, :class_name => "Credit", :foreign_key => :user_id
   has_many :inactive_credits, -> { where(credits: {active: false}) }, :class_name => "Credit", :foreign_key => :user_id

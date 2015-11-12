@@ -25,13 +25,14 @@ var Glyphicon = require('react-bootstrap').Glyphicon;
 var Badge = require('react-bootstrap').Badge;
 var OverlayTrigger = require('react-bootstrap').OverlayTrigger;
 var Tooltip = require('react-bootstrap').Tooltip;
-var OverlayTrigger = require('react-bootstrap').OverlayTrigger;
 var Popover = require('react-bootstrap').Popover;
 var Input = require('react-bootstrap').Input;
 var Col = require('react-bootstrap').Col;
 var Well = require('react-bootstrap').Well;
 var Panel = require('react-bootstrap').Panel;
 var ButtonToolbar = require('react-bootstrap').ButtonToolbar;
+
+var VenmoAuthorizationWatch = require('./VenmoAuthorizationWatch.jsx');
 
 PublicPost = React.createClass({
   mixins: [ Navigation ],
@@ -52,6 +53,7 @@ PublicPost = React.createClass({
       offer: null,
       star_position: null,
       sold: null,
+      showVenmoModal: false,
     }
   },
   componentDidMount: function () {
@@ -75,10 +77,8 @@ PublicPost = React.createClass({
       headers: {'Authorization': localStorage.getItem('jwt-easybooks')},
       success: function (response) {
         $.when(this.setState({sold: response.sold})).done(function (){
-          if (this.state.sold) {
-            this.loadStar();
-            this.loadStarCount();
-          }
+          this.loadStar();
+          this.loadStarCount();
         }.bind(this));
       }.bind(this),
       error: function (error) {
@@ -230,6 +230,12 @@ PublicPost = React.createClass({
       offer: this.refs.offer.getValue(),
     });
   },
+  openVenmoModal: function () {
+    this.setState({showVenmoModal: true})
+  },
+  closeVenmoModal: function () {
+    this.setState({showVenmoModal: false})
+  },
   render: function () {
     var post = this.props.post
   	var course = post.course
@@ -237,6 +243,11 @@ PublicPost = React.createClass({
     var author = <span className="colorGrey fs16"><i> {post.author}</i></span>
     var watchNotClickedTooltip = <Tooltip id="1">Click to add yourself to the list of watchers. When you become first on the list, expect a text message from the seller!</Tooltip>
     var watchClickedTooltip = <Tooltip id="1">Your position is {this.state.star_position} out of {this.state.star_count} watchers</Tooltip>
+    var watchNewButton = (
+      <Button bsSize="small" bsStyle="default" onClick={this.openVenmoModal}>
+        Watch Now
+      </Button>
+    )
     var watchClicked = (
       <OverlayTrigger placement="top" overlay={watchClickedTooltip}>
         <Button onClick={this.starPost} bsStyle="success" bsSize="small"><Glyphicon glyph="eye-open"/> Watching ({this.state.star_position})</Button>
@@ -248,26 +259,6 @@ PublicPost = React.createClass({
       </OverlayTrigger>
     )
     var infoButton = <Button onClick={this.redirectToPost} bsStyle="info" bsSize="small"><Glyphicon glyph="info-sign"/> Info</Button>
-    var sendOfferButton = (
-      <OverlayTrigger rootClose trigger="click" placement="bottom" overlay={<Popover id="1" title="Your Offer">
-      <Col lg={6} md={6} s={6} xs={6}>
-      <Input
-        type="text"
-        value={this.state.offer}
-        placeholder={post.price}
-        hasFeedback
-        ref="offer"
-        groupClassName="group-class"
-        labelClassName="label-class"
-        onChange={this.handleChange} />
-      </Col>
-      <Col lg={6} md={6} s={6} xs={6}>
-      <Button onClick={this.sendOffer} bsStyle="success" bsSize="small"><Glyphicon glyph="send"/> Send</Button>
-      </Col>
-      </Popover>}>
-      <Button bsStyle="info" bsSize="small"><Glyphicon glyph="send"/> Make Offer</Button>
-      </OverlayTrigger>
-    )
     var description = <Col lg={12} md={12} s={12} xs={12}><p>{post.description}</p></Col>
     var pickUp = <Col lg={12} md={12} s={12} xs={12}><p>Pick Up: {post.pickup}</p></Col>
     if (post.seller_id != this.props.currentUser.id) {
@@ -296,9 +287,10 @@ PublicPost = React.createClass({
           </ButtonToolbar>
         )
       } else {
+          // {this.state.star? watchClicked : watchNotClicked}
         var buttonGroup = (
           <ButtonToolbar>
-          {this.state.star? watchClicked : watchNotClicked}
+          {this.state.star? watchClicked : watchNewButton}
           {infoButton}
           </ButtonToolbar>
         )  
@@ -343,6 +335,7 @@ PublicPost = React.createClass({
           ref="postUnstarred"
           message='Unwatching Post'
           autoHideDuration={1000}/>
+        <VenmoAuthorizationWatch show={this.state.showVenmoModal} close={this.closeVenmoModal} currentUser={this.props.currentUser} origin={this.props.origin} starPost={this.starPost}/>
         <Panel className="mB0">
           <Col lg={12} md={12} s={12}>
             <h3><Label bsSize="large">{course.department + ' ' + course.course_number}</Label> <Link to={postLink}>{post.title}</Link>{author}</h3>
