@@ -33,7 +33,7 @@ class User < ActiveRecord::Base
   has_many :inactive_selling_conversations,  -> { where(conversations: {active: false}) }, :class_name => "Conversation", :foreign_key => :seller_id
 
   has_many :buying_conversations, -> { where(conversations: {active: true}) }, :class_name => "Conversation", :foreign_key => :buyer_id
-  has_many :buying_conversations, -> { where(conversations: {active: false}) }, :class_name => "Conversation", :foreign_key => :buyer_id
+  has_many :inactive_buying_conversations, -> { where(conversations: {active: false}) }, :class_name => "Conversation", :foreign_key => :buyer_id
 
   has_many :selling_entries, :class_name => "Entry", :foreign_key => :seller_id
   has_many :buying_entries, :class_name => "Entry", :foreign_key => :buyer_id

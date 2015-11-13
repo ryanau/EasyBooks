@@ -53,8 +53,7 @@
   .landing-container {
     width: 80%; }
   .column,
-  .columns {
-    margin-left: 4%; }
+  .columns { }
   .column:first-child,
   .columns:first-child {
     margin-left: 0; }

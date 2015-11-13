@@ -56,14 +56,13 @@ class PostsController < ApplicationController
   end
 
   def sell_status
-    # fix this
-    # check check conversations they're in
+    engaged_count = current_user.buying_conversations.count + current_user.selling_conversations.count
     if current_user.credits.count == 0
       status = true
       error_message = "Insufficient credit."
-    elsif current_user.selling_posts.where(sold: false, public: true).count > 0
+    elsif engaged_count > Phone.all.count
       status = true
-      error_message = "You have reached your selling limit. Please mark your post as 'SOLD' or delete it by click the following button."
+      error_message = "You have reached the app's limit in concurrent transactions. Please complete all active transactions first."
     else
       status = false
       error_message = "Success"

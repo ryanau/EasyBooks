@@ -65,18 +65,6 @@ class SmsInbound
     @command = Command.find_by(random_num: @body)
   end
 
-  # def proceed_user_action_in_private_channel
-  #   p '*' *100
-  #   p 'proceeding user action'
-  #   if @body.upcase == 'EXIT'
-  #     p 'proceeding exit'
-  #     proceed_user_action_in_private_channel_exit
-  #   elsif @body.upcase == 'DONE'
-  #     p 'proceeding done'
-  #     proceed_user_action_in_private_channel_done
-  #   end
-  # end
-
   def proceed_seller_action_in_private_channel(payment_code)
     if @body.upcase == 'EXIT'
       proceed_user_action_in_private_channel_exit
@@ -104,15 +92,15 @@ class SmsInbound
 
   def proceed_seller_action_in_private_channel_complete(payment_code)
     #venmo transaction here
+    token = @conversation.buyer.venmo_account.token
+    note = "EasyBooks transaction of #{@post.title} for $#{@post.price}0"
+    seller_venmo_uid = @conversation.seller.venmo_account.venmo_uid
+    amount = @post.price.to_s + "0"
     response = create_venmo_charge(token, note, seller_venmo_uid, amount)
+
     payment_id = response.parsed_response["data"]["payment"]["id"]
     venmo_amount = response.parsed_response["data"]["payment"]["amount"]
 
-    token = @conversation.buyer.venmo_account.token
-    note = "EasyBooks transaction of #{@post.title} for $#{@post.price}0. Transaction ID: #{payment_id}"
-    seller_venmo_uid = @conversation.seller.venmo_account.venmo_uid
-    amount = @post.price.to_s + "0"
-    
     entry = Entry.create(seller_id: @conversation.seller.id, buyer_id: @conversation.buyer.id, post_id: @post.id, venmo_transaction_id: payment_id, amount: venmo_amount)
     
     if entry
@@ -120,8 +108,7 @@ class SmsInbound
       seller_message = "EasyBooks: The Payment Code was verified. You should see a transfer of $#{@post.price}0 from #{@conversation.buyer.first_name}'s Venmo to yours.\n\nThank you for using EasyBooks!"
       SmsOutbound.send_from_private_phone(@phone.number, @conversation.seller.phone, seller_message)
       SmsOutbound.send_from_private_phone(@phone.number, @conversation.buyer.phone, buyer_message)
-      # star = Star.find_by(id: @conversation.star_id, active: true)
-      # post = Post.find_by(id: star.post.id, active: true)
+
       @post.update_attributes(sold: true, public: false, buyer_id: @conversation.buyer.id)
       @post.stars.update_all(active: false)
       @conversation.update_attributes(active: false)
@@ -138,17 +125,6 @@ class SmsInbound
                 }
     )
   end
-
-  # def proceed_user_action_in_private_channel_done
-  #   message = 'EasyBooks: This transaction is marked as completed by the other party. This private channel is now closed.'
-  #   SmsOutbound.send_from_private_phone(@phone.number, @conversation.seller.phone, message)
-  #   SmsOutbound.send_from_private_phone(@phone.number, @conversation.buyer.phone, message)
-  #   star = Star.find_by(id: @conversation.star_id, active: true)
-  #   post = Post.find_by(id: star.post.id, active: true)
-  #   post.update_attributes(sold: true, public: false, buyer_id: @conversation.buyer.id)
-  #   post.stars.update_all(active: false)
-  #   @conversation.update_attributes(active: false)
-  # end
 
   def check_system_phone_inbound
     if @command.action == 'approve_post_alert'
