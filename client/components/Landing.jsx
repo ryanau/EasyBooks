@@ -4,9 +4,15 @@ var Link = Router.Link;
 
 var mui = require('material-ui');
 var ThemeManager = new mui.Styles.ThemeManager();
+var DropDownMenu = mui.DropDownMenu;
+var Tabs = mui.Tabs;
+var Tab = mui.Tab;
 
 var Button = require('react-bootstrap').Button;
 var Well = require('react-bootstrap').Well;
+var OverlayTrigger = require('react-bootstrap').OverlayTrigger;
+var Tooltip = require('react-bootstrap').Tooltip;
+var Popover = require('react-bootstrap').Popover;
 
 var DashBoard = require('./DashBoard.jsx');
 var Register = require('./Register.jsx');
@@ -20,6 +26,14 @@ Landing = React.createClass({
 	    muiTheme: ThemeManager.getCurrentTheme()
 	  };
 	},
+  getInitialState: function () {
+    return {
+      displayBuy: true,
+    }
+  },
+  handleTabChange: function(value, e, tab) {
+    value == 0? this.setState({displayBuy: true}) : this.setState({displayBuy: false})
+  },
   render: function () {
   	if (this.props.mode === "development") { var link = 'http://localhost:3000/auth/facebook' } 
   	if (this.props.mode === "production") { var link = 'https://easybooks.herokuapp.com/auth/facebook' }
@@ -36,23 +50,40 @@ Landing = React.createClass({
   			</div>
   		)
   	} else {
+      var headerSlogan
+      this.state.displayBuy? headerSlogan = <h4>3 Easy Steps to Buy a Textbook</h4> : headerSlogan = <h4>3 Easy Steps to Sell a Textbook</h4>
+      var logInToolTip = <Tooltip id="1">We only need your basic info and friends list (to see mutual friends connections) to get started!</Tooltip>
+      var logInPopover = <Popover title="Why do we need Facebook?">We only need your basic info and friends list (to see mutual friends connections) to get started!</Popover>
       var display = (
-        <div>
-        <div className="section hero">
+        <div className="splashpage">
+        <div className="section-hero hero">
           <div className="landing-container">
             <div className="row">
               <div className="twelve column">
-                <h4 className="hero-heading">Your trusted, streamlined campus marketplace for textbooks!</h4>
-                <Button href={link} bsStyle="primary">Log In via Facebook</Button>
-                <p>We only need your basic info and friends list (to see mutual friends connections) to get started!</p>
+                  <div className="pB20">
+                    <p className="hero-heading">Your trusted campus textbook marketplace</p>
+                  </div>
+                  <OverlayTrigger placement="bottom" trigger="hover" overlay={logInPopover}>
+                    <Button href={link} bsStyle="primary">Log In via Facebook</Button>
+                  </OverlayTrigger>
               </div>
+              <div className="twelve column phones">
+                 <img className="phone" src="./berkeley_i_house.jpg"/>
+               </div>
             </div>
           </div>
         </div>
-        <div className="section get-help">
+        <div className="section values">
           <div className="landing-container">
             <div className="row">
               <div className="twelve column value">
+                <Tabs onChange={this.handleTabChange}>
+                  <Tab label="To Buy" >  
+                  </Tab>
+                  <Tab label="To Sell" >
+                  </Tab>
+                </Tabs>
+                {headerSlogan}
                 <h5 className="value-heading">Trying to buy or sell your textbook? Don’t want to be ripped off??</h5>
                 <p className="value-description">Students take note! Feel like you are wasting time and money finding used textbooks, try EasyBooks! You can buy directly from your fellow schoolmates, often at a lower price!</p>
                 <p className="value-description">Unlike competitors, we provide a comfortable environment that enables you to sell/buy your textbooks quickly and reliably from other students.</p>

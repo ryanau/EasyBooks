@@ -17,6 +17,11 @@ module PostAlertControls
   private
 
   def self.find_subscribed_idle_user(post, seller)
+    # fix this since this is only searching for users who have starred the posts that have not already been talking to them
+    # first check if the seller is even available to talk
+    # should also check if they're already in a conversation as a buyer for other posts
+    # or as a seller in other posts
+    # variable depending on how many conversations we allow concurrently
     subscribers_id = post.stars.where(active: true).pluck(:user_id)
     occupied = []
     subscribers_id.each do |subscriber_id|

@@ -10,6 +10,7 @@ var ThemeManager = new mui.Styles.ThemeManager();
 var Panel = require('react-bootstrap').Panel;
 var Glyphicon = require('react-bootstrap').Glyphicon;
 var Col = require('react-bootstrap').Col;
+var PageHeader = require('react-bootstrap').PageHeader;
 
 var ReactRouterBootstrap = require('react-router-bootstrap')
   , ButtonLink = ReactRouterBootstrap.ButtonLink
@@ -125,9 +126,11 @@ PublicPosts = React.createClass({
   render: function () {
   	var header = "this.state.course_selected"
   	if (this.state.course_selected.courses.length == 0) {
-  		var header = "Post for All Courses: " + this.props.sorting
+  		var header = "Post for All Courses"
+  		var subHeader = this.props.sorting
   	} else {
-  		var header = "Posts for " + this.state.course_selected.courses[0] + " : " + this.props.sorting
+  		var header = "Posts: " + this.state.course_selected.courses[0]
+  		var subHeader = this.props.sorting
   	}
   	if (this.state.posts == null) {
   		var posts = "Loading..."
@@ -148,9 +151,8 @@ PublicPosts = React.createClass({
   	};
   	return (
   		<div>
-	  		<Panel header={header} bsStyle="info" className="p0">
-	  			{posts}
-	  		</Panel>
+  			<PageHeader>{header} <small>{subHeader}</small></PageHeader>
+	  		{posts}
   		</div>
   	)
   }

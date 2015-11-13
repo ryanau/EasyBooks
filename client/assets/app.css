@@ -10,6 +10,14 @@ body {
   flex-direction: column;
 }
 
+body { 
+/*  background: url(/berkeley_night.jpg) no-repeat center center fixed; 
+*/  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
 #drop {
 	width: 200px;
 }
@@ -77,12 +85,20 @@ img {
   margin-bottom: 50px;
 }
 
+.mB10 {
+  margin-bottom: 10px;
+}
+
 .flL {
   float: left;
 }
 
 .flR {
   float: right;
+}
+
+.pB20 {
+  padding-bottom: 20px;
 }
 
 @media (min-width: 550px) {
@@ -165,6 +181,11 @@ footer {
   margin-bottom: 1.2rem;
 }
 
+.section-hero {
+  padding: 5rem 0 5rem;
+  text-align: center;
+  color: white;
+}
 /* Hero
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 .phones {
@@ -249,8 +270,8 @@ footer {
     padding: 12rem 0 11rem;
   }
   .hero {
-    padding-bottom: 12rem;
-    text-align: left;
+    padding-bottom: 8rem;
+    text-align: center;
     height: 165px;
   }
   .phone {
@@ -285,7 +306,7 @@ footer {
     padding: 14rem 0 15rem;
   }
   .hero {
-    padding: 16rem 0 14rem;
+/*    padding: 16rem 0 14rem;*/
   }
   .section-description {
     max-width: 60%;
@@ -311,8 +332,14 @@ footer {
   .section {
     padding: 20rem 0 19rem;
   }
+
+  .section-hero {
+    padding-top: 23rem;
+    padding-bottom: 37rem;
+  }
+
   .hero {
-    padding: 22rem 0;
+/*    padding: 22rem 0;*/
   }
   .hero-heading {
     font-size: 3.0rem;

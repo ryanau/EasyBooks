@@ -67,10 +67,13 @@ VenmoAuthorizationWatch = React.createClass({
 			var modalContent = (
 				<div>
 				<Modal.Header>
-					<Modal.Title>To watch</Modal.Title>
+					<Modal.Title>Watch and Monitor this Post</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
-					<Button onClick={this.starPost} bsStyle="success" bsSize="small"><Glyphicon glyph="ice-lolly"/>Watch Now</Button>
+					<Button onClick={this.starPost} bsStyle="success" bsSize="small"><Glyphicon glyph="eye-open"/> Watch Now</Button>
+					<hr />
+					<p>If you're the first person watching this post, expect a text from the seller any second!</p>
+					<p>If not, don't be discouraged! Just relax and grab a coffee, and we will keep you updated:)</p>
 				</Modal.Body>
 				</div>
 			)
@@ -78,11 +81,17 @@ VenmoAuthorizationWatch = React.createClass({
 			var modalContent = (
 				<div>
 				<Modal.Header>
-					<Modal.Title>Venmo Authorization</Modal.Title>
+					<Modal.Title>Authorize Your Venmo Account</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
+					<p>In order to watch and monitor this post, you will first need to authorize your venmo account.</p>
 					<Button onClick={this.popupCenter} disabled={this.state.isLoading} bsStyle="primary" bsSize="small"><Glyphicon glyph="ice-lolly"/>{this.state.isLoading ? 'Authorizing...' : 'Authorize Venmo Account'}
 					</Button>
+					<hr />
+					<h4>Why do we need Venmo Authorization?</h4>
+					<p>It is necessary for a streamlined marketplace experience offered by EasyBooks!</p>
+					<p>You will receive a Payment Code via text once you get connected with the seller. After you meet up and receive your book from the seller, go ahead and reveal the Payment Code to the seller.</p>
+					<p>Once the seller texts the Payment Code, the Venmo transfer will be completed automatically! It is THAT easy!</p>
 				</Modal.Body>
 				</div>
 			)

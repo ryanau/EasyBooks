@@ -48,14 +48,16 @@ class PostsController < ApplicationController
 
   def show
     post = Post.find_by(id: params[:post_id], active: true)
-    if post.sold && post.seller_id != current_user.id
-      render json: {error_message: "Post not found"}
+    if post.seller_id == current_user.id || post.buyer_id == current_user.id || !post.sold
+      render :json => post.as_json(include: {seller: {only: [:id, :first_name, :last_name, :pic]}, course: {only: [:department, :course_number]}, entry: {only: [:venmo_transaction_id, :created_at]}})
     else
-      render :json => post.as_json(include: {seller: {only: [:id, :first_name, :last_name, :pic]}})
+      render json: {error_message: "Post not found"}
     end
   end
 
   def sell_status
+    # fix this
+    # check check conversations they're in
     if current_user.credits.count == 0
       status = true
       error_message = "Insufficient credit."
@@ -77,17 +79,6 @@ class PostsController < ApplicationController
   def mutual_friends
     result = find_mutual_friends(params[:post_id])
     render json: {mutual_friends_count: result[:count], mutual_friends: result[:friends]}
-  end
-
-  def mark_sold
-    post_id = params[:post_id]
-    post = Post.find_by(id: post_id, active: true)
-    if !post.sold && post.public
-      post.update_attributes(sold: true, public: false)
-      post.stars.update_all(active: false)
-      response = true
-    end
-    render json: {sold: response}
   end
 
   def destroy

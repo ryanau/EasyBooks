@@ -73,7 +73,7 @@ Comments = React.createClass({
 			if (this.state.comments.length != 0) {
 				var comments = this.state.comments.map(function (comment, index) {
 					return (
-							<ListGroupItem>
+							<ListGroupItem key={index}>
 								<Comment key={index} comment={comment} post_id={this.props.post_id} seller_id={this.props.seller_id}/>
 							</ListGroupItem>
 					)
