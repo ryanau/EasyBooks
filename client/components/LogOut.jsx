@@ -8,6 +8,7 @@ LogOut = React.createClass({
   },
   logOutUser: function () {
     localStorage.removeItem('jwt-easybooks');
+    sessionStorage.clear();
     setTimeout(function() {location = '/';}, 2000);
   },
   render: function () {

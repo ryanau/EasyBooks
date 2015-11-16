@@ -11,9 +11,11 @@ module CourseAlertControls
       if subscriber_engaged_count < phone_total_count
         conversation_course_array = []
         subscription.user.buying_conversations.each do |conversation|
-          conversation_course_array << conversation.star.post.course_id == course_id
+          if conversation.star.post.course_id == course_id
+            conversation_course_array << conversation
+          end
         end
-        if conversation_course_array.empty?
+        if conversation_course_array.empty? && seller.id != subscription.user_id
           command = new_post_alert_stop_command(subscription.id)
           send_course_alert(subscription.user.phone, course, seller, post, command.random_num)
         end

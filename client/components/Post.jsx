@@ -358,6 +358,8 @@ Post = React.createClass({
 				    </ButtonToolbar>
 				  )
 			  }
+			}
+			if (post.seller_id == this.props.currentUser.id || post.buyer_id == this.props.currentUser.id) {
 			  if (post.entry && post.entry.venmo_transaction_id) {
 				  var soldAt = <Well>{'Sold on ' + moment(post.entry.created_at).format('MMMM Do YYYY, h:mm:ss a') + ' | Venmo Transaction ID: ' + post.entry.venmo_transaction_id}</Well>
 			  }

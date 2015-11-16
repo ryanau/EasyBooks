@@ -147,7 +147,7 @@ module.exports = React.createClass({
           </a>
           <a id="watchBar">
               <icon className="paradeiser_icon_canvas">
-              <img src="http://danielwinter.at/apple-touch-icon_76x76.png" alt="Posts Watching" className="paradeiser_logo"/>
+              <img src="/watch.svg" alt="Posts Watching"/>
               </icon>
               <span>Watching</span>
           </a>

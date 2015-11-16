@@ -25,12 +25,14 @@ VenmoAuthorizationWatch = React.createClass({
 		}
 	},
 	popupCenter: function () {
+		// var authUrl = 'http://localhost:3000/auth/venmo'
+		var authUrl = 'https://easybooks.herokuapp.com/auth/venmo'
 	  var left = (screen.width/2)-(width/2);
 	  var top = (screen.height/2)-(height/2);
 	  var width = $(this).attr("data-width");
 	  var height = $(this).attr("data-height");
 	  this.setState({isLoading: true})
-	  var logInWindow = window.open('http://localhost:3000/auth/venmo', 'authPopup', "menubar=no,toolbar=no,status=no,width="+width+",height="+height+",toolbar=no,left="+left+",top="+top);
+	  var logInWindow = window.open(authUrl, 'authPopup', "menubar=no,toolbar=no,status=no,width="+width+",height="+height+",toolbar=no,left="+left+",top="+top);
 	  var timer = this.setInterval(function () {
 	  	if(logInWindow.closed) {  
   	    clearInterval(timer);

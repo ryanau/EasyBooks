@@ -4,12 +4,13 @@ module PostAlertControls
     seller = post.seller
     accepted = post.stars.where(sent: true, active: true).count
     if accepted == 0
+      p 'finding star'
       star = find_subscribed_idle_user(post, seller)
       if star
         command = new_post_alert_command(star.id)
         star.update_attributes(sent: true)
         send_post_alert(star.user.phone, post, command.random_num)
-        PostAlertDestroyer.perform_in(1.minutes, star.id)
+        PostAlertDestroyer.perform_in(3.minutes, star.id)
       end
     end
   end
@@ -17,18 +18,23 @@ module PostAlertControls
   private
 
   def self.find_subscribed_idle_user(post, seller)
-    seller_engaged_count = current_user.buying_conversations.count + current_user.selling_conversations.count
+    seller_engaged_count = seller.buying_conversations.count + seller.selling_conversations.count
     phone_total_count = Phone.all.count
     
     if seller_engaged_count < phone_total_count
+      p 'check seller count seller than phone count'
       subscribers_id = post.stars.where(active: true).pluck(:user_id)
       occupied = []
       subscribers_id.each do |subscriber_id|
         subscriber_engaged_count = User.find(subscriber_id).buying_conversations.count + User.find(subscriber_id).selling_conversations.count
+        p 'subscriber_engaged_count'
+        p subscriber_engaged_count
         if subscriber_engaged_count > phone_total_count
+          p 'putting in occupied'
           occupied << subscriber_id
         end
       end
+      p 'before returning star'
       post.stars.where(sent: false, active: true).where.not(user_id: seller.id).where.not(user_id: occupied).first
     else
       return false

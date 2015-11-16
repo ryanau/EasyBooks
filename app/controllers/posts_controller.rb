@@ -39,7 +39,7 @@ class PostsController < ApplicationController
     action = PostCreator.new(params, current_user)
     if action.ok?
       post = action.post
-      # CourseAlert.perform_async(post.course_id, post.id, current_user.id)
+      CourseAlert.perform_async(post.course_id, post.id, current_user.id)
       render json: {post_id: action.post.id}
     else
       render json: {error_message: action.post}
@@ -83,6 +83,9 @@ class PostsController < ApplicationController
   def destroy
     post_id = params[:post_id]
     current_user.selling_posts.find_by(id: post_id, active: true).update_attributes(active: false)
+    if star = Post.find(post_id).stars.find_by(sent: true, accepted: true, active: true)
+      ConversationDestroyer.perform_async(star.id, post_id)
+    end
     render json: {message: "Post Deleted"}
   end
 

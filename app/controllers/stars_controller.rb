@@ -16,7 +16,7 @@ class StarsController < ApplicationController
     star = Post.find(post_id).stars.find_by(user_id: current_user.id)
     star.update_attributes(active: false)
     if star.conversation
-      star.conversation.update_attributes(active: false)
+      PostUnwatcher.perform_async(star.id, post_id)
     end
     render json: {message: "Unstarred"}
   end

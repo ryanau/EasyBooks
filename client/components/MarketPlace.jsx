@@ -66,6 +66,7 @@ MarketPlace = React.createClass({
         <Col xs={12} md={8} lg={9} s={8}>
           <Select
           name="form-field-name"
+          placeholder="Select or type the course name"
           value="Search by course name..."
           options={searchOptions}
           onChange={this.searchChange}
@@ -73,10 +74,10 @@ MarketPlace = React.createClass({
         </Col>
         <Col xs={12} md={4} lg={3} s={4}>
           <DropdownButton bsStyle="primary" title={this.state.sorting} key={1} id="sorting">
-            <MenuItem onSelect={this.changeSorting} eventKey="1">Newest to Oldest </MenuItem>
-            <MenuItem onSelect={this.changeSorting} eventKey="2">Oldest to Newest </MenuItem>
-            <MenuItem onSelect={this.changeSorting} eventKey="3">$ Low to High </MenuItem>
-            <MenuItem onSelect={this.changeSorting} eventKey="4">$ High to Low </MenuItem>
+            <MenuItem onSelect={this.changeSorting} eventKey="1">Newest to Oldest</MenuItem>
+            <MenuItem onSelect={this.changeSorting} eventKey="2">Oldest to Newest</MenuItem>
+            <MenuItem onSelect={this.changeSorting} eventKey="3">$ Low to High</MenuItem>
+            <MenuItem onSelect={this.changeSorting} eventKey="4">$ High to Low</MenuItem>
           </DropdownButton>
         </Col>
         <Col xs={12} md={12} lg={12} s={12}>

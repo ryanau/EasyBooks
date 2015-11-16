@@ -23,6 +23,7 @@ class SmsInbound
     elsif check_private_channel_phone
       inbound_user = User.find_by(phone: @from)
       @conversation = Conversation.find_by(seller_phone_id: @phone.id, seller_id: inbound_user.id, active: true) || @conversation = Conversation.find_by(buyer_phone_id: @phone.id, buyer_id: inbound_user.id, active: true)
+      p @conversation.id
       @star = @conversation.star
       @post = Post.find_by(id: @star.post_id, active: true)
       if check_private_channel_conversation(inbound_user)
@@ -30,13 +31,15 @@ class SmsInbound
           if @body.upcase == 'EXIT' || payment_code = Paymentcode.find_by(random_num: @body, conversation_id: @conversation.id)
             proceed_seller_action_in_private_channel(payment_code)
           else
-            SmsOutbound.send_from_private_phone(@phone.number, @recipient.phone, @body)
+            outbound_phone = Phone.find(@conversation.buyer_phone_id).number
+            SmsOutbound.send_from_private_phone(outbound_phone, @recipient.phone, @body)
           end
         else #buyer
           if @body.upcase == 'EXIT'
             proceed_buyer_action_in_private_channel
           else
-            SmsOutbound.send_from_private_phone(@phone.number, @recipient.phone, @body)
+            outbound_phone = Phone.find(@conversation.seller_phone_id).number
+            SmsOutbound.send_from_private_phone(outbound_phone, @recipient.phone, @body)
           end
         end
       else
@@ -98,6 +101,8 @@ class SmsInbound
     amount = @post.price.to_s + "0"
     response = create_venmo_charge(token, note, seller_venmo_uid, amount)
 
+    p 'response'
+    p response
     payment_id = response.parsed_response["data"]["payment"]["id"]
     venmo_amount = response.parsed_response["data"]["payment"]["amount"]
 
@@ -113,6 +118,10 @@ class SmsInbound
       @post.stars.update_all(active: false)
       @conversation.update_attributes(active: false)
       @conversation.paymentcode.destroy
+
+      if @conversation.seller.selling_posts.count > 0
+      activiate_post_alerts(@conversation.seller_id)
+      end
     end
   end
 
@@ -124,6 +133,24 @@ class SmsInbound
                   "user_id" => user_id
                 }
     )
+  end
+
+  def activiate_post_alerts(seller_id)
+    seller = User.find(seller_id)
+    phone_total_count = Phone.all.count
+    seller_engaged_count = seller.buying_conversations.count + seller.selling_conversations.count
+    if phone_total_count > seller_engaged_count
+      posts_id = []
+      seller.selling_posts.each do |selling_post|
+        if !selling_post.stars.where(sent: false).empty?
+          posts_id << selling_post.id
+        end
+      end
+      number_of_posts_to_send = phone_total_count - seller_engaged_count - 1
+      posts_id[0..number_of_posts_to_send].each do |post|
+        PostAlert.perform_async(post.id)
+      end
+    end
   end
 
   def check_system_phone_inbound
@@ -150,6 +177,7 @@ class SmsInbound
     p 'inside check private channel conversation'
     if @conversation = Conversation.find_by(seller_phone_id: @phone.id, seller_id: inbound_user.id, active: true)
       p 'its a seller'
+      p @conversation.id
       @recipient = User.find(@conversation.buyer_id)
       @seller = true
       true
@@ -191,7 +219,7 @@ class SmsInbound
 
     SmsOutbound.send_from_private_phone(buyer_phone.number, buyer.phone, to_buyer_message)
 
-    to_seller_message = "EasyBooks: You just got matched with #{buyer.first_name} who wants to buy #{post.title} for #{course_name} at $#{post.price}0.\n\nTo terminate this conversation and talk to the next buyer interested, reply with 'EXIT'.\n\nASK for the Payment Code from the buyer after you hands over your book.\n\nText the Payment Code to this conversation to initiate the Venmo transfer and complete the transaction."
+    to_seller_message = "EasyBooks: You just got matched with #{buyer.first_name} who wants to buy #{post.title} for #{course_name} at $#{post.price}0.\n\nTo terminate this conversation and talk to the next buyer interested, reply with 'EXIT'.\n\nAsk the buyer for the Payment Code after you handover the book. Text it to this number to start the Venmo transfer and complete the transaction."
     SmsOutbound.send_from_private_phone(seller_phone.number, seller.phone, to_seller_message)
   end
 
