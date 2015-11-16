@@ -25,8 +25,8 @@ VenmoAuthorizationWatch = React.createClass({
 		}
 	},
 	popupCenter: function () {
-		// var authUrl = 'http://localhost:3000/auth/venmo'
-		var authUrl = 'https://easybooks.herokuapp.com/auth/venmo'
+		var authUrl = 'http://localhost:3000/auth/venmo'
+		// var authUrl = 'https://easybooks.herokuapp.com/auth/venmo'
 	  var left = (screen.width/2)-(width/2);
 	  var top = (screen.height/2)-(height/2);
 	  var width = $(this).attr("data-width");
