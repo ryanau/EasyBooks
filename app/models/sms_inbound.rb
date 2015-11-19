@@ -23,7 +23,6 @@ class SmsInbound
     elsif check_private_channel_phone
       inbound_user = User.find_by(phone: @from)
       @conversation = Conversation.find_by(seller_phone_id: @phone.id, seller_id: inbound_user.id, active: true) || @conversation = Conversation.find_by(buyer_phone_id: @phone.id, buyer_id: inbound_user.id, active: true)
-      p @conversation.id
       @star = @conversation.star
       @post = Post.find_by(id: @star.post_id, active: true)
       if check_private_channel_conversation(inbound_user)
@@ -215,7 +214,7 @@ class SmsInbound
 
     payment_code = new_paymentcode(conversation.id).random_num
 
-    to_buyer_message = "Hi #{buyer.first_name}! It's #{seller.first_name} selling #{post.title} for $#{post.price} (#{post.condition}). You still interested?\n\nIf you're no longer interested in buying my book, feel free to reply with 'EXIT' to terminate this conversation.\n\nEasyBooks says: Please tell seller the Payment Code AFTER you have received the book from the seller. The venmo transfer will be initiated once the seller text the Payment Code to this conversation.\n\n*** Payment Code ***\n#{payment_code}"
+    to_buyer_message = "Hi #{buyer.first_name}! It's #{seller.first_name} selling #{post.title} for $#{post.price}0 (#{post.condition}). You still interested?\n\nIf you're no longer interested in buying my book, feel free to reply with 'EXIT' to terminate this conversation.\n\nEasyBooks says: Please tell seller the Payment Code AFTER you have received the book from the seller. The venmo transfer will be initiated once the seller text the Payment Code to this conversation.\n\n*** Payment Code ***\n#{payment_code}"
 
     SmsOutbound.send_from_private_phone(buyer_phone.number, buyer.phone, to_buyer_message)
 

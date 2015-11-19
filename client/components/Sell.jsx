@@ -267,7 +267,7 @@ Sell = React.createClass({
 	 			<Alert bsStyle="danger">
 	 				<h4>Error!</h4>
 	 		  	<p>{this.state.error_message}</p>
-	 		  	<p><ButtonLink bsStyle="primary" to="/postdashboard">Managet your Active Posts</ButtonLink></p>
+	 		  	<p><ButtonLink bsStyle="primary" to="/profile">Buy more credit</ButtonLink></p>
 	 		  </Alert>
 	 	  } else {
 	 	  	var courseList = this.state.courses;

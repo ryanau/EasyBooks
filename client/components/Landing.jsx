@@ -77,11 +77,11 @@ Landing = React.createClass({
                 <div className="twelve column value">
                   <h4 className="hero-heading">Step 2</h4>
                 </div>
-                <div className="twelve columns">
+                <div className="one-third column">
                   <h4 className="hero-heading">Found the book you want? Watch the post!</h4>
                   <p className="value-description">By watching a post, the seller knows you are interested in paying the listed price and will contact you as soon as possible.</p>
                 </div>
-                <div className="twelve columns">
+                <div className="two-thirds column">
                   <img id="img-buy-step-2-watch_post" src="./buy-step-2/watch_post.png"/>
                   <img id="img-buy-step-2-post_alert" src="./buy-step-2/post_alert.png"/>
                 </div>

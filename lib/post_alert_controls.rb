@@ -54,7 +54,7 @@ module PostAlertControls
   def self.send_post_alert(to, post, random_num)
     seller = post.seller.first_name
     course_name = post.course.department + " " + post.course.course_number
-    message = "EasyBooks says: #{post.title} for #{course_name} (#{post.condition}) is available for $#{post.price}.\n\nTo text the seller, reply with '#{random_num}'.\n\nThis offer expires in 5 mins."
+    message = "EasyBooks says: #{post.title} for #{course_name} (#{post.condition}) is available for $#{post.price}0.\n\nTo text the seller, reply with '#{random_num}'.\n\nThis offer expires in 5 mins."
     SmsOutbound.send_from_main_phone(to, message)
   end
 end
