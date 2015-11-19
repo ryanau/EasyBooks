@@ -8,7 +8,7 @@ var TimerMixin = require('react-timer-mixin');
 var Glyphicon = require('react-bootstrap').Glyphicon;
 var Button = require('react-bootstrap').Button;
 var Col = require('react-bootstrap').Col;
-var SplitButton = require('react-bootstrap').SplitButton;
+var DropdownButton = require('react-bootstrap').DropdownButton;
 var MenuItem = require('react-bootstrap').MenuItem;
 var Well = require('react-bootstrap').Well;
 
@@ -63,24 +63,22 @@ MarketPlace = React.createClass({
     var searchOptions = this.state.courses;
   	return (
   		<div>
-        <Col xs={12} md={12} lg={12} s={12}>
-        <h4>Search by Course</h4>
-        </Col>
         <Col xs={12} md={8} lg={9} s={8}>
           <Select
           name="form-field-name"
-          value="Type the course name or click the dropdown button on the right"
+          placeholder="Select or type the course name"
+          value="Search by course name..."
           options={searchOptions}
           onChange={this.searchChange}
           searchable={true}/>
         </Col>
         <Col xs={12} md={4} lg={3} s={4}>
-          <SplitButton bsStyle="primary" title={this.state.sorting} key={1} id="sorting">
+          <DropdownButton bsStyle="primary" title={this.state.sorting} key={1} id="sorting">
             <MenuItem onSelect={this.changeSorting} eventKey="1">Newest to Oldest</MenuItem>
             <MenuItem onSelect={this.changeSorting} eventKey="2">Oldest to Newest</MenuItem>
             <MenuItem onSelect={this.changeSorting} eventKey="3">$ Low to High</MenuItem>
             <MenuItem onSelect={this.changeSorting} eventKey="4">$ High to Low</MenuItem>
-          </SplitButton>
+          </DropdownButton>
         </Col>
         <Col xs={12} md={12} lg={12} s={12}>
   			 <PublicPosts origin={this.props.origin} course_selected={this.state.course_selected} currentUser={this.props.currentUser} sorting={this.state.sorting}/>

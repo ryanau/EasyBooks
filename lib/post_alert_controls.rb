@@ -4,12 +4,13 @@ module PostAlertControls
     seller = post.seller
     accepted = post.stars.where(sent: true, active: true).count
     if accepted == 0
+      p 'finding star'
       star = find_subscribed_idle_user(post, seller)
       if star
         command = new_post_alert_command(star.id)
         star.update_attributes(sent: true)
         send_post_alert(star.user.phone, post, command.random_num)
-        PostAlertDestroyer.perform_in(1.minutes, star.id)
+        PostAlertDestroyer.perform_in(3.minutes, star.id)
       end
     end
   end
@@ -17,14 +18,27 @@ module PostAlertControls
   private
 
   def self.find_subscribed_idle_user(post, seller)
-    subscribers_id = post.stars.where(active: true).pluck(:user_id)
-    occupied = []
-    subscribers_id.each do |subscriber_id|
-      if User.find(subscriber_id).stars.where(accepted: true, active: true).count > 0
-        occupied << subscriber_id
+    seller_engaged_count = seller.buying_conversations.count + seller.selling_conversations.count
+    phone_total_count = Phone.all.count
+    
+    if seller_engaged_count < phone_total_count
+      p 'check seller count seller than phone count'
+      subscribers_id = post.stars.where(active: true).pluck(:user_id)
+      occupied = []
+      subscribers_id.each do |subscriber_id|
+        subscriber_engaged_count = User.find(subscriber_id).buying_conversations.count + User.find(subscriber_id).selling_conversations.count
+        p 'subscriber_engaged_count'
+        p subscriber_engaged_count
+        if subscriber_engaged_count > phone_total_count
+          p 'putting in occupied'
+          occupied << subscriber_id
+        end
       end
+      p 'before returning star'
+      post.stars.where(sent: false, active: true).where.not(user_id: seller.id).where.not(user_id: occupied).first
+    else
+      return false
     end
-    post.stars.where(sent: false, active: true).where.not(user_id: seller.id).where.not(user_id: occupied).first
   end
 
   def self.new_post_alert_command(star_id)
@@ -40,7 +54,7 @@ module PostAlertControls
   def self.send_post_alert(to, post, random_num)
     seller = post.seller.first_name
     course_name = post.course.department + " " + post.course.course_number
-    message = "EasyBooks says: #{post.title} for #{course_name} (#{post.condition}) is available for $#{post.price}.\n\nTo text the seller, reply with '#{random_num}'.\n\nThis offer expires in 5 mins."
+    message = "EasyBooks says: #{post.title} for #{course_name} (#{post.condition}) is available for $#{post.price}0.\n\nTo text the seller, reply with '#{random_num}'.\n\nThis offer expires in 5 mins."
     SmsOutbound.send_from_main_phone(to, message)
   end
 end

@@ -20,7 +20,6 @@ Rails.application.routes.draw do
       get '/stars/starred', :to => 'stars#starred'
       get '/stars/position', :to => 'stars#position'
 
-      put '/posts/mark_sold', :to => 'posts#mark_sold'
       get '/post/:id/sold', :to => 'posts#post_sold'
       get '/active_posts', :to => 'posts#active_posts'
       get '/starred_posts', :to => 'posts#starred_posts'

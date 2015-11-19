@@ -20,6 +20,10 @@ var Dropdown = require('react-bootstrap').Dropdown;
 var Button = require('react-bootstrap').Button;
 var Panel = require('react-bootstrap').Panel;
 var Alert = require('react-bootstrap').Alert;
+var Col = require('react-bootstrap').Col;
+var PageHeader = require('react-bootstrap').PageHeader;
+var Row = require('react-bootstrap').Row;
+var ButtonToolbar = require('react-bootstrap').ButtonToolbar;
 
 var VenmoAuthorizationSell = require('./VenmoAuthorizationSell.jsx');
 
@@ -60,7 +64,25 @@ Sell = React.createClass({
 		if (this.props.currentUser.venmo_linked || sessionStorage.getItem('venmo_link') == "true") {
 			this.loadSellEligible();
 			this.loadCourses();
+			this.loadCreditCount();
 		}
+	},
+	loadCreditCount: function () {
+		$.ajax({
+		  url: this.props.origin + '/credits/count',
+		  type: 'GET',
+		  dataType: 'json',
+		  crossDomain: true,
+		  headers: {'Authorization': localStorage.getItem('jwt-easybooks')},
+		  success: function (response) {
+		    this.setState({
+		    	credit_count: response.credit_count,
+		    });
+		  }.bind(this),
+		  error: function (error) {
+		    window.location = "/"
+		  }.bind(this),
+		});	
 	},
 	loadUserVenmoStatus: function () {
 		$.ajax({
@@ -245,7 +267,7 @@ Sell = React.createClass({
 	 			<Alert bsStyle="danger">
 	 				<h4>Error!</h4>
 	 		  	<p>{this.state.error_message}</p>
-	 		  	<p><ButtonLink bsStyle="primary" to="/postdashboard">Managet your Active Posts</ButtonLink></p>
+	 		  	<p><ButtonLink bsStyle="primary" to="/profile">Buy more credit</ButtonLink></p>
 	 		  </Alert>
 	 	  } else {
 	 	  	var courseList = this.state.courses;
@@ -263,12 +285,37 @@ Sell = React.createClass({
 	 	  		var uploadingProgress = <LinearProgress mode="indeterminate" />
 	 	  	} else if (this.state.uploading == null) {
 	 	  		var uploadingProgress = 
+	 	  			<div>
+	 	  			<h5>Picture Uploader (Optional)</h5>
 	 					<Dropzone onDrop={this.onDrop} className="dropzone" activeClassName="dropzone_active" multiple={false}>
 	 		        <div><h5>Drag or click here to upload your picture for the book (ONE only)</h5></div>
 	 		      </Dropzone>
+	 		      </div>
 	 	  	}
 	 	  	var body = 
 	 	  	<div>
+		      <h5><strong>Select Condition</strong></h5>
+					<Dropdown id="condition">
+						<Dropdown.Toggle>
+					  	{this.state.condition}
+					  </Dropdown.Toggle>
+			      <Dropdown.Menu>
+			        <MenuItem eventKey="1" onSelect={this.changeCondition}>New</MenuItem>
+			        <MenuItem eventKey="2" onSelect={this.changeCondition}>Like New</MenuItem>
+			        <MenuItem eventKey="3" onSelect={this.changeCondition}>Good</MenuItem>
+			        <MenuItem eventKey="4" onSelect={this.changeCondition}>Fair</MenuItem>
+			      </Dropdown.Menu>
+			    </Dropdown>
+			    <div className="mB10">
+					<h5><strong>Select Course Name</strong></h5>
+					<Select
+						placeholder="Select or type the course name"
+					  name="form-field-name"
+					  value={this.state.course_selected}
+					  options={courseList}
+					  onChange={this.searchChange}
+					  searchable={true}/>
+					</div>
 	 				<Input
 	 	        type="text"
 	 	        value={this.state.title}
@@ -294,7 +341,7 @@ Sell = React.createClass({
 	 	        labelClassName="label-class"
 	 	        onChange={this.handleChange} />
 	 				<Input
-	 	        type="text"
+	 					type="text"
 	 	        value={this.state.price}
 	 	        placeholder="e.g. 36"
 	 	        addonBefore="$" 
@@ -308,7 +355,7 @@ Sell = React.createClass({
 	 	        labelClassName="label-class"
 	 	        onChange={this.handleChange} />
 	 				<Input
-	 	        type="text"
+		 				type="text"
 	 	        value={this.state.description}
 	 	        placeholder="e.g. slightly highlighted, international edition"
 	 	        label="Description"
@@ -319,7 +366,7 @@ Sell = React.createClass({
 	 	        labelClassName="label-class"
 	 	        onChange={this.handleChange} />
 	 				<Input
-	 	        type="text"
+	 					type="text"
 	 	        value={this.state.pickup}
 	 	        placeholder="e.g. Unit 1"
 	 	        label="Pick Up Location"
@@ -329,41 +376,29 @@ Sell = React.createClass({
 	 	        groupClassName="group-class"
 	 	        labelClassName="label-class"
 	 	        onChange={this.handleChange} />
-	 	      <h5><strong>Select Condition</strong></h5>
-	 				<Dropdown id="condition">
-	 					<Dropdown.Toggle>
-	 				  	{this.state.condition}
-	 				  </Dropdown.Toggle>
-	 		      <Dropdown.Menu>
-	 		        <MenuItem eventKey="1" onSelect={this.changeCondition}>New</MenuItem>
-	 		        <MenuItem eventKey="2" onSelect={this.changeCondition}>Like New</MenuItem>
-	 		        <MenuItem eventKey="3" onSelect={this.changeCondition}>Good</MenuItem>
-	 		        <MenuItem eventKey="4" onSelect={this.changeCondition}>Fair</MenuItem>
-	 		      </Dropdown.Menu>
-	 		    </Dropdown>
-	 				<h5><strong>Select Course Name</strong></h5>
-	 				<Select
-	 				  name="form-field-name"
-	 				  value="Type the course name or click the dropdown button on the right"
-	 				  options={courseList}
-	 				  onChange={this.searchChange}
-	 				  searchable={true}/>
 	 				<div>
 	 					{uploadingProgress}
 	 				</div>
 	 				<div>{picPreview}</div>
 	 				<div>
+	 				<ButtonToolbar className="mT10">
 	 				<Button
 	 	        bsStyle="primary"
 	 	        disabled={this.state.isLoading}
 	 	        onClick={!this.state.isLoading ? this.handleSubmit : null}>
 	 	        {this.state.isLoading ? 'Putting it on the rack...' : 'Sell Book'}
 	 	      </Button>
-	 				</div>
+	 	      </ButtonToolbar>
+	 	      </div>
 	 			</div>
 	 		}
    	} else {
   		var body = <VenmoAuthorizationSell loadUserVenmoStatus={this.loadUserVenmoStatus} origin={this.props.origin}/>
+	  }
+	  if (this.state.credit_count == null) {
+	  	var creditCount = "Loading credit..."
+	  } else {
+	  	var creditCount = 'Remaining credit: ' + this.state.credit_count;
 	  }
   	return (
   		<div className="container col-md-8 col-md-offset-2">
@@ -371,11 +406,9 @@ Sell = React.createClass({
 	  		  ref="postCreated"
 	  		  message='Post Created! Redirecting...'
 	  		  autoHideDuration={1000}/>
-	  			<form className="form-horizontal">
-	  				{warning}
-
-	  				{body}
-	  			</form>
+	  		<PageHeader>Make a Sell Post <small>{creditCount}</small></PageHeader>
+  				{warning}
+  				{body}
   		</div>
   	)
   }

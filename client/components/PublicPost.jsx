@@ -50,14 +50,12 @@ PublicPost = React.createClass({
       star_count: null,
       mutual_friends_count: null,
       mutual_friends: null,
-      offer: null,
       star_position: null,
       sold: null,
       showVenmoModal: false,
     }
   },
   componentDidMount: function () {
-    this.loadMutualFriends();
     this.loadSold();
   },
   redirectToPost: function () {
@@ -79,6 +77,7 @@ PublicPost = React.createClass({
         $.when(this.setState({sold: response.sold})).done(function (){
           this.loadStar();
           this.loadStarCount();
+          this.loadMutualFriends();
         }.bind(this));
       }.bind(this),
       error: function (error) {
@@ -195,6 +194,7 @@ PublicPost = React.createClass({
           this.refs.postStarred.show();
           $.when(this.setState({star: true})).done(function (){
             this.loadStarCount();
+            this.loadStarPosition();
           }.bind(this));
         }.bind(this),
         error: function (error) {
@@ -216,18 +216,11 @@ PublicPost = React.createClass({
       crossDomain: true,
       headers: {'Authorization': localStorage.getItem('jwt-easybooks')},
       success: function (response) {
-        this.setState({
-          star_count: response.star_count,
-        });
+        this.setState({star_count: response.star_count});
       }.bind(this),
       error: function (error) {
         window.location = "/"
       }.bind(this),
-    });
-  },
-  handleChange: function () {
-    this.setState({
-      offer: this.refs.offer.getValue(),
     });
   },
   openVenmoModal: function () {
@@ -243,40 +236,49 @@ PublicPost = React.createClass({
     var author = <span className="colorGrey fs16"><i> {post.author}</i></span>
     var watchNotClickedTooltip = <Tooltip id="1">Click to add yourself to the list of watchers. When you become first on the list, expect a text message from the seller!</Tooltip>
     var watchClickedTooltip = <Tooltip id="1">Your position is {this.state.star_position} out of {this.state.star_count} watchers</Tooltip>
+    if (this.state.star) {
+      var watcherBadgeTooltip = watchClickedTooltip
+    } else {
+      var watcherBadgeTooltip = <Tooltip id="1">You are not watching this post</Tooltip>
+    }
     var watchNewButton = (
-      <Button bsSize="small" bsStyle="default" onClick={this.openVenmoModal}>
-        Watch Now
-      </Button>
+      <Button bsSize="small" bsStyle="default" onClick={this.openVenmoModal}><Glyphicon glyph="eye-open"/> Watch Now</Button>
     )
     var watchClicked = (
       <OverlayTrigger placement="top" overlay={watchClickedTooltip}>
         <Button onClick={this.starPost} bsStyle="success" bsSize="small"><Glyphicon glyph="eye-open"/> Watching ({this.state.star_position})</Button>
       </OverlayTrigger>
     )
-    var watchNotClicked = (
-      <OverlayTrigger placement="top" overlay={watchNotClickedTooltip}>
-        <Button onClick={this.starPost} bsStyle="default" bsSize="small"><Glyphicon glyph="eye-close"/> Watch</Button>
+    var watcherBadge = (
+      <OverlayTrigger placement="top" overlay={watcherBadgeTooltip}>
+        <Label>{this.state.star_count} people watching</Label>
       </OverlayTrigger>
     )
     var infoButton = <Button onClick={this.redirectToPost} bsStyle="info" bsSize="small"><Glyphicon glyph="info-sign"/> Info</Button>
     var description = <Col lg={12} md={12} s={12} xs={12}><p>{post.description}</p></Col>
     var pickUp = <Col lg={12} md={12} s={12} xs={12}><p>Pick Up: {post.pickup}</p></Col>
     if (post.seller_id != this.props.currentUser.id) {
-      if (this.state.mutual_friends != null && this.state.mutual_friends.length < 10) {
+      if (this.state.mutual_friends != null && this.state.mutual_friends.length < 20) {
         var avatars = this.state.mutual_friends.map(function (friend, index) {
+          var tooltip = <Tooltip id={index}>{friend[0]}</Tooltip>
           return (
-            <Avatar key={index} src={friend[1]} style={{marginRight: "3px"}}/>
+          <OverlayTrigger key={index} placement="top" overlay={tooltip}>
+            <Avatar src={friend[1]} style={{marginRight: "3px"}}/>
+          </OverlayTrigger>
           )
         }.bind(this))
         var mutual = this.state.mutual_friends_count + " Mutual Friends"
       } else if (this.state.mutual_friends != null && this.state.mutual_friends.length > 10) {
-        var avatars = this.state.mutual_friends.slice(0,9).map(function (friend, index) {
+        var avatars = this.state.mutual_friends.slice(0,19).map(function (friend, index) {
+        var tooltip = <Tooltip id={index}>{friend[0]}</Tooltip>
           return (
-            <Avatar key={index} src={friend[1]} style={{marginRight: "3px"}}/>
+            <OverlayTrigger key={index} placement="top" overlay={tooltip}>
+              <Avatar src={friend[1]} style={{marginRight: "3px"}}/>
+            </OverlayTrigger>
           )
         }.bind(this))
         var mutual = this.state.mutual_friends_count + " Mutual Friends"
-        var lastCount = <Badge>{this.state.mutual_friends_count - 9 + ' +'}</Badge>
+        var lastCount = <Badge>{this.state.mutual_friends_count - 19 + ' +'}</Badge>
       } else {
         var mutual = "Loading mutual friends..."
       }
@@ -287,7 +289,6 @@ PublicPost = React.createClass({
           </ButtonToolbar>
         )
       } else {
-          // {this.state.star? watchClicked : watchNotClicked}
         var buttonGroup = (
           <ButtonToolbar>
           {this.state.star? watchClicked : watchNewButton}
@@ -296,6 +297,11 @@ PublicPost = React.createClass({
         )  
       }
       var seller = post.seller.first_name + ' ' + post.seller.last_name
+      var mutualPopOver = (
+        <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={<Popover id="1">{avatars}{lastCount}</Popover>}>
+        <Button bsSize="xsmall">{mutual}</Button>
+        </OverlayTrigger>
+      )
     } else {
       var seller = "you"
       var mutual = ":P"
@@ -316,7 +322,7 @@ PublicPost = React.createClass({
         var condition = <Label bsStyle="success">New</Label>
         break;
       case "Like New":
-        var condition = <Label bsStyle="default">Like New</Label>
+        var condition = <Label bsStyle="info">Like New</Label>
         break;
       case "Good":
         var condition = <Label bsStyle="primary">Good</Label>
@@ -336,30 +342,20 @@ PublicPost = React.createClass({
           message='Unwatching Post'
           autoHideDuration={1000}/>
         <VenmoAuthorizationWatch show={this.state.showVenmoModal} close={this.closeVenmoModal} currentUser={this.props.currentUser} origin={this.props.origin} starPost={this.starPost}/>
-        <Panel className="mB0">
+        <Panel className="mB10">
+          {condition} <Label bsStyle="danger">${post.price}</Label> <Label bsSize="small">{moment(post.created_at).fromNow()}</Label> {watcherBadge}
           <Col lg={12} md={12} s={12}>
             <h3><Label bsSize="large">{course.department + ' ' + course.course_number}</Label> <Link to={postLink}>{post.title}</Link>{author}</h3>
           </Col>
           {this.props.post.description? description : null}
           {this.props.post.pickup? pickUp : null}
-          <Col lg={1} xs={1}>
-            {condition} 
+          <Col lg={9} xs={12}>
+            <Avatar src={post.seller.pic} style={{marginRight: "3px"}}/>By {seller} {mutualPopOver} 
           </Col>
-          <Col lg={4} xs={3}>
-            ${post.price} | {moment(post.created_at).fromNow()}
-          </Col>
-          <Col lg={3} xs={3}>
-            <Badge>{this.state.star_count}</Badge> Watchers
-          </Col>          
-          <Col lg={4} xs={5}>
+          <Col lg={3} xs={12}>
             {buttonGroup}
           </Col>
-          <Col lg={12} xs={12}>
-            <Avatar src={post.seller.pic} style={{marginRight: "3px"}}/>By {seller} | {mutual}
-          </Col>
-          <Col lg={12} xs={12}>
-            {avatars}{lastCount}
-          </Col>
+
         </Panel>
   			
   		</div>

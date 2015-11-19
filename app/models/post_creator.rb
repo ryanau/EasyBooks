@@ -6,9 +6,9 @@ class PostCreator
   end
 
   def ok?
-    unless @current_user.selling_posts.where(sold: false, public: true).count > 0
+    # unless @current_user.selling_posts.where(sold: false, public: true).count > 0
       save_post
-    end
+    # end
   end
 
   def save_post

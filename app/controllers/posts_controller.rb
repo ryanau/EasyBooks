@@ -39,7 +39,7 @@ class PostsController < ApplicationController
     action = PostCreator.new(params, current_user)
     if action.ok?
       post = action.post
-      # CourseAlert.perform_async(post.course_id, post.id, current_user.id)
+      CourseAlert.perform_async(post.course_id, post.id, current_user.id)
       render json: {post_id: action.post.id}
     else
       render json: {error_message: action.post}
@@ -48,20 +48,21 @@ class PostsController < ApplicationController
 
   def show
     post = Post.find_by(id: params[:post_id], active: true)
-    if post.sold && post.seller_id != current_user.id
-      render json: {error_message: "Post not found"}
+    if post.seller_id == current_user.id || post.buyer_id == current_user.id || !post.sold
+      render :json => post.as_json(include: {seller: {only: [:id, :first_name, :last_name, :pic]}, course: {only: [:department, :course_number]}, entry: {only: [:venmo_transaction_id, :created_at]}})
     else
-      render :json => post.as_json(include: {seller: {only: [:id, :first_name, :last_name, :pic]}})
+      render json: {error_message: "Post not found"}
     end
   end
 
   def sell_status
+    engaged_count = current_user.buying_conversations.count + current_user.selling_conversations.count
     if current_user.credits.count == 0
       status = true
       error_message = "Insufficient credit."
-    elsif current_user.selling_posts.where(sold: false, public: true).count > 0
+    elsif engaged_count > Phone.all.count
       status = true
-      error_message = "You have reached your selling limit. Please mark your post as 'SOLD' or delete it by click the following button."
+      error_message = "You have reached the app's limit in concurrent transactions. Please complete all active transactions first."
     else
       status = false
       error_message = "Success"
@@ -79,20 +80,12 @@ class PostsController < ApplicationController
     render json: {mutual_friends_count: result[:count], mutual_friends: result[:friends]}
   end
 
-  def mark_sold
-    post_id = params[:post_id]
-    post = Post.find_by(id: post_id, active: true)
-    if !post.sold && post.public
-      post.update_attributes(sold: true, public: false)
-      post.stars.update_all(active: false)
-      response = true
-    end
-    render json: {sold: response}
-  end
-
   def destroy
     post_id = params[:post_id]
     current_user.selling_posts.find_by(id: post_id, active: true).update_attributes(active: false)
+    if star = Post.find(post_id).stars.find_by(sent: true, accepted: true, active: true)
+      ConversationDestroyer.perform_async(star.id, post_id)
+    end
     render json: {message: "Post Deleted"}
   end
 

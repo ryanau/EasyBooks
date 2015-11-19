@@ -30,13 +30,15 @@ class SmsInbound
           if @body.upcase == 'EXIT' || payment_code = Paymentcode.find_by(random_num: @body, conversation_id: @conversation.id)
             proceed_seller_action_in_private_channel(payment_code)
           else
-            SmsOutbound.send_from_private_phone(@phone.number, @recipient.phone, @body)
+            outbound_phone = Phone.find(@conversation.buyer_phone_id).number
+            SmsOutbound.send_from_private_phone(outbound_phone, @recipient.phone, @body)
           end
         else #buyer
           if @body.upcase == 'EXIT'
             proceed_buyer_action_in_private_channel
           else
-            SmsOutbound.send_from_private_phone(@phone.number, @recipient.phone, @body)
+            outbound_phone = Phone.find(@conversation.seller_phone_id).number
+            SmsOutbound.send_from_private_phone(outbound_phone, @recipient.phone, @body)
           end
         end
       else
@@ -64,18 +66,6 @@ class SmsInbound
   def verify_command
     @command = Command.find_by(random_num: @body)
   end
-
-  # def proceed_user_action_in_private_channel
-  #   p '*' *100
-  #   p 'proceeding user action'
-  #   if @body.upcase == 'EXIT'
-  #     p 'proceeding exit'
-  #     proceed_user_action_in_private_channel_exit
-  #   elsif @body.upcase == 'DONE'
-  #     p 'proceeding done'
-  #     proceed_user_action_in_private_channel_done
-  #   end
-  # end
 
   def proceed_seller_action_in_private_channel(payment_code)
     if @body.upcase == 'EXIT'
@@ -105,26 +95,32 @@ class SmsInbound
   def proceed_seller_action_in_private_channel_complete(payment_code)
     #venmo transaction here
     token = @conversation.buyer.venmo_account.token
-    note = "EasyBooks: #{@post.title} for $#{@post.price}"
+    note = "EasyBooks transaction of #{@post.title} for $#{@post.price}0"
     seller_venmo_uid = @conversation.seller.venmo_account.venmo_uid
     amount = @post.price.to_s + "0"
-
     response = create_venmo_charge(token, note, seller_venmo_uid, amount)
+
+    p 'response'
+    p response
     payment_id = response.parsed_response["data"]["payment"]["id"]
     venmo_amount = response.parsed_response["data"]["payment"]["amount"]
+
     entry = Entry.create(seller_id: @conversation.seller.id, buyer_id: @conversation.buyer.id, post_id: @post.id, venmo_transaction_id: payment_id, amount: venmo_amount)
     
     if entry
-      buyer_message = "EasyBooks: The Payment Code was verified. You should see a transfer of $#{@post.price} from your Venmo account to #{@conversation.seller.first_name}'s account.\n\nThank you for using EasyBooks!"
-      seller_message = "EasyBooks: The Payment Code was verified. You should see a transfer of $#{@post.price} from #{@conversation.seller.first_name}'s account to yours.\n\nThank you for using EasyBooks!"
+      buyer_message = "EasyBooks: The Payment Code was verified. You should see a transfer of $#{@post.price}0 from your Venmo to #{@conversation.seller.first_name}'s account.\n\nThank you for using EasyBooks!"
+      seller_message = "EasyBooks: The Payment Code was verified. You should see a transfer of $#{@post.price}0 from #{@conversation.buyer.first_name}'s Venmo to yours.\n\nThank you for using EasyBooks!"
       SmsOutbound.send_from_private_phone(@phone.number, @conversation.seller.phone, seller_message)
       SmsOutbound.send_from_private_phone(@phone.number, @conversation.buyer.phone, buyer_message)
-      # star = Star.find_by(id: @conversation.star_id, active: true)
-      # post = Post.find_by(id: star.post.id, active: true)
+
       @post.update_attributes(sold: true, public: false, buyer_id: @conversation.buyer.id)
       @post.stars.update_all(active: false)
       @conversation.update_attributes(active: false)
       @conversation.paymentcode.destroy
+
+      if @conversation.seller.selling_posts.count > 0
+      activiate_post_alerts(@conversation.seller_id)
+      end
     end
   end
 
@@ -138,16 +134,23 @@ class SmsInbound
     )
   end
 
-  # def proceed_user_action_in_private_channel_done
-  #   message = 'EasyBooks: This transaction is marked as completed by the other party. This private channel is now closed.'
-  #   SmsOutbound.send_from_private_phone(@phone.number, @conversation.seller.phone, message)
-  #   SmsOutbound.send_from_private_phone(@phone.number, @conversation.buyer.phone, message)
-  #   star = Star.find_by(id: @conversation.star_id, active: true)
-  #   post = Post.find_by(id: star.post.id, active: true)
-  #   post.update_attributes(sold: true, public: false, buyer_id: @conversation.buyer.id)
-  #   post.stars.update_all(active: false)
-  #   @conversation.update_attributes(active: false)
-  # end
+  def activiate_post_alerts(seller_id)
+    seller = User.find(seller_id)
+    phone_total_count = Phone.all.count
+    seller_engaged_count = seller.buying_conversations.count + seller.selling_conversations.count
+    if phone_total_count > seller_engaged_count
+      posts_id = []
+      seller.selling_posts.each do |selling_post|
+        if !selling_post.stars.where(sent: false).empty?
+          posts_id << selling_post.id
+        end
+      end
+      number_of_posts_to_send = phone_total_count - seller_engaged_count - 1
+      posts_id[0..number_of_posts_to_send].each do |post|
+        PostAlert.perform_async(post.id)
+      end
+    end
+  end
 
   def check_system_phone_inbound
     if @command.action == 'approve_post_alert'
@@ -165,7 +168,7 @@ class SmsInbound
     department = @subscription.course.department
     course_number = @subscription.course.course_number
     @subscription.update_attributes(active: false)
-    message = "EasyBooks: Your subscription to #{department} #{course_number} has been cancelled. You will no longer receive text alerts when new posts for this course is available.\n\nTo resubscribe, visit: https://easybooks.herokuapp.com/subscriptions"
+    message = "EasyBooks: You have cancelled your subscription to #{department} #{course_number}. You will no longer receive text alerts when new posts for this course are available.\n\nTo resubscribe, visit: https://easybooks.herokuapp.com/subscriptions"
     SmsOutbound.send_from_main_phone(@from, message)
   end
 
@@ -173,6 +176,7 @@ class SmsInbound
     p 'inside check private channel conversation'
     if @conversation = Conversation.find_by(seller_phone_id: @phone.id, seller_id: inbound_user.id, active: true)
       p 'its a seller'
+      p @conversation.id
       @recipient = User.find(@conversation.buyer_id)
       @seller = true
       true
@@ -210,11 +214,11 @@ class SmsInbound
 
     payment_code = new_paymentcode(conversation.id).random_num
 
-    to_buyer_message = "Hi #{buyer.first_name}! It's #{seller.first_name} selling #{post.title} for $#{post.price} (#{post.condition}). You still interested?\n\nIf you're no longer interested in buying my book, feel free to reply with 'EXIT' to terminate this conversation.\n\nEasyBooks says: Please reveal the Payment Code to the seller ONLY AFTER you have received the book from the seller. The venmo transfer will be initiated once the seller text the Payment Code to this conversation.\n\n*** Payment Code ***\n#{payment_code}"
+    to_buyer_message = "Hi #{buyer.first_name}! It's #{seller.first_name} selling #{post.title} for $#{post.price}0 (#{post.condition}). You still interested?\n\nIf you're no longer interested in buying my book, feel free to reply with 'EXIT' to terminate this conversation.\n\nEasyBooks says: Please tell seller the Payment Code AFTER you have received the book from the seller. The venmo transfer will be initiated once the seller text the Payment Code to this conversation.\n\n*** Payment Code ***\n#{payment_code}"
 
     SmsOutbound.send_from_private_phone(buyer_phone.number, buyer.phone, to_buyer_message)
 
-    to_seller_message = "EasyBooks: You just got matched with #{buyer.first_name} who is interested in #{post.title} for #{course_name}.\n\nTo terminate this conversation and talk to the next buyer interested, reply with 'EXIT'.\n\nAfter you hand over the book to the buyer, ASK for the Payment Code. Text the Payment Code to this number to initiate the Venmo transfer and complete the transaction."
+    to_seller_message = "EasyBooks: You just got matched with #{buyer.first_name} who wants to buy #{post.title} for #{course_name} at $#{post.price}0.\n\nTo terminate this conversation and talk to the next buyer interested, reply with 'EXIT'.\n\nAsk the buyer for the Payment Code after you handover the book. Text it to this number to start the Venmo transfer and complete the transaction."
     SmsOutbound.send_from_private_phone(seller_phone.number, seller.phone, to_seller_message)
   end
 

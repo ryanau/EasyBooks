@@ -33,6 +33,6 @@ class UsersController < ApplicationController
   end
 
   def current
-    render json: {id: current_user.id, first_name: current_user.first_name, last_name: current_user.last_name, completed: current_user.completed, pic: current_user.pic, completed: current_user.completed, venmo_linked: !VenmoAccount.find_by(user_id: current_user.id).nil?}
+    render json: {id: current_user.id, first_name: current_user.first_name, last_name: current_user.last_name, completed: current_user.completed, pic: current_user.pic, venmo_linked: !VenmoAccount.find_by(user_id: current_user.id).nil?}
   end
 end
