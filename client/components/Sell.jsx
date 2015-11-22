@@ -24,6 +24,8 @@ var Col = require('react-bootstrap').Col;
 var PageHeader = require('react-bootstrap').PageHeader;
 var Row = require('react-bootstrap').Row;
 var ButtonToolbar = require('react-bootstrap').ButtonToolbar;
+var Popover = require('react-bootstrap').Popover;
+var OverlayTrigger = require('react-bootstrap').OverlayTrigger;
 
 var VenmoAuthorizationSell = require('./VenmoAuthorizationSell.jsx');
 
@@ -181,7 +183,7 @@ Sell = React.createClass({
 		var data = {
 			title: this.state.title,
 			author: this.state.author,
-			price: this.state.price,
+			price: Math.ceil((this.state.price * 1.039 + 0.75)*100)/100,
 			pickup: this.state.pickup,
 			course_selected: this.state.course_selected,
 			pic_url: this.state.pic_url,
@@ -292,6 +294,7 @@ Sell = React.createClass({
 	 		      </Dropzone>
 	 		      </div>
 	 	  	}
+	 	  	var price_tooltip = <Popover title="Listing price reflects the 3.9% + $0.75 processing fee">But don't worry you'll still make <strong>${this.state.price}</strong> for your book!</Popover>
 	 	  	var body = 
 	 	  	<div>
 		      <h5><strong>Select Condition</strong></h5>
@@ -346,7 +349,7 @@ Sell = React.createClass({
 	 	        placeholder="e.g. 36"
 	 	        addonBefore="$" 
 	 	        addonAfter=".00"
-	 	        label="Price"
+	 	        label="How much do you want to make from your book?"
 	 	        help="Required"
 	 	        bsStyle={this.validatePrice()}
 	 	        hasFeedback
@@ -354,6 +357,11 @@ Sell = React.createClass({
 	 	        groupClassName="group-class"
 	 	        labelClassName="label-class"
 	 	        onChange={this.handleChange} />
+	 	      <ButtonToolbar>
+	 	        <OverlayTrigger placement="top" overlay={price_tooltip} trigger="hover">
+	            <Button>Including the processing fee, it will be listed for: ${Math.ceil((this.state.price * 1.039 + 0.75)*100)/100}</Button>
+	          </OverlayTrigger>
+          </ButtonToolbar>
 	 				<Input
 		 				type="text"
 	 	        value={this.state.description}

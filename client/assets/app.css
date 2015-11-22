@@ -468,18 +468,18 @@ footer {
   #img-buy-step-2-watch_post {
     z-index: 0;
     position: absolute;
-    max-width: 100%
+    max-width: 80%
   }
 
   #img-buy-step-2-post_alert {
     z-index: 1;
-    /* left: 60rem; */
+    left: 10rem; 
     position: relative;
     float: right;
   }
 
   #img-buy-step-2-subscribe {
-    max-width: 100%;
+    max-width: 80%;
   }
 
   #img-buy-step-2-course_alert {

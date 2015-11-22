@@ -79,7 +79,7 @@ AddSubscription = React.createClass({
 			<div>
 				<Select
 				  name="form-field-name"
-				  value="Please type the course name or use the dropdown menu"
+				  placeholder="Select or type the course name"
 				  options={searchOptions}
 				  onChange={this.searchChange}
 				  searchable={true}/>

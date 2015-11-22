@@ -175,6 +175,10 @@ Landing = React.createClass({
                 <OverlayTrigger id="1" placement="bottom" trigger="hover" overlay={logInPopover}>
                   <Button href={link} bsStyle="primary">Log In via Facebook</Button>
                 </OverlayTrigger>
+                <h4>Trust, Convenience, Save money</h4>
+                <p>Connect to a verified student community</p>
+                <p>On the go personalized marketplace</p>
+                <p>Save money as a buyer. make money as a seller</p>
               </div>
             </div>
           </div>

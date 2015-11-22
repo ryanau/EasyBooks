@@ -16,7 +16,7 @@ App = React.createClass({
       origin: '/api/v1',
 
       // comment the following line when deploying to heroku
-      origin: 'http://localhost:3000/api/v1',
+      // origin: 'http://localhost:3000/api/v1',
     }
   },
   getInitialState: function () {
