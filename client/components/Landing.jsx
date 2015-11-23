@@ -177,32 +177,30 @@ Landing = React.createClass({
               </OverlayTrigger>
               </div>
               <div className="one-third column">
-              <h3>Trust</h3>
-              <h4>Connect to a verified student community</h4>
+              <h3 className="fW300">Trust</h3>
+              <h4 className="fW300">Connect to a verified student community</h4>
               </div>
               <div className="one-third column">
-              <h3>Convenience</h3>
-              <h4>On the go personalized marketplace</h4>
+              <h3 className="fW300">Convenience</h3>
+              <h4 className="fW300">On the go personalized marketplace</h4>
               </div>
               <div className="one-third column">
-              <h3>Save Money</h3>
-              <h4>Save money as a buyer, make money as a seller</h4>
+              <h3 className="fW300">Save Money</h3>
+              <h4 className="fW300">Save money as a buyer, make money as a seller</h4>
               </div>
             </div>
           </div>
         </div>
         <div className="section-tab first-step-img">
-          <div className="landing-container">
-            <div className="row">
-              <div className="twelve column value">
-                <Tabs onChange={this.handleTabChange}>
-                  <Tab label="To Buy" >  
-                  </Tab>
-                  <Tab label="To Sell" >
-                  </Tab>
-                </Tabs>
-                {headerSlogan}
-              </div>
+          <div className="row">
+            <div className="twelve column value">
+              <Tabs onChange={this.handleTabChange}>
+                <Tab label="To Buy" >  
+                </Tab>
+                <Tab label="To Sell" >
+                </Tab>
+              </Tabs>
+              {headerSlogan}
             </div>
           </div>
         </div>
