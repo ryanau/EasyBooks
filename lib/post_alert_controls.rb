@@ -10,7 +10,7 @@ module PostAlertControls
         command = new_post_alert_command(star.id)
         star.update_attributes(sent: true)
         send_post_alert(star.user.phone, post, command.random_num)
-        PostAlertDestroyer.perform_in(3.minutes, star.id)
+        PostAlertDestroyer.perform_in(5.minutes, star.id)
       end
     end
   end

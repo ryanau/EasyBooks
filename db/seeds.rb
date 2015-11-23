@@ -28,7 +28,7 @@ Phone.create(number: "+15102963497")
 Promo.create(code: "XYZXYZ", info: "1 Free Selling Credit", credit: 1)
 Promo.create(code: "XYZXYA", info: "5 Free Selling Credit", credit: 5)
 Promo.create(code: "XYZXYB", info: "1 Free Selling Credit", credit: 1)
-
+Promo.create(code: "ILUVPM", info: "You love PM huh? You just earned yourself 10 Free Selling Credit! Note: Venmo Authorization is disabled for demo purposes.", credit: 10)
 
 # seed users
 # 10.times do

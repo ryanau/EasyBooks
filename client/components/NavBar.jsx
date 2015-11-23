@@ -109,14 +109,14 @@ module.exports = React.createClass({
     }
   },
   render: function() {
-    var brand = <Link to='/' className='navbar-brand'>EasyBooks</Link>;  
+    var brand = <Link to='/' className='navbar-brand'><img src="/logo_small.png"/></Link>;  
     if (this.props.signedIn && this.props.currentUser.completed && $(window).width() < 768) {
       if (this.state.starred_post_count != null) {
         var starPostCount = this.state.starred_post_count
       }
       var control = (
         <div>
-        <Navbar inverse toggleNavKey={0} fixedTop={true} className="transparent">
+        <Navbar toggleNavKey={0} fixedTop={true} className="transparent">
           <NavBrand>{brand}</NavBrand>
           <Nav right eventKey={0}>
             <MenuItem onSelect={this.buyNav}>Buy</MenuItem>
@@ -159,7 +159,7 @@ module.exports = React.createClass({
         var starPostCount = this.state.starred_post_count
       }
       var control = (
-        <Navbar inverse toggleNavKey={0} fixedTop={true} className="transparent">
+        <Navbar toggleNavKey={0} fixedTop={true} className="transparent">
           <NavBrand>{brand}</NavBrand>
           <Nav right eventKey={0}>
             <MenuItem onSelect={this.buyNav}>Buy</MenuItem>
@@ -178,7 +178,7 @@ module.exports = React.createClass({
       )
     } else {
       var control = 
-      <Navbar inverse toggleNavKey={0} fixedTop={true} className="transparent">
+      <Navbar toggleNavKey={0} fixedTop={true} className="transparent">
         <NavBrand>{brand}</NavBrand>
       </Navbar>
     }

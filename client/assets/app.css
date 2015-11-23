@@ -55,10 +55,6 @@ body {
 	height: 50%;
 }
 
-img {
-
-}
-
 .parent {
    display: table;
    width: 100%;
@@ -103,6 +99,10 @@ img {
   margin-bottom: 10px;
 }
 
+.mB60 {
+  margin-bottom: 20px;
+}
+
 .flL {
   float: left;
 }
@@ -119,6 +119,21 @@ img {
   background-color: yellow;
 }
 
+.fW300 {
+  font-weight: 300;
+}
+
+.fS16 {
+  font-size: 16px;
+}
+
+.fS18 {
+  font-size: 18px;
+}
+
+.i {
+  font-style: italic;
+}
 @media (min-width: 550px) {
   .mL5p{
     margin-left: 10%;
@@ -272,9 +287,6 @@ footer {
   padding-bottom: 5rem;
 }
 
-#img-buy-step-1 {
-  max-width: 100%;
-}
 /* Help
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 .get-help {
@@ -455,7 +467,16 @@ footer {
   .hero-heading {
     font-size: 2.7rem;
     text-align: center;
+    font-weight: 300;
   }
+
+  .step {
+    font-size: 2.3rem;
+    text-align: center;
+    font-weight: 400;
+    font-style: italic;
+  }
+
   .phone {
     top: -16rem;
     max-height: 615px;
@@ -468,22 +489,44 @@ footer {
   #img-buy-step-2-watch_post {
     z-index: 0;
     position: absolute;
-    max-width: 100%
+    max-width: 80%
   }
 
   #img-buy-step-2-post_alert {
     z-index: 1;
-    /* left: 60rem; */
+    left: 10rem; 
     position: relative;
     float: right;
   }
 
   #img-buy-step-2-subscribe {
-    max-width: 100%;
+    max-width: 80%;
   }
 
   #img-buy-step-2-course_alert {
     max-height: 400px;
+  }
+
+  #img-buy-step-2-b-web {
+    padding-top: 100px;
+    float: right;
+  }
+
+  #img-buy-step-2-b-text {
+    float: left;
+    top: -30px;
+    position: relative;
+    margin-left: 60px;
+  }
+
+  #img-buy-step-2-a-text {
+    float: right;
+    position: relative;
+    right: 30px; 
+  }
+
+  .text-buy-step-2-b {
+    padding-top: 100px;
   }
 
   .middle-text {
@@ -496,10 +539,26 @@ footer {
 
   .sell-step-3 {
     height: 300px;
+    padding-top: 250px;
+    padding-bottom: 450px;
   }
 
-  .sell-step-3-heading {
-    padding-top: 50px;
-    padding-bottom: 50px;
+  .sell-step-1 {
+    padding-top: 170px;
+  }
+
+  #img-buy-step-2 {
+    float: right;
+    max-width: 73%;
+  }
+
+  #img-buy-step-1 {
+    position: relative;
+    left: 20px;
+    max-width: 140%;
+  }
+
+  .text-buy-step-1 {
+    padding-top: 70px;
   }
 }

@@ -98,14 +98,15 @@ class SmsInbound
     note = "EasyBooks transaction of #{@post.title} for $#{@post.price}0"
     seller_venmo_uid = @conversation.seller.venmo_account.venmo_uid
     amount = @post.price.to_s + "0"
-    response = create_venmo_charge(token, note, seller_venmo_uid, amount)
+    # disable Venmo charge
+    # response = create_venmo_charge(token, note, seller_venmo_uid, amount)
 
-    p 'response'
-    p response
-    payment_id = response.parsed_response["data"]["payment"]["id"]
-    venmo_amount = response.parsed_response["data"]["payment"]["amount"]
+    # payment_id = response.parsed_response["data"]["payment"]["id"]
+    # venmo_amount = response.parsed_response["data"]["payment"]["amount"]
 
-    entry = Entry.create(seller_id: @conversation.seller.id, buyer_id: @conversation.buyer.id, post_id: @post.id, venmo_transaction_id: payment_id, amount: venmo_amount)
+    # entry = Entry.create(seller_id: @conversation.seller.id, buyer_id: @conversation.buyer.id, post_id: @post.id, venmo_transaction_id: payment_id, amount: venmo_amount)
+
+    entry = Entry.create(seller_id: @conversation.seller.id, buyer_id: @conversation.buyer.id, post_id: @post.id, venmo_transaction_id: "Completed through Demo", amount: amount)
     
     if entry
       buyer_message = "EasyBooks: The Payment Code was verified. You should see a transfer of $#{@post.price}0 from your Venmo to #{@conversation.seller.first_name}'s account.\n\nThank you for using EasyBooks!"

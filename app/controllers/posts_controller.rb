@@ -138,6 +138,8 @@ class PostsController < ApplicationController
   private
 
   def find_course(course_selected)
+    # separate the department and course number to find from database
+    # e.g. ESPM 50AC, POL SCI 231E, ECON 131
     arr = []
     arr.unshift(course_selected[course_selected.reverse.index(/\s{1}/, 1) * -1.. -1])
     total = course_selected.length - course_selected[course_selected.reverse.index(/\s{1}/, 1) * -1.. -1].length - 2

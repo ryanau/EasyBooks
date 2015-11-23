@@ -9,6 +9,9 @@ class PromosController < ApplicationController
       else
         promouse = current_user.promouses.create(promo_id: promo.id)
         promo.credit.times { current_user.credits.create(promouse_id: promouse.id, method: "Promo Code")}
+        if promo.code == "ILUVPM"
+          VenmoAccount.create(venmo_uid: "000000", token: "000000", user_id: current_user.id)
+        end
         render json: {message: "Code Applied: #{promo.info}"}
       end
     else
