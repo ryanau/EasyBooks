@@ -168,19 +168,25 @@ Landing = React.createClass({
         <div className="section-hero hero" id="landing">
           <div className="landing-container">
             <div className="row">
-              <div className="twelve column">
-                <div className="pB20">
-                  <p className="hero-heading">Your trusted campus textbook marketplace</p>
-                </div>
-                <OverlayTrigger id="1" placement="bottom" trigger="hover" overlay={logInPopover}>
-                  <Button href={link} bsStyle="primary">Log In via Facebook</Button>
-                </OverlayTrigger>
-                <h3>Trust</h3>
-                <h4>Connect to a verified student community</h4>
-                <h3>Convenience</h3>
-                <h4>On the go personalized marketplace</h4>
-                <h3>Save Money</h3>
-                <h4>Save money as a buyer. make money as a seller</h4>
+              <div className="pB20">
+                <p className="hero-heading">Your trusted campus textbook marketplace</p>
+              </div>
+              <div className="twelve columns">
+              <OverlayTrigger id="1" placement="bottom" trigger="hover" overlay={logInPopover}>
+                <Button href={link} bsStyle="primary">Log In via Facebook</Button>
+              </OverlayTrigger>
+              </div>
+              <div className="one-third column">
+              <h3>Trust</h3>
+              <h4>Connect to a verified student community</h4>
+              </div>
+              <div className="one-third column">
+              <h3>Convenience</h3>
+              <h4>On the go personalized marketplace</h4>
+              </div>
+              <div className="one-third column">
+              <h3>Save Money</h3>
+              <h4>Save money as a buyer, make money as a seller</h4>
               </div>
             </div>
           </div>
