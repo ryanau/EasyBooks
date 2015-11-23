@@ -55,10 +55,6 @@ body {
 	height: 50%;
 }
 
-img {
-
-}
-
 .parent {
    display: table;
    width: 100%;
@@ -276,9 +272,6 @@ footer {
   padding-bottom: 5rem;
 }
 
-#img-buy-step-1 {
-  max-width: 100%;
-}
 /* Help
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 .get-help {
@@ -461,6 +454,14 @@ footer {
     text-align: center;
     font-weight: 300;
   }
+
+  .step {
+    font-size: 2.3rem;
+    text-align: center;
+    font-weight: 400;
+    font-style: italic;
+  }
+
   .phone {
     top: -16rem;
     max-height: 615px;
@@ -491,6 +492,28 @@ footer {
     max-height: 400px;
   }
 
+  #img-buy-step-2-b-web {
+    padding-top: 100px;
+    float: right;
+  }
+
+  #img-buy-step-2-b-text {
+    float: left;
+    top: -30px;
+    position: relative;
+    margin-left: 60px;
+  }
+
+  #img-buy-step-2-a-text {
+    float: right;
+    position: relative;
+    right: 30px; 
+  }
+
+  .text-buy-step-2-b {
+    padding-top: 100px;
+  }
+
   .middle-text {
   padding-top: 200px;
   }
@@ -501,10 +524,26 @@ footer {
 
   .sell-step-3 {
     height: 300px;
+    padding-top: 250px;
+    padding-bottom: 450px;
   }
 
-  .sell-step-3-heading {
-    padding-top: 50px;
-    padding-bottom: 50px;
+  .sell-step-1 {
+    padding-top: 170px;
+  }
+
+  #img-buy-step-2 {
+    float: right;
+    max-width: 73%;
+  }
+
+  #img-buy-step-1 {
+    position: relative;
+    left: 20px;
+    max-width: 140%;
+  }
+
+  .text-buy-step-1 {
+    padding-top: 70px;
   }
 }
