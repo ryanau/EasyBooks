@@ -175,22 +175,22 @@ Landing = React.createClass({
               <div className="pB20">
                 <p className="hero-heading">Your trusted campus textbook marketplace</p>
               </div>
-              <div className="twelve columns">
+              <div className="twelve columns mB60">
               <OverlayTrigger id="1" placement="bottom" trigger="hover" overlay={logInPopover}>
                 <Button href={link} bsStyle="primary">Log In via Facebook</Button>
               </OverlayTrigger>
               </div>
               <div className="one-third column">
-              <h3 className="fW300">Trust</h3>
-              <h4 className="fW300">Connect to a verified student community</h4>
+              <h3 className="fW300 fS18 i">Convenience</h3>
+              <h4 className="fW300 fS16">On the go personalized marketplace</h4>
               </div>
               <div className="one-third column">
-              <h3 className="fW300">Convenience</h3>
-              <h4 className="fW300">On the go personalized marketplace</h4>
+              <h3 className="fW300 fS18 i">Value</h3>
+              <h4 className="fW300 fS16">Save money as a buyer, make money as a seller</h4>
               </div>
               <div className="one-third column">
-              <h3 className="fW300">Save Money</h3>
-              <h4 className="fW300">Save money as a buyer, make money as a seller</h4>
+              <h3 className="fW300 fS18 i">Trust</h3>
+              <h4 className="fW300 fS16">Connect to a verified student community</h4>
               </div>
             </div>
           </div>
@@ -202,9 +202,9 @@ Landing = React.createClass({
               className="tab"
               tabItemContainerStyle={{backgroundColor: "#080808"}}
               >
-                <Tab label="Click to see Buy" style={{fontSize: "20px", fontFamily: "Lato", fontStyle: "italic", fontWeight: "300"}}>  
+                <Tab label="I want to Buy" style={{fontSize: "18px", fontFamily: "Lato", fontWeight: "300"}}>  
                 </Tab>
-                <Tab label="Click to see Sell" style={{fontSize: "20px", fontFamily: "Lato", fontStyle: "italic", fontWeight: "300"}}>
+                <Tab label="I want to Sell" style={{fontSize: "18px", fontFamily: "Lato", fontWeight: "300"}}>
                 </Tab>
               </Tabs>
               {headerSlogan}
