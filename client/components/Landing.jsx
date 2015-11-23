@@ -194,7 +194,7 @@ Landing = React.createClass({
         <div className="section-tab first-step-img">
           <div className="row">
             <div className="twelve column value">
-              <Tabs onChange={this.handleTabChange}>
+              <Tabs onChange={this.handleTabChange} style={{fontSize: "25px"}}>
                 <Tab label="To Buy" >  
                 </Tab>
                 <Tab label="To Sell" >
