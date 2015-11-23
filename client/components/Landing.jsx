@@ -202,9 +202,9 @@ Landing = React.createClass({
               className="tab"
               tabItemContainerStyle={{backgroundColor: "#080808"}}
               >
-                <Tab label="Click to See Buy" >  
+                <Tab label="Click to see Buy" style={{fontSize: "20px", fontFamily: "Lato", fontStyle: "italic", fontWeight: "300"}}>  
                 </Tab>
-                <Tab label="Click to See Sell" >
+                <Tab label="Click to see Sell" style={{fontSize: "20px", fontFamily: "Lato", fontStyle: "italic", fontWeight: "300"}}>
                 </Tab>
               </Tabs>
               {headerSlogan}
