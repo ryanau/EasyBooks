@@ -51,7 +51,7 @@ Landing = React.createClass({
   		)
   	} else {
       var headerSlogan
-      this.state.displayBuy? headerSlogan = <h2 className="fW300">3 Easy Steps to Buy a Textbook</h2> : headerSlogan = <h2 className="fW300">3 Easy Steps to Sell a Textbook</h2>
+      this.state.displayBuy? headerSlogan = <h2 className="fW300 catcher">3 Easy Steps to Buy a Textbook</h2> : headerSlogan = <h2 className="fW300 catcher">3 Easy Steps to Sell a Textbook</h2>
       var logInPopover = <Popover id="1"title="Why do we need Facebook?">We only need your basic info and friends list (to see mutual friends connections) to get started!</Popover>
       var displayBuy = (
         <div>
@@ -131,7 +131,7 @@ Landing = React.createClass({
                   <p className="value-description">It takes less than 30 seconds. Yes, we’re serious.</p>
                 </div>
                 <div className="one-half column">
-                  <img id="img-buy-step-2" src="./sell-step-1/sell.png"/>
+                  <img id="img-sell-step-2" src="./sell-step-1/sell.png"/>
                 </div>
               </div>
             </div>
@@ -169,7 +169,7 @@ Landing = React.createClass({
       )
       var display = (
       <div>
-        <div className="section-hero hero" id="landing">
+        <div id="landing">
           <div className="landing-container">
             <div className="row">
               <div className="pB20">

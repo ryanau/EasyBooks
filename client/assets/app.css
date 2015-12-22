@@ -230,7 +230,7 @@ footer {
   color: #00695C;
 }
 .value-description {
-  font-weight: 240;
+  font-weight: 300;
   color: #424242;
   text-align: center;
 
@@ -313,7 +313,7 @@ footer {
   .hero {
     padding-bottom: 8rem;
     text-align: center;
-    height: 165px;
+    min-height: 100%;
   }
   .phone {
     position: absolute;
@@ -333,6 +333,7 @@ footer {
   .hero-heading {
     font-size: 1.8rem;
     text-align: center;
+    font-weight: 300;
   }
   .section-tab {
     text-align: center;
@@ -346,6 +347,39 @@ footer {
   #img-buy-step-2-post_alert {
     z-index: 1;
   }
+
+  #img-buy-step-1 {
+    max-width: 100%;
+  }
+
+  .step {
+    font-size: 1.5rem;
+    text-align: center;
+    font-weight: 400;
+    font-style: italic;
+  }
+
+  #img-buy-step-2-a-web {
+    max-width: 100%;
+  }
+
+  #img-buy-step-2-b-web {
+    max-width: 100%;
+  }
+
+  #img-sell-step-2 {
+    max-width: 100%;
+  }
+
+  .catcher {
+    font-size: 2.5rem;
+  }
+
+  #landing {
+    padding-top: 13rem 0 13rem;
+    text-align: center;
+    color: white;
+  }
 }
 
 
@@ -357,7 +391,7 @@ footer {
   .hero {
     padding-bottom: 8rem;
     text-align: center;
-    height: 165px;
+    min-height: 100%;
   }
   .phone {
     position: absolute;
@@ -392,12 +426,24 @@ footer {
     position: relative;
   }
 
+  .step {
+    font-size: 1.5rem;
+    text-align: center;
+    font-weight: 400;
+    font-style: italic;
+  }
+
+  #landing {
+    padding: 18rem 0 18rem;
+    text-align: center;
+    color: white;
+  }
 }
 
 /* Bigger than 750 */
 @media (min-width: 750px) {
   .hero {
-    height: 190px;
+    min-height: 100%
   }
   .hero-heading {
     font-size: 1.8rem;
@@ -442,6 +488,19 @@ footer {
     /* left: 60rem; */
     position: relative;
     float: right;
+  }
+
+  .step {
+    font-size: 1.5rem;
+    text-align: center;
+    font-weight: 400;
+    font-style: italic;
+  }
+
+  #landing {
+    padding: 18rem 0 18rem;
+    text-align: center;
+    color: white;
   }
 }
 
@@ -547,7 +606,7 @@ footer {
     padding-top: 170px;
   }
 
-  #img-buy-step-2 {
+  #img-sell-step-2 {
     float: right;
     max-width: 73%;
   }
@@ -560,5 +619,19 @@ footer {
 
   .text-buy-step-1 {
     padding-top: 70px;
+  }
+
+  #landing {
+    padding: 18rem 0 18rem;
+    text-align: center;
+    color: white;
+  }
+
+  .catcher {
+    font-size: 3rem;
+  }
+
+  #img-buy-step-2-a-web {
+    max-width: 200%
   }
 }
