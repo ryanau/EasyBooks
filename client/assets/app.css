@@ -630,4 +630,8 @@ footer {
   .catcher {
     font-size: 3rem;
   }
+
+  #img-buy-step-2-a-web {
+    max-width: 200%
+  }
 }
